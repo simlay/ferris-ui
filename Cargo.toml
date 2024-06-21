@@ -1,0 +1,58 @@
+[package]
+name = "ferris-ui"
+version = "0.1.0"
+edition = "2021"
+
+[target.'cfg(target_os = "ios")'.dependencies]
+objc2 = "0.5.2"
+winit = { version = "0.30.0", features = ["rwh_06" ] }
+
+[target.'cfg(target_os = "ios")'.dependencies.objc2-ui-kit]
+version = "0.2.2"
+features = [
+#"all",
+    "UIApplication",
+    "UIDevice",
+    "UIEvent",
+    "UIGeometry",
+    "UIGestureRecognizer",
+    "UIOrientation",
+    "UIPanGestureRecognizer",
+    "UIPinchGestureRecognizer",
+    "UIResponder",
+    "UIRotationGestureRecognizer",
+    "UIScreen",
+    "UIScreenMode",
+    "UITapGestureRecognizer",
+    "UITouch",
+    "UITraitCollection",
+    "UIView",
+    "UIViewController",
+    "UIWindow",
+    "UITextView",
+    "UIScrollView",
+    "UISwitch",
+
+    "UIControl",
+    "UILabel",
+
+    "UIColor",
+    "UIStackView",
+    "UITabBar",
+    "UIToolbar",
+    "UIBarButtonItem",
+    "UIBarItem",
+]
+[target.'cfg(target_os = "ios")'.dependencies.objc2-foundation]
+version = "0.2.2"
+features = [
+    "dispatch",
+    "NSArray",
+    "NSEnumerator",
+    "NSGeometry",
+    "NSObjCRuntime",
+    "NSString",
+    "NSProcessInfo",
+    "NSThread",
+    "NSSet",
+]
