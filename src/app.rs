@@ -19,18 +19,23 @@ use crate::{
 pub struct App {
     window: Option<Window>,
     root_ui_view: Option<Retained<UIView>>,
-    root_view: Box<dyn View>,
+    root_view_fn: Box<dyn Fn(EventLoopProxy<GUIEvent>) -> Box<dyn View>>,
+    root_view: Option<Box<dyn View>>,
     proxy: EventLoopProxy<GUIEvent>,
-    ui_label: Option<Retained<UILabel>>,
+    //ui_label: Option<Retained<UILabel>>,
 }
 
 impl App {
-    pub fn new(proxy: EventLoopProxy<GUIEvent>, root_view: Box<dyn View> ) -> Self {
+    pub fn new(
+        proxy: EventLoopProxy<GUIEvent>,
+        root_view_fn: Box<dyn Fn(EventLoopProxy<GUIEvent>) -> Box<dyn View>>,
+        ) -> Self {
         Self {
             window: None,
             root_ui_view: None,
-            root_view,
-            ui_label: None,
+            root_view_fn: root_view_fn,
+            root_view: None,
+            //ui_label: None,
             proxy,
         }
     }
@@ -39,6 +44,7 @@ impl App {
 impl ApplicationHandler<GUIEvent> for App {
     fn user_event(&mut self, event_loop: &ActiveEventLoop, event: GUIEvent) {
         println!("NEW EVENT: {event:?}");
+        /*
         if let GUIEvent::Text(text) = event {
             unsafe {
                 self.ui_label
@@ -47,6 +53,7 @@ impl ApplicationHandler<GUIEvent> for App {
                     .setText(Some(&NSString::from_str(text.as_str())))
             };
         }
+        */
     }
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         let window = event_loop
@@ -60,12 +67,14 @@ impl ApplicationHandler<GUIEvent> for App {
                 let ui_view: Retained<UIView> =
                     unsafe { Retained::retain(ui_view.cast()) }.unwrap();
                 let root_frame = ui_view.frame();
-                let root_ui_view = self.root_view.build();
+                let root_view = (self.root_view_fn)(self.proxy.clone());
+                let root_ui_view = root_view.build();
                 root_ui_view.setFrame(root_frame);
                 unsafe { ui_view.addSubview(root_ui_view.as_ref()) };
 
-                ui_view.setBackgroundColor(Some(unsafe { &UIColor::greenColor() }));
+                //ui_view.setBackgroundColor(Some(unsafe { &UIColor::greenColor() }));
                 self.root_ui_view = Some(ui_view);
+                self.root_view = Some(root_view);
             }
         }
 

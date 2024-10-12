@@ -2,9 +2,13 @@
     "rust-analyzer": {
         "initialization_options": {
             "cargo": {
-                "target": "aarch64-apple-ios-sim",
+                "target": "aarch64-apple-ios-macabi",
                 "runBuildScripts": true,
-                "features": []
+                "features": [],
+                "extraArgs": "-Zbuild-std",
+                "extraEnv": {
+                    "RUSTUP_TOOLCHAIN": "nightly"
+                }
             }
         }
     }

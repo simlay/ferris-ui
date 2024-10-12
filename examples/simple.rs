@@ -17,21 +17,23 @@ fn main() {
     // This is ideal for non-game applications that only update in response to user
     // input, and uses significantly less power/CPU time than ControlFlow::Poll.
     event_loop.set_control_flow(ControlFlow::Wait);
-    let my_view = MyView {
-        proxy: proxy.clone(),
-    };
+    let my_view = MyView::new(
+        proxy.clone(),
+    );
 
-    let mut app = App::new(proxy, Box::new(my_view));
+    let mut app = App::new(proxy, Box::new(MyView::new));
     let _ = event_loop.run_app(&mut app);
 }
 
 struct MyView {
     proxy: EventLoopProxy<GUIEvent>,
+    vstack: VStack,
 }
-impl View for MyView {
-    fn build(&self) -> Box<&UIView> {
+
+impl MyView {
+    pub fn new(proxy: EventLoopProxy<GUIEvent>) -> Box<dyn View>{
         let mtm = MainThreadMarker::new().unwrap();
-        let text_field = TextField::new(mtm, self.proxy.clone());
+        let text_field = TextField::new(mtm, proxy.clone());
         unsafe {
             text_field.setText(Some(&NSString::from_str("THIS IS AN INPUT")));
             text_field.setBackgroundColor(Some(&UIColor::blueColor()));
@@ -55,10 +57,10 @@ impl View for MyView {
             });
         }
 
-        /*
         let switch = unsafe { UISwitch::new(mtm) };
         let tabbar = unsafe { UITabBar::new(mtm) };
         let toolbar = unsafe { UIToolbar::new(mtm) };
+        /*
 
         unsafe {
             toolbar.setItems(None);
@@ -68,14 +70,21 @@ impl View for MyView {
             mtm,
             None,
             vec![
-                //Box::new(switch.clone()),
                 Box::new(text_field),
                 Box::new(label.clone()),
+                Box::new(switch.clone()),
                 //Box::new(toolbar),
                 //Box::new(tabbar),
             ],
         );
-        todo!();
-        //Box::new(&vstack.build())
+        Box::new(Self {
+            proxy,
+            vstack,
+        })
+    }
+}
+impl View for MyView {
+    fn build(&self) -> Box<&UIView> {
+        Box::new(&self.vstack.build())
     }
 }
