@@ -9,7 +9,7 @@ install: bundle
 	xcrun simctl install booted ./RustWrapper.app/
 
 run: install
-	SIMCTL_CHILD_RUST_BACKTRACE=full xcrun simctl launch --console --terminate-running-process booted RustWrapper
+	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --console --terminate-running-process booted RustWrapper
 
 watch:
 	cargo watch -s 'make run' -w ./src -w ./Cargo.toml -w ./examples/

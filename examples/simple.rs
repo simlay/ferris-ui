@@ -1,10 +1,11 @@
-use ferris_ui::{App, GUIEvent, TextField, VStack, View};
+use ferris_ui::{App, GUIEvent, TextField, VStack, View, Switch, Text};
 use objc2::rc::Retained;
 use objc2_foundation::{MainThreadMarker, NSString};
 use objc2_ui_kit::{UIColor, UIEdgeInsets, UILabel, UISwitch, UITabBar, UIToolbar, UIView};
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopProxy};
 
 fn main() {
+    env_logger::init();
     let event_loop: EventLoop<GUIEvent> = EventLoop::with_user_event().build().unwrap();
     //let event_loop = EventLoop::new().unwrap();
     let proxy: EventLoopProxy<GUIEvent> = event_loop.create_proxy();
@@ -17,9 +18,7 @@ fn main() {
     // This is ideal for non-game applications that only update in response to user
     // input, and uses significantly less power/CPU time than ControlFlow::Poll.
     event_loop.set_control_flow(ControlFlow::Wait);
-    let my_view = MyView::new(
-        proxy.clone(),
-    );
+
 
     let mut app = App::new(proxy, Box::new(MyView::new));
     let _ = event_loop.run_app(&mut app);
@@ -32,43 +31,46 @@ struct MyView {
 
 impl MyView {
     pub fn new(proxy: EventLoopProxy<GUIEvent>) -> Box<dyn View>{
-        let mtm = MainThreadMarker::new().unwrap();
-        let text_field = TextField::new(mtm, proxy.clone());
-        unsafe {
-            text_field.setText(Some(&NSString::from_str("THIS IS AN INPUT")));
-            text_field.setBackgroundColor(Some(&UIColor::blueColor()));
-            text_field.setLayoutMargins(UIEdgeInsets {
-                top: 30.,
-                left: 30.,
-                bottom: 30.,
-                right: 30.,
-            });
-        }
-        let label = unsafe { UILabel::new(mtm) };
+
+        let switch = Switch::new(
+            proxy.clone(), Some(Box::new(move |switch| {
+                let is_on = switch.is_on();
+                if is_on {
+                    unsafe { switch.setBackgroundColor(Some(&UIColor::blueColor())) }
+                } else {
+                    unsafe { switch.setBackgroundColor(Some(&UIColor::cyanColor())) }
+                }
+            })),
+        ).set_background_color(unsafe{UIColor::cyanColor()});
+
+        let label = Text::new();
+        label.set_text(format!("Switch state: {}", switch.is_on()));
 
         unsafe {
-            label.setText(Some(&NSString::from_str("baz")));
             label.setBackgroundColor(Some(&UIColor::redColor()));
-            label.setLayoutMargins(UIEdgeInsets {
-                top: 30.,
-                left: 30.,
-                bottom: 30.,
-                right: 30.,
-            });
+        }
+        let cloned_label = label.clone();
+
+        let mut text_field = TextField::new(
+            proxy.clone(),
+            Some(Box::new(move |text_field| {
+                let new_text = unsafe{ text_field.text() }.to_string();
+                let text = format!("Current text: {new_text}");
+                cloned_label.set_text(text);
+            }))
+        );
+
+        unsafe {
+            text_field.setBackgroundColor(Some(&UIColor::blueColor()));
         }
 
-        let switch = unsafe { UISwitch::new(mtm) };
+        /*
+        let mtm = MainThreadMarker::new().unwrap();
         let tabbar = unsafe { UITabBar::new(mtm) };
         let toolbar = unsafe { UIToolbar::new(mtm) };
-        /*
-
-        unsafe {
-            toolbar.setItems(None);
-        }
         */
+
         let vstack = VStack::new(
-            mtm,
-            None,
             vec![
                 Box::new(text_field),
                 Box::new(label.clone()),
@@ -84,7 +86,7 @@ impl MyView {
     }
 }
 impl View for MyView {
-    fn build(&self) -> Box<&UIView> {
-        Box::new(&self.vstack.build())
+    fn ui_view(&self) -> Box<&UIView> {
+        Box::new(&self.vstack.ui_view())
     }
 }

@@ -14,6 +14,7 @@ use crate::GUIEvent;
 pub struct TextFieldState {
     delegate: RefCell<Retained<TextFieldDelegate>>,
     proxy: EventLoopProxy<GUIEvent>,
+    event_fn: Option<Box<dyn Fn(&TextField)>>,
 }
 
 declare_class!(
@@ -70,16 +71,20 @@ declare_class!(
 );
 
 impl TextField {
-    pub fn new(mtm: MainThreadMarker, proxy: EventLoopProxy<GUIEvent>) -> Retained<Self> {
+    pub fn new(
+        proxy: EventLoopProxy<GUIEvent>,
+        event_fn: Option<Box<dyn Fn(&Self)>>,
+    ) -> Retained<Self> {
+        let mtm = MainThreadMarker::new().unwrap();
 
         // TODO: This should be hidden someplace.
         let delegate: Retained<TextFieldDelegate> = unsafe { objc2::msg_send_id![mtm.alloc(), init]};
         let this = mtm.alloc().set_ivars(TextFieldState {
             delegate: RefCell::new(delegate),
             proxy,
+            event_fn,
         });
         let this: Retained<TextField> = unsafe { msg_send_id![super(this), init] };
-
         {
             let delegate = this.ivars().delegate.borrow();
             unsafe {this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone())))};
@@ -87,8 +92,12 @@ impl TextField {
 
         this
     }
+
     fn text_changed(&self) {
         let text = unsafe{self.text()}.to_string();
-        let _ = self.ivars().proxy.send_event(GUIEvent::Text(text));
+        let _ = self.ivars().proxy.send_event(GUIEvent::Text(text.clone()));
+        if let Some(event_fn) = &self.ivars().event_fn {
+            event_fn(self);
+        }
     }
 }

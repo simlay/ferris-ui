@@ -12,7 +12,8 @@ pub struct VStack {
 }
 
 impl VStack {
-    pub fn new(mtm: MainThreadMarker, frame: Option<CGRect>, children: Vec<Box<dyn View>>) -> Self {
+    pub fn new(children: Vec<Box<dyn View>>) -> Self {
+        let mtm = MainThreadMarker::new().unwrap();
         let stack_view = unsafe { UIStackView::new(mtm) };
         unsafe {
             stack_view.setAxis(UILayoutConstraintAxis::Vertical);
@@ -20,9 +21,6 @@ impl VStack {
             stack_view.setDistribution(UIStackViewDistribution::FillEqually);
         };
 
-        if let Some(frame) = frame {
-            stack_view.setFrame(frame);
-        }
         Self {
             children,
             stack_view,
@@ -30,9 +28,9 @@ impl VStack {
     }
 }
 impl View for VStack {
-    fn build(&self) -> Box<&UIView> {
+    fn ui_view(&self) -> Box<&UIView> {
         for child in &self.children {
-            let child = child.build();
+            let child = child.ui_view();
             unsafe { self.stack_view.addArrangedSubview(child.as_ref()) };
         }
         Box::new(self.stack_view.as_ref())

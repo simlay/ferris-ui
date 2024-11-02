@@ -4,6 +4,7 @@ use objc2_ui_kit::{
     UIColor, UIEdgeInsets, UILabel, UIView,
     UISwitch, UITabBar, UIToolbar,
 };
+use log::{debug, error};
 use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
 use winit::event_loop::{ActiveEventLoop, EventLoopProxy};
@@ -22,28 +23,26 @@ pub struct App {
     root_view_fn: Box<dyn Fn(EventLoopProxy<GUIEvent>) -> Box<dyn View>>,
     root_view: Option<Box<dyn View>>,
     proxy: EventLoopProxy<GUIEvent>,
-    //ui_label: Option<Retained<UILabel>>,
 }
 
 impl App {
     pub fn new(
         proxy: EventLoopProxy<GUIEvent>,
         root_view_fn: Box<dyn Fn(EventLoopProxy<GUIEvent>) -> Box<dyn View>>,
-        ) -> Self {
+    ) -> Self {
         Self {
             window: None,
             root_ui_view: None,
             root_view_fn: root_view_fn,
             root_view: None,
-            //ui_label: None,
             proxy,
         }
     }
 }
 
 impl ApplicationHandler<GUIEvent> for App {
-    fn user_event(&mut self, event_loop: &ActiveEventLoop, event: GUIEvent) {
-        println!("NEW EVENT: {event:?}");
+    fn user_event(&mut self, _event_loop: &ActiveEventLoop, event: GUIEvent) {
+        debug!("NEW EVENT: {event:?}");
         /*
         if let GUIEvent::Text(text) = event {
             unsafe {
@@ -68,7 +67,7 @@ impl ApplicationHandler<GUIEvent> for App {
                     unsafe { Retained::retain(ui_view.cast()) }.unwrap();
                 let root_frame = ui_view.frame();
                 let root_view = (self.root_view_fn)(self.proxy.clone());
-                let root_ui_view = root_view.build();
+                let root_ui_view = root_view.ui_view();
                 root_ui_view.setFrame(root_frame);
                 unsafe { ui_view.addSubview(root_ui_view.as_ref()) };
 
@@ -84,7 +83,7 @@ impl ApplicationHandler<GUIEvent> for App {
     fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {
         match event {
             WindowEvent::CloseRequested => {
-                println!("The close button was pressed; stopping");
+                debug!("The close button was pressed; stopping");
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
@@ -104,7 +103,7 @@ impl ApplicationHandler<GUIEvent> for App {
                 self.window.as_ref().unwrap().request_redraw();
             }
             e => {
-                println!("{e:#?}");
+                error!("{e:#?}");
             }
         }
     }
