@@ -33,7 +33,7 @@ jobs:
         run: |
           sleep 10
           xcrun simctl io booted screenshot screenshot.png
-          magick convert screenshot.png -resize 25% screenshot.small.png
+          sips -Z 640 screenshot.png --out screenshot.small.png
 
       - uses: actions/upload-artifact@v4
         id: screenshot-upload-step
