@@ -56,4 +56,6 @@ jobs:
           echo 'Artifact ID is ${{ steps.screenshot-upload-step.outputs.artifact-id }}'
           echo 'Artifact URL is ${{ steps.screenshot-upload-step.outputs.artifact-url }}'
           echo "## SCREENSHOT" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "![Screenshot](data:image/png;base64,$(base64 -i screenshot.png))"
           echo "![Screenshot](data:image/png;base64,$(base64 -i screenshot.png))" >> "$GITHUB_STEP_SUMMARY"
