@@ -33,6 +33,7 @@ jobs:
         run: |
           sleep 10
           xcrun simctl io booted screenshot screenshot.png
+          magick convert screenshot.png -resize 25% screenshot.small.png
 
       - uses: actions/upload-artifact@v4
         id: screenshot-upload-step
@@ -56,6 +57,4 @@ jobs:
           echo 'Artifact ID is ${{ steps.screenshot-upload-step.outputs.artifact-id }}'
           echo 'Artifact URL is ${{ steps.screenshot-upload-step.outputs.artifact-url }}'
           echo "## SCREENSHOT" >> "$GITHUB_STEP_SUMMARY"
-
-          echo "![Screenshot](data:image/png;base64,$(base64 -i screenshot.png))"
-          echo "![Screenshot](data:image/png;base64,$(base64 -i screenshot.png))" >> "$GITHUB_STEP_SUMMARY"
+          echo "![](data:image/png;base64,$(base64 -i screenshot.small.png))" >> "$GITHUB_STEP_SUMMARY"
