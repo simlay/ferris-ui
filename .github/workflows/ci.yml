@@ -36,9 +36,19 @@ jobs:
           path: screenshot.png
           compression-level: 0 # no compression
 
+          #- name: Put screenshot in github summary
+          #  run: |
+          #    echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
+          #    echo "## Heading" >> "$GITHUB_STEP_SUMMARY"
+          #    echo "Uploading image..."
+          #    mkdir -p "$GITHUB_WORKSPACE/artifacts"
+          #    cp ./image.png "$GITHUB_WORKSPACE/artifacts/"
+          #    echo "image_path=$GITHUB_WORKSPACE/artifacts/image.png" >> $GITHUB_OUTPUT
+          #    echo "image" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Put screenshot in github summary
         run: |
           echo 'Artifact ID is ${{ steps.screenshot-upload-step.outputs.artifact-id }}'
           echo 'Artifact URL is ${{ steps.screenshot-upload-step.outputs.artifact-url }}'
           echo "## SCREENSHOT" >> "$GITHUB_STEP_SUMMARY"
-          echo "![screenshot]({{ steps.screenshot-upload-step.outputs.artifact-url }})" >> "$GITHUB_STEP_SUMMARY"
+          echo "![screenshot](data:image/png;base64,$(base64 -i screenshot.png))" >> "$GITHUB_STEP_SUMMARY"
