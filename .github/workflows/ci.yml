@@ -27,13 +27,18 @@ jobs:
           make install
           make run &
           sleep 10
-          xcrun simctl io booted screenshot image.png
+          xcrun simctl io booted screenshot screenshot.png
+
+      - uses: actions/upload-artifact@v4
+        id: screenshot-upload-step
+        with:
+          name: screenshot
+          path: screenshot.png
+          compression-level: 0 # no compression
 
       - name: Put screenshot in github summary
         run: |
-           echo "## Heading" >> "$GITHUB_STEP_SUMMARY"
-           echo "Uploading image..."
-           mkdir -p "$GITHUB_WORKSPACE/artifacts"
-           cp ./image.png "$GITHUB_WORKSPACE/artifacts/"
-           echo "::set-output name=image_path::$GITHUB_WORKSPACE/artifacts/image.png"
-           echo "image" >> "$GITHUB_STEP_SUMMARY"
+          echo 'Artifact ID is ${{ steps.screenshot-upload-step.outputs.artifact-id }}'
+          echo 'Artifact URL is ${{ steps.screenshot-upload-step.outputs.artifact-url }}'
+          echo "## SCREENSHOT" >> "$GITHUB_STEP_SUMMARY"
+          echo "![screenshot]({{ steps.screenshot-upload-step.outputs.artifact-url }})" >> "$GITHUB_STEP_SUMMARY"
