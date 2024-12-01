@@ -1,15 +1,15 @@
-use std::cell::RefCell;
-use objc2_ui_kit::{UIColor, UIControlEvents, UIEdgeInsets, UIResponder, UISwitch, UIToolbar, UIView};
-use objc2::runtime::ProtocolObject;
 use objc2::rc::Retained;
-use objc2_foundation::{
-    CGPoint, CGRect, CGSize, MainThreadMarker, NSObject, NSObjectProtocol,
+use objc2::runtime::ProtocolObject;
+use objc2::{declare_class, msg_send_id, mutability, ClassType, DeclaredClass};
+use objc2_foundation::{CGPoint, CGRect, CGSize, MainThreadMarker, NSObject, NSObjectProtocol};
+use objc2_ui_kit::{
+    UIColor, UIControlEvents, UIEdgeInsets, UIResponder, UISwitch, UIToolbar, UIView,
 };
-use objc2::{declare_class, msg_send_id, mutability, ClassType, DeclaredClass };
+use std::cell::RefCell;
 
-use winit::event_loop::EventLoopProxy;
-use crate::GUIEvent;
+use crate::{GUIEvent, View};
 use log::debug;
+use winit::event_loop::EventLoopProxy;
 
 pub struct SwitchState {
     proxy: EventLoopProxy<GUIEvent>,
@@ -50,10 +50,7 @@ impl Switch {
     ) -> Retained<Self> {
         let mtm = MainThreadMarker::new().unwrap();
 
-        let this = mtm.alloc().set_ivars(SwitchState {
-            proxy,
-            event_fn,
-        });
+        let this = mtm.alloc().set_ivars(SwitchState { proxy, event_fn });
         let this: Retained<Self> = unsafe { msg_send_id![super(this), init] };
 
         unsafe {
@@ -67,8 +64,17 @@ impl Switch {
         this
     }
     pub fn is_on(&self) -> bool {
-        unsafe {
-            self.isOn()
-        }
+        unsafe { self.isOn() }
+    }
+}
+
+impl View for Switch {
+    fn ui_view(&self) -> Box<&UIView> {
+        Box::new(self.as_ref())
+    }
+    #[cfg(feature = "nightly")]
+    fn set_event_fn(self: Retained<Self>, event_fn: Box<dyn Fn(&Self)>) -> Retained<Self> {
+        let ivars = self.ivars();
+        Self::new(ivars.proxy.clone(), Some(event_fn))
     }
 }

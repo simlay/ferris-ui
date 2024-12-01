@@ -1,15 +1,16 @@
-use std::cell::RefCell;
-use objc2_ui_kit::{UIColor, UIControlEvents, UIEdgeInsets, UILabel, UIResponder, UISwitch, UIToolbar, UIView};
-use objc2::runtime::ProtocolObject;
 use objc2::rc::Retained;
+use objc2::runtime::ProtocolObject;
+use objc2::{declare_class, msg_send_id, mutability, ClassType, DeclaredClass};
 use objc2_foundation::{
-    CGPoint, CGRect, CGSize, MainThreadMarker, NSObject, NSObjectProtocol,
-    NSString,
+    CGPoint, CGRect, CGSize, MainThreadMarker, NSObject, NSObjectProtocol, NSString,
 };
-use objc2::{declare_class, msg_send_id, mutability, ClassType, DeclaredClass };
+use objc2_ui_kit::{
+    UIColor, UIControlEvents, UIEdgeInsets, UILabel, UIResponder, UISwitch, UIToolbar, UIView,
+};
+use std::cell::RefCell;
 
-use winit::event_loop::EventLoopProxy;
 use crate::GUIEvent;
+use winit::event_loop::EventLoopProxy;
 
 declare_class!(
     pub struct Text;

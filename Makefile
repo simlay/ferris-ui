@@ -8,6 +8,9 @@ bundle: build
 install: bundle
 	xcrun simctl install booted ./RustWrapper.app/
 
+debug: install
+	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --wait-for-debugger --console --terminate-running-process booted RustWrapper
+
 run: install
 	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --console --terminate-running-process booted RustWrapper
 
@@ -15,7 +18,7 @@ watch:
 	cargo watch -s 'make run' -w ./src -w ./Cargo.toml -w ./examples/
 
 build-macabi:
-	cargo +nightly build --target aarch64-apple-ios-macabi -Zbuild-std --example simple
+	cargo build --target aarch64-apple-ios-macabi -Zbuild-std --example simple
 
 bundle-macabi: build-macabi
 	cp ./target/aarch64-apple-ios-macabi/debug/examples/simple ./RustWrapper.app/

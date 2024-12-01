@@ -1,21 +1,13 @@
+use crate::{GUIEvent, TextField, VStack, View};
+use log::{debug, error};
 use objc2::rc::Retained;
 use objc2_foundation::{MainThreadMarker, NSString};
-use objc2_ui_kit::{
-    UIColor, UIEdgeInsets, UILabel, UIView,
-    UISwitch, UITabBar, UIToolbar,
-};
-use log::{debug, error};
+use objc2_ui_kit::{UIColor, UIEdgeInsets, UILabel, UISwitch, UITabBar, UIToolbar, UIView};
 use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
 use winit::event_loop::{ActiveEventLoop, EventLoopProxy};
 use winit::raw_window_handle::{HasWindowHandle, RawWindowHandle};
 use winit::window::{Window, WindowId};
-use crate::{
-    View,
-    TextField,
-    VStack,
-    GUIEvent,
-};
 
 pub struct App {
     window: Option<Window>,
@@ -58,7 +50,6 @@ impl ApplicationHandler<GUIEvent> for App {
         let window = event_loop
             .create_window(Window::default_attributes())
             .unwrap();
-
 
         if let Ok(handle) = window.window_handle() {
             if let RawWindowHandle::UiKit(handle) = handle.as_raw() {

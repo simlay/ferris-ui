@@ -1,15 +1,11 @@
-use std::cell::RefCell;
-use objc2_foundation::{
-    CGPoint, CGRect, CGSize, MainThreadMarker, NSObject, NSObjectProtocol,
-};
+use crate::{GUIEvent, View};
 use objc2::rc::Retained;
 use objc2::runtime::ProtocolObject;
-use objc2::{declare_class, msg_send_id, mutability, ClassType, DeclaredClass };
-use objc2_ui_kit::{
-    UITextView, UIView, UIResponder, UITextViewDelegate, UIScrollViewDelegate,
-};
+use objc2::{declare_class, msg_send_id, mutability, ClassType, DeclaredClass};
+use objc2_foundation::{CGPoint, CGRect, CGSize, MainThreadMarker, NSObject, NSObjectProtocol};
+use objc2_ui_kit::{UIResponder, UIScrollViewDelegate, UITextView, UITextViewDelegate, UIView};
+use std::cell::RefCell;
 use winit::event_loop::EventLoopProxy;
-use crate::GUIEvent;
 
 pub struct TextFieldState {
     delegate: RefCell<Retained<TextFieldDelegate>>,
@@ -78,7 +74,8 @@ impl TextField {
         let mtm = MainThreadMarker::new().unwrap();
 
         // TODO: This should be hidden someplace.
-        let delegate: Retained<TextFieldDelegate> = unsafe { objc2::msg_send_id![mtm.alloc(), init]};
+        let delegate: Retained<TextFieldDelegate> =
+            unsafe { objc2::msg_send_id![mtm.alloc(), init] };
         let this = mtm.alloc().set_ivars(TextFieldState {
             delegate: RefCell::new(delegate),
             proxy,
@@ -87,17 +84,28 @@ impl TextField {
         let this: Retained<TextField> = unsafe { msg_send_id![super(this), init] };
         {
             let delegate = this.ivars().delegate.borrow();
-            unsafe {this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone())))};
+            unsafe { this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone()))) };
         }
 
         this
     }
 
     fn text_changed(&self) {
-        let text = unsafe{self.text()}.to_string();
+        let text = unsafe { self.text() }.to_string();
         let _ = self.ivars().proxy.send_event(GUIEvent::Text(text.clone()));
         if let Some(event_fn) = &self.ivars().event_fn {
             event_fn(self);
         }
+    }
+}
+
+impl View for TextField {
+    fn ui_view(&self) -> Box<&UIView> {
+        Box::new(self.as_ref())
+    }
+    #[cfg(feature = "nightly")]
+    fn set_event_fn(self: Retained<Self>, event_fn: Box<dyn Fn(&Self)>) -> Retained<Self> {
+        let ivars = self.ivars();
+        Self::new(ivars.proxy.clone(), Some(event_fn))
     }
 }

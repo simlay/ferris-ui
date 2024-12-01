@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cargo check
+        run: cargo check --target aarch64-apple-ios-sim
+
+      - name: Cargo check
+        run: cargo build --target aarch64-apple-ios-sim
+
+      - name: start simulator
+        run: xcrun simctl boot 'iPhone 16'
+
+      - name: Run example and take screenshot
+        run: |
+          make install
+          make run &
+          sleep 10
+          xcrun simctl io booted screenshot image.png
+
+      - name: Put screenshot in github summary
+        run: |
+           echo "## Heading" >> "$GITHUB_STEP_SUMMARY"
+           echo "Uploading image..."
+           mkdir -p "$GITHUB_WORKSPACE/artifacts"
+           cp ./image.png "$GITHUB_WORKSPACE/artifacts/"
+           echo "::set-output name=image_path::$GITHUB_WORKSPACE/artifacts/image.png"
+           echo "image" >> "$GITHUB_STEP_SUMMARY"
