@@ -33,16 +33,6 @@ impl MyView {
         let switch = Switch::new(
             proxy.clone(),
             None,
-            /*
-            Some(Box::new(move |switch| {
-                let is_on = switch.is_on();
-                if is_on {
-                    unsafe { switch.setBackgroundColor(Some(&UIColor::blueColor())) }
-                } else {
-                    unsafe { switch.setBackgroundColor(Some(&UIColor::cyanColor())) }
-                }
-            }))
-            */
         )
         .set_event_fn(Box::new(move |switch| {
             let is_on = switch.is_on();
@@ -62,7 +52,7 @@ impl MyView {
         }
         let cloned_label = label.clone();
 
-        let mut text_field =
+        let text_field =
             TextField::new(proxy.clone(), None).set_event_fn(Box::new(move |text_field| {
                 let new_text = unsafe { text_field.text() }.to_string();
                 let text = format!("Current text: {new_text}");
@@ -73,18 +63,10 @@ impl MyView {
             text_field.setBackgroundColor(Some(&UIColor::blueColor()));
         }
 
-        /*
-        let mtm = MainThreadMarker::new().unwrap();
-        let tabbar = unsafe { UITabBar::new(mtm) };
-        let toolbar = unsafe { UIToolbar::new(mtm) };
-        */
-
         let vstack = VStack::new(vec![
             Box::new(text_field),
             Box::new(label.clone()),
             Box::new(switch.clone()),
-            //Box::new(toolbar),
-            //Box::new(tabbar),
         ]);
         Box::new(Self { proxy, vstack })
     }
