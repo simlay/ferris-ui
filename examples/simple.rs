@@ -30,19 +30,16 @@ struct MyView {
 
 impl MyView {
     pub fn new(proxy: EventLoopProxy<GUIEvent>) -> Box<dyn View> {
-        let switch = Switch::new(
-            proxy.clone(),
-            None,
-        )
-        .set_event_fn(Box::new(move |switch| {
-            let is_on = switch.is_on();
-            if is_on {
-                unsafe { switch.setBackgroundColor(Some(&UIColor::blueColor())) }
-            } else {
-                unsafe { switch.setBackgroundColor(Some(&UIColor::cyanColor())) }
-            }
-        }))
-        .set_background_color(unsafe { UIColor::cyanColor() });
+        let switch = Switch::new(proxy.clone(), None)
+            .set_event_fn(Box::new(move |switch| {
+                let is_on = switch.is_on();
+                if is_on {
+                    unsafe { switch.setBackgroundColor(Some(&UIColor::blueColor())) }
+                } else {
+                    unsafe { switch.setBackgroundColor(Some(&UIColor::cyanColor())) }
+                }
+            }))
+            .set_background_color(unsafe { UIColor::cyanColor() });
 
         let label = Text::new();
         label.set_text(format!("Switch state: {}", switch.is_on()));

@@ -26,7 +26,7 @@ pub trait View {
         self
     }
     #[cfg(feature = "nightly")]
-    fn set_event_fn(self: Retained<Self>, event_fn: Box<dyn Fn(&Self)>) -> Retained<Self>
+    fn set_event_fn(self: Retained<Self>, _event_fn: Box<dyn Fn(&Self)>) -> Retained<Self>
     where
         Self: Sized,
     {

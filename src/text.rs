@@ -1,16 +1,7 @@
 use objc2::rc::Retained;
-use objc2::runtime::ProtocolObject;
-use objc2::{declare_class, msg_send_id, mutability, ClassType, DeclaredClass};
-use objc2_foundation::{
-    CGPoint, CGRect, CGSize, MainThreadMarker, NSObject, NSObjectProtocol, NSString,
-};
-use objc2_ui_kit::{
-    UIColor, UIControlEvents, UIEdgeInsets, UILabel, UIResponder, UISwitch, UIToolbar, UIView,
-};
-use std::cell::RefCell;
-
-use crate::GUIEvent;
-use winit::event_loop::EventLoopProxy;
+use objc2::{ClassType, DeclaredClass, declare_class, msg_send_id, mutability};
+use objc2_foundation::{MainThreadMarker, NSObject, NSString};
+use objc2_ui_kit::{UILabel, UIView};
 
 declare_class!(
     pub struct Text;
@@ -35,9 +26,9 @@ impl Text {
         let this: Retained<Self> = unsafe { msg_send_id![super(this), init] };
         this
     }
-    pub fn set_text(&self, new_text: String) {
+    pub fn set_text<T: Into<String>>(&self, new_text: T) {
         unsafe {
-            self.setText(Some(&NSString::from_str(&new_text)));
+            self.setText(Some(&NSString::from_str(&new_text.into())));
         }
     }
     pub fn clear_text(&self) {

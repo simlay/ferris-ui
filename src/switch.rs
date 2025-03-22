@@ -1,11 +1,7 @@
 use objc2::rc::Retained;
-use objc2::runtime::ProtocolObject;
-use objc2::{declare_class, msg_send_id, mutability, ClassType, DeclaredClass};
-use objc2_foundation::{CGPoint, CGRect, CGSize, MainThreadMarker, NSObject, NSObjectProtocol};
-use objc2_ui_kit::{
-    UIColor, UIControlEvents, UIEdgeInsets, UIResponder, UISwitch, UIToolbar, UIView,
-};
-use std::cell::RefCell;
+use objc2::{ClassType, DeclaredClass, declare_class, msg_send_id, mutability};
+use objc2_foundation::{MainThreadMarker, NSObject};
+use objc2_ui_kit::{UIControlEvents, UIResponder, UISwitch, UIView};
 
 use crate::{GUIEvent, View};
 use log::debug;

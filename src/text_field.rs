@@ -1,8 +1,8 @@
 use crate::{GUIEvent, View};
 use objc2::rc::Retained;
 use objc2::runtime::ProtocolObject;
-use objc2::{declare_class, msg_send_id, mutability, ClassType, DeclaredClass};
-use objc2_foundation::{CGPoint, CGRect, CGSize, MainThreadMarker, NSObject, NSObjectProtocol};
+use objc2::{ClassType, DeclaredClass, declare_class, msg_send_id, mutability};
+use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol};
 use objc2_ui_kit::{UIResponder, UIScrollViewDelegate, UITextView, UITextViewDelegate, UIView};
 use std::cell::RefCell;
 use winit::event_loop::EventLoopProxy;
@@ -46,21 +46,27 @@ declare_class!(
     unsafe impl UIScrollViewDelegate for TextFieldDelegate {}
     unsafe impl UITextViewDelegate for TextFieldDelegate {
         #[method(textViewDidBeginEditing:)]
-        unsafe fn text_field_did_begin_editing(&self, sender: &TextField) {
+        unsafe fn text_field_did_begin_editing(&self, _sender: &TextField) {
+            /*
             let text = sender.text();
             println!("DidBeginEditing: {text}");
+            */
         }
 
         #[method(textViewDidEndEditing:)]
-        unsafe fn text_field_did_end_editing(&self, sender: &TextField) {
+        unsafe fn text_field_did_end_editing(&self, _sender: &TextField) {
+            /*
             let text = sender.text();
             println!("DidEndEditing: {text}");
+            */
         }
 
         #[method(textViewDidChange:)]
         unsafe fn text_field_did_change(&self, sender: &TextField) {
+            /*
             let text = sender.text();
             println!("textViewDidChange: {text}");
+            */
             sender.text_changed();
         }
     }

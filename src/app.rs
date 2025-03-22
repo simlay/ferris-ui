@@ -1,8 +1,7 @@
-use crate::{GUIEvent, TextField, VStack, View};
+use crate::{GUIEvent, View};
 use log::{debug, error};
 use objc2::rc::Retained;
-use objc2_foundation::{MainThreadMarker, NSString};
-use objc2_ui_kit::{UIColor, UIEdgeInsets, UILabel, UISwitch, UITabBar, UIToolbar, UIView};
+use objc2_ui_kit::UIView;
 use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
 use winit::event_loop::{ActiveEventLoop, EventLoopProxy};
@@ -25,7 +24,7 @@ impl App {
         Self {
             window: None,
             root_ui_view: None,
-            root_view_fn: root_view_fn,
+            root_view_fn,
             root_view: None,
             proxy,
         }
@@ -71,7 +70,7 @@ impl ApplicationHandler<GUIEvent> for App {
         self.window = Some(window);
     }
 
-    fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {
+    fn window_event(&mut self, event_loop: &ActiveEventLoop, _id: WindowId, event: WindowEvent) {
         match event {
             WindowEvent::CloseRequested => {
                 debug!("The close button was pressed; stopping");

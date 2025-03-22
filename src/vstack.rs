@@ -1,9 +1,8 @@
 use crate::View;
 use objc2::rc::Retained;
-use objc2_foundation::{CGPoint, CGRect, CGSize, MainThreadMarker, NSArray, NSString};
+use objc2_foundation::MainThreadMarker;
 use objc2_ui_kit::{
-    UIColor, UIEdgeInsets, UILabel, UILayoutConstraintAxis, UIStackView, UIStackViewAlignment,
-    UIStackViewDistribution, UISwitch, UITabBar, UIToolbar, UIView,
+    UILayoutConstraintAxis, UIStackView, UIStackViewAlignment, UIStackViewDistribution, UIView,
 };
 
 pub struct VStack {
