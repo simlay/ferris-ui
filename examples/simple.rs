@@ -1,7 +1,5 @@
 use ferris_ui::{App, GUIEvent, Switch, Text, TextField, VStack, View};
-use objc2::rc::Retained;
-use objc2_foundation::{MainThreadMarker, NSString};
-use objc2_ui_kit::{UIColor, UIEdgeInsets, UILabel, UISwitch, UITabBar, UIToolbar, UIView};
+use objc2_ui_kit::{UIColor, UIView};
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopProxy};
 
 fn main() {

@@ -1,5 +1,5 @@
 use objc2::rc::Retained;
-use objc2::{ClassType, DeclaredClass, declare_class, msg_send_id, mutability};
+use objc2::{DeclaredClass, define_class, msg_send, MainThreadOnly};
 use objc2_foundation::{MainThreadMarker, NSObject};
 use objc2_ui_kit::{UIControlEvents, UIResponder, UISwitch, UIView};
 
@@ -12,21 +12,15 @@ pub struct SwitchState {
     event_fn: Option<Box<dyn Fn(&Switch)>>,
 }
 
-declare_class!(
+define_class!(
+    #[unsafe(super(UISwitch, UIView, UIResponder, NSObject))]
+    #[thread_kind = MainThreadOnly]
+    #[name = "FerrisUISwitch"]
+    #[ivars = SwitchState]
     pub struct Switch;
-    unsafe impl ClassType for Switch {
-        #[inherits(UIView, UIResponder, NSObject)]
-        type Super = UISwitch;
-        type Mutability = mutability::MainThreadOnly;
-        const NAME: &'static str = "FerrisUISwitch";
-    }
 
-    impl DeclaredClass for Switch {
-        type Ivars = SwitchState;
-    }
-
-    unsafe impl Switch {
-        #[method(toggle)]
+    impl Switch {
+        #[unsafe(method(toggle))]
         fn toggle(&self) {
             let is_on = self.is_on();
             if let Some(event_fn) = &self.ivars().event_fn {
@@ -47,13 +41,13 @@ impl Switch {
         let mtm = MainThreadMarker::new().unwrap();
 
         let this = mtm.alloc().set_ivars(SwitchState { proxy, event_fn });
-        let this: Retained<Self> = unsafe { msg_send_id![super(this), init] };
+        let this: Retained<Self> = unsafe { msg_send![super(this), init] };
 
         unsafe {
             this.addTarget_action_forControlEvents(
                 Some(&this),
                 objc2::sel!(toggle),
-                UIControlEvents::UIControlEventValueChanged,
+                UIControlEvents::ValueChanged,
             );
         }
 

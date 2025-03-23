@@ -1,7 +1,7 @@
 use crate::{GUIEvent, View};
 use objc2::rc::Retained;
 use objc2::runtime::ProtocolObject;
-use objc2::{ClassType, DeclaredClass, declare_class, msg_send_id, mutability};
+use objc2::{DeclaredClass, define_class, msg_send, MainThreadOnly};
 use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol};
 use objc2_ui_kit::{UIResponder, UIScrollViewDelegate, UITextView, UITextViewDelegate, UIView};
 use std::cell::RefCell;
@@ -13,56 +13,44 @@ pub struct TextFieldState {
     event_fn: Option<Box<dyn Fn(&TextField)>>,
 }
 
-declare_class!(
+define_class!(
+    #[unsafe(super(UITextView, UIView, UIResponder, NSObject))]
+    #[thread_kind = MainThreadOnly]
+    #[name = "FerrisUITextView"]
+    #[ivars = TextFieldState]
     pub struct TextField;
-    unsafe impl ClassType for TextField {
-        #[inherits(UIView, UIResponder, NSObject)]
-        type Super = UITextView;
-        type Mutability = mutability::MainThreadOnly;
-        const NAME: &'static str = "FerrisUITextView";
-    }
 
-    impl DeclaredClass for TextField {
-        type Ivars = TextFieldState;
-    }
-
-    unsafe impl TextField { }
+    impl TextField { }
 );
 
-declare_class!(
+define_class!(
+    #[unsafe(super(NSObject))]
+    #[thread_kind = MainThreadOnly]
+    #[name = "FerrisTextViewDelegate"]
     pub struct TextFieldDelegate;
 
-    unsafe impl ClassType for TextFieldDelegate {
-        type Super = NSObject;
-        type Mutability = mutability::MainThreadOnly;
-        const NAME: &'static str = "FerrisTextViewDelegate";
-    }
-
-    impl DeclaredClass for TextFieldDelegate {
-        type Ivars = ();
-    }
 
     unsafe impl NSObjectProtocol for TextFieldDelegate {}
     unsafe impl UIScrollViewDelegate for TextFieldDelegate {}
     unsafe impl UITextViewDelegate for TextFieldDelegate {
-        #[method(textViewDidBeginEditing:)]
-        unsafe fn text_field_did_begin_editing(&self, _sender: &TextField) {
+        #[unsafe(method(textViewDidBeginEditing:))]
+        fn text_field_did_begin_editing(&self, _sender: &TextField) {
             /*
             let text = sender.text();
             println!("DidBeginEditing: {text}");
             */
         }
 
-        #[method(textViewDidEndEditing:)]
-        unsafe fn text_field_did_end_editing(&self, _sender: &TextField) {
+        #[unsafe(method(textViewDidEndEditing:))]
+        fn text_field_did_end_editing(&self, _sender: &TextField) {
             /*
             let text = sender.text();
             println!("DidEndEditing: {text}");
             */
         }
 
-        #[method(textViewDidChange:)]
-        unsafe fn text_field_did_change(&self, sender: &TextField) {
+        #[unsafe(method(textViewDidChange:))]
+        fn text_field_did_change(&self, sender: &TextField) {
             /*
             let text = sender.text();
             println!("textViewDidChange: {text}");
@@ -81,13 +69,13 @@ impl TextField {
 
         // TODO: This should be hidden someplace.
         let delegate: Retained<TextFieldDelegate> =
-            unsafe { objc2::msg_send_id![mtm.alloc(), init] };
+            unsafe { objc2::msg_send![mtm.alloc(), init] };
         let this = mtm.alloc().set_ivars(TextFieldState {
             delegate: RefCell::new(delegate),
             proxy,
             event_fn,
         });
-        let this: Retained<TextField> = unsafe { msg_send_id![super(this), init] };
+        let this: Retained<TextField> = unsafe { msg_send![super(this), init] };
         {
             let delegate = this.ivars().delegate.borrow();
             unsafe { this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone()))) };
