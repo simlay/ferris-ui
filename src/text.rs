@@ -1,5 +1,6 @@
+use crate::View;
 use objc2::rc::Retained;
-use objc2::{msg_send, define_class, MainThreadOnly, MainThreadMarker};
+use objc2::{MainThreadMarker, MainThreadOnly, define_class, msg_send};
 use objc2_foundation::{NSObject, NSString};
 use objc2_ui_kit::{UILabel, UIView};
 
@@ -20,13 +21,23 @@ impl Text {
         this
     }
     pub fn set_text<T: Into<String>>(&self, new_text: T) {
+        // UNANSWERED: Is this safe?
         unsafe {
             self.setText(Some(&NSString::from_str(&new_text.into())));
         }
+    }
+    pub fn with_text<T: Into<String>>(self: Retained<Self>, new_text: T) -> Retained<Self> {
+        self.set_text(new_text);
+        self
     }
     pub fn clear_text(&self) {
         unsafe {
             self.setText(None);
         }
+    }
+}
+impl View for Text {
+    fn ui_view(&self) -> Box<&UIView> {
+        Box::new(self.as_ref())
     }
 }

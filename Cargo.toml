@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 [features]
 nightly = []
+nightly-debug = []
 default = ["nightly"]
 
 [target.'cfg(target_os = "ios")'.dependencies]

@@ -1,5 +1,5 @@
 use objc2::rc::Retained;
-use objc2::{DeclaredClass, define_class, msg_send, MainThreadOnly};
+use objc2::{DeclaredClass, MainThreadOnly, define_class, msg_send};
 use objc2_foundation::{MainThreadMarker, NSObject};
 use objc2_ui_kit::{UIControlEvents, UIResponder, UISwitch, UIView};
 
@@ -63,7 +63,7 @@ impl View for Switch {
         Box::new(self.as_ref())
     }
     #[cfg(feature = "nightly")]
-    fn set_event_fn(self: Retained<Self>, event_fn: Box<dyn Fn(&Self)>) -> Retained<Self> {
+    fn with_event_fn(self: Retained<Self>, event_fn: Box<dyn Fn(&Self)>) -> Retained<Self> {
         let ivars = self.ivars();
         Self::new(ivars.proxy.clone(), Some(event_fn))
     }

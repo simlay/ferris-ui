@@ -1,7 +1,7 @@
 use crate::{GUIEvent, View};
 use objc2::rc::Retained;
 use objc2::runtime::ProtocolObject;
-use objc2::{DeclaredClass, define_class, msg_send, MainThreadOnly};
+use objc2::{DeclaredClass, MainThreadOnly, define_class, msg_send};
 use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol};
 use objc2_ui_kit::{UIResponder, UIScrollViewDelegate, UITextView, UITextViewDelegate, UIView};
 use std::cell::RefCell;
@@ -28,7 +28,6 @@ define_class!(
     #[thread_kind = MainThreadOnly]
     #[name = "FerrisTextViewDelegate"]
     pub struct TextFieldDelegate;
-
 
     unsafe impl NSObjectProtocol for TextFieldDelegate {}
     unsafe impl UIScrollViewDelegate for TextFieldDelegate {}
@@ -68,8 +67,7 @@ impl TextField {
         let mtm = MainThreadMarker::new().unwrap();
 
         // TODO: This should be hidden someplace.
-        let delegate: Retained<TextFieldDelegate> =
-            unsafe { objc2::msg_send![mtm.alloc(), init] };
+        let delegate: Retained<TextFieldDelegate> = unsafe { objc2::msg_send![mtm.alloc(), init] };
         let this = mtm.alloc().set_ivars(TextFieldState {
             delegate: RefCell::new(delegate),
             proxy,
@@ -82,6 +80,11 @@ impl TextField {
         }
 
         this
+    }
+
+    pub fn get_text(&self) -> String {
+        // UNANSWERED: Is this safe?
+        unsafe { self.text() }.to_string()
     }
 
     fn text_changed(&self) {
@@ -98,7 +101,7 @@ impl View for TextField {
         Box::new(self.as_ref())
     }
     #[cfg(feature = "nightly")]
-    fn set_event_fn(self: Retained<Self>, event_fn: Box<dyn Fn(&Self)>) -> Retained<Self> {
+    fn with_event_fn(self: Retained<Self>, event_fn: Box<dyn Fn(&Self)>) -> Retained<Self> {
         let ivars = self.ivars();
         Self::new(ivars.proxy.clone(), Some(event_fn))
     }

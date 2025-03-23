@@ -5,13 +5,14 @@ use objc2_ui_kit::{
     UILayoutConstraintAxis, UIStackView, UIStackViewAlignment, UIStackViewDistribution, UIView,
 };
 
+type VStackChildren = Vec<Box<dyn View>>;
 pub struct VStack {
-    children: Vec<Box<dyn View>>,
+    children: VStackChildren,
     stack_view: Retained<UIStackView>,
 }
 
 impl VStack {
-    pub fn new(children: Vec<Box<dyn View>>) -> Self {
+    pub fn new(children: VStackChildren) -> Self {
         let mtm = MainThreadMarker::new().unwrap();
         let stack_view = unsafe { UIStackView::new(mtm) };
         unsafe {

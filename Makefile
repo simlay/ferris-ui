@@ -14,6 +14,27 @@ debug: install
 run: install
 	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --console --terminate-running-process booted RustWrapper
 
+screenshot: install
+	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process booted RustWrapper
+	sleep 2
+	xcrun simctl io booted screenshot screenshot.png
+
+record: install
+	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process booted RustWrapper --record
+	xcrun simctl io booted recordVideo record.mp4
+
+gh-summary:
+	echo "## APP STDOUT" > Summary.md
+	echo \`\`\` >> Summary.md
+	cat stdout.txt >> Summary.md
+	echo \`\`\` >> Summary.md
+	echo "## APP STDERR" > Summary.md
+	echo \`\`\` >> Summary.md
+	cat stderr.txt >> Summary.md
+	echo \`\`\` >> Summary.md
+	echo "## SCREENSHOT" >> Summary.md
+	echo "![](data:image/png;base64,$(shell base64 -i screenshot.png))" >> Summary.md
+
 watch:
 	cargo watch -s 'make run' -w ./src -w ./Cargo.toml -w ./examples/
 

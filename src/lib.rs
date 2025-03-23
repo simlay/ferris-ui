@@ -1,4 +1,4 @@
-#![cfg_attr(feature = "nightly", feature(core_intrinsics))]
+#![cfg_attr(feature = "nightly-debug", feature(core_intrinsics))]
 #![cfg_attr(feature = "nightly", feature(arbitrary_self_types))]
 mod app;
 mod switch;
@@ -17,7 +17,7 @@ use objc2_ui_kit::{UIColor, UIView};
 pub trait View {
     fn event(&mut self, _event: GUIEvent) {}
     fn ui_view(&self) -> Box<&UIView>;
-    fn set_background_color(self, color: Retained<UIColor>) -> Self
+    fn with_background_color(self, color: Retained<UIColor>) -> Self
     where
         Self: Sized,
     {
@@ -26,7 +26,7 @@ pub trait View {
         self
     }
     #[cfg(feature = "nightly")]
-    fn set_event_fn(self: Retained<Self>, _event_fn: Box<dyn Fn(&Self)>) -> Retained<Self>
+    fn with_event_fn(self: Retained<Self>, _event_fn: Box<dyn Fn(&Self)>) -> Retained<Self>
     where
         Self: Sized,
     {
