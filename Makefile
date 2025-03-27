@@ -21,14 +21,16 @@ screenshot: install
 
 record: install
 	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process booted RustWrapper --record
-	xcrun simctl io booted recordVideo record.mp4
+	xcrun simctl io booted recordVideo -f record.mp4 &
+	sleep 2
+	ps | grep 'simctl io booted recordVideo' | grep -v grep | awk '{print $$1}' | xargs kill -s SIGINT
 
 gh-summary:
 	echo "## APP STDOUT" > Summary.md
 	echo \`\`\` >> Summary.md
 	cat stdout.txt >> Summary.md
 	echo \`\`\` >> Summary.md
-	echo "## APP STDERR" > Summary.md
+	echo "## APP STDERR" >> Summary.md
 	echo \`\`\` >> Summary.md
 	cat stderr.txt >> Summary.md
 	echo \`\`\` >> Summary.md

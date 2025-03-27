@@ -14,8 +14,7 @@ define_class!(
 );
 
 impl Text {
-    pub fn new() -> Retained<Self> {
-        let mtm = MainThreadMarker::new().unwrap();
+    pub fn new(mtm: MainThreadMarker) -> Retained<Self> {
         let this = mtm.alloc().set_ivars(());
         let this: Retained<Self> = unsafe { msg_send![super(this), init] };
         this

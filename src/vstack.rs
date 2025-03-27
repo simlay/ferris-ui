@@ -12,8 +12,7 @@ pub struct VStack {
 }
 
 impl VStack {
-    pub fn new(children: VStackChildren) -> Self {
-        let mtm = MainThreadMarker::new().unwrap();
+    pub fn new(mtm: MainThreadMarker, children: VStackChildren) -> Self {
         let stack_view = unsafe { UIStackView::new(mtm) };
         unsafe {
             stack_view.setAxis(UILayoutConstraintAxis::Vertical);

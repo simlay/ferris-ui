@@ -2,6 +2,7 @@ use objc2::rc::Retained;
 use objc2::{DeclaredClass, MainThreadOnly, define_class, msg_send};
 use objc2_foundation::{MainThreadMarker, NSObject};
 use objc2_ui_kit::{UIControlEvents, UIResponder, UISwitch, UIView};
+use std::cell::RefCell;
 
 use crate::{GUIEvent, View};
 use log::debug;
@@ -9,7 +10,7 @@ use winit::event_loop::EventLoopProxy;
 
 pub struct SwitchState {
     proxy: EventLoopProxy<GUIEvent>,
-    event_fn: Option<Box<dyn Fn(&Switch)>>,
+    event_fn: RefCell<Option<Box<dyn Fn(&Switch)>>>,
 }
 
 define_class!(
@@ -23,7 +24,7 @@ define_class!(
         #[unsafe(method(toggle))]
         fn toggle(&self) {
             let is_on = self.is_on();
-            if let Some(event_fn) = &self.ivars().event_fn {
+            if let Some(event_fn) = &*self.ivars().event_fn.borrow() {
                 event_fn(self);
             }
 
@@ -34,13 +35,11 @@ define_class!(
 );
 
 impl Switch {
-    pub fn new(
-        proxy: EventLoopProxy<GUIEvent>,
-        event_fn: Option<Box<dyn Fn(&Self)>>,
-    ) -> Retained<Self> {
-        let mtm = MainThreadMarker::new().unwrap();
-
-        let this = mtm.alloc().set_ivars(SwitchState { proxy, event_fn });
+    pub fn new(mtm: MainThreadMarker, proxy: EventLoopProxy<GUIEvent>) -> Retained<Self> {
+        let this = mtm.alloc().set_ivars(SwitchState {
+            proxy,
+            event_fn: RefCell::new(None),
+        });
         let this: Retained<Self> = unsafe { msg_send![super(this), init] };
 
         unsafe {
@@ -64,7 +63,7 @@ impl View for Switch {
     }
     #[cfg(feature = "nightly")]
     fn with_event_fn(self: Retained<Self>, event_fn: Box<dyn Fn(&Self)>) -> Retained<Self> {
-        let ivars = self.ivars();
-        Self::new(ivars.proxy.clone(), Some(event_fn))
+        *self.ivars().event_fn.borrow_mut() = Some(event_fn);
+        self
     }
 }

@@ -10,7 +10,7 @@ use winit::event_loop::EventLoopProxy;
 pub struct TextFieldState {
     delegate: RefCell<Retained<TextFieldDelegate>>,
     proxy: EventLoopProxy<GUIEvent>,
-    event_fn: Option<Box<dyn Fn(&TextField)>>,
+    event_fn: RefCell<Option<Box<dyn Fn(&TextField)>>>,
 }
 
 define_class!(
@@ -60,18 +60,13 @@ define_class!(
 );
 
 impl TextField {
-    pub fn new(
-        proxy: EventLoopProxy<GUIEvent>,
-        event_fn: Option<Box<dyn Fn(&Self)>>,
-    ) -> Retained<Self> {
-        let mtm = MainThreadMarker::new().unwrap();
-
-        // TODO: This should be hidden someplace.
-        let delegate: Retained<TextFieldDelegate> = unsafe { objc2::msg_send![mtm.alloc(), init] };
-        let this = mtm.alloc().set_ivars(TextFieldState {
+    pub fn new(mtm: MainThreadMarker, proxy: EventLoopProxy<GUIEvent>) -> Retained<Self> {
+        let delegate: Retained<TextFieldDelegate> =
+            unsafe { objc2::msg_send![TextFieldDelegate::alloc(mtm), init] };
+        let this = Self::alloc(mtm).set_ivars(TextFieldState {
             delegate: RefCell::new(delegate),
             proxy,
-            event_fn,
+            event_fn: RefCell::new(None),
         });
         let this: Retained<TextField> = unsafe { msg_send![super(this), init] };
         {
@@ -88,9 +83,9 @@ impl TextField {
     }
 
     fn text_changed(&self) {
-        let text = unsafe { self.text() }.to_string();
+        let text = self.get_text();
         let _ = self.ivars().proxy.send_event(GUIEvent::Text(text.clone()));
-        if let Some(event_fn) = &self.ivars().event_fn {
+        if let Some(event_fn) = &*self.ivars().event_fn.borrow() {
             event_fn(self);
         }
     }
@@ -102,7 +97,7 @@ impl View for TextField {
     }
     #[cfg(feature = "nightly")]
     fn with_event_fn(self: Retained<Self>, event_fn: Box<dyn Fn(&Self)>) -> Retained<Self> {
-        let ivars = self.ivars();
-        Self::new(ivars.proxy.clone(), Some(event_fn))
+        *self.ivars().event_fn.borrow_mut() = Some(event_fn);
+        self
     }
 }

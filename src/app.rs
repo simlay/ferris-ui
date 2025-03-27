@@ -34,16 +34,6 @@ impl App {
 impl ApplicationHandler<GUIEvent> for App {
     fn user_event(&mut self, _event_loop: &ActiveEventLoop, event: GUIEvent) {
         debug!("NEW EVENT: {event:?}");
-        /*
-        if let GUIEvent::Text(text) = event {
-            unsafe {
-                self.ui_label
-                    .as_ref()
-                    .unwrap()
-                    .setText(Some(&NSString::from_str(text.as_str())))
-            };
-        }
-        */
     }
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         let window = event_loop
