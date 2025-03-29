@@ -17,7 +17,8 @@ run: install
 screenshot: install
 	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process booted RustWrapper
 	sleep 2
-	xcrun simctl io booted screenshot screenshot.png
+	xcrun simctl io booted screenshot screenshot-big.png
+	magick screenshot-big.png -resize 50% screenshot.png
 
 record: install
 	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process booted RustWrapper --record
