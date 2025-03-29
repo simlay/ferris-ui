@@ -57,7 +57,7 @@ jobs:
 
       - name: Put screenshot in github summary
         run: |
-          SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i screenshot.png)" | jq -r '.data.url')
+          SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i screenshot.png)" | jq -r '.data.display_url')
           export SCREENSHOT_URL
           make gh-summary
           cat Summary.md >> "$GITHUB_STEP_SUMMARY"
@@ -95,7 +95,7 @@ jobs:
 
       - name: upload screenshots to imgbb
         run: |
-          SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i swift-example/swift-screenshot.png)" | jq -r '.data.url')
+          SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i swift-example/swift-screenshot.png)" | jq -r '.data.display_url')
           export SCREENSHOT_URL
           make gh-summary
           cat Summary.md >> "$GITHUB_STEP_SUMMARY"

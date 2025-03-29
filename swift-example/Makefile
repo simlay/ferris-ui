@@ -18,5 +18,5 @@ swift-example-screenshot: swift-example-install
 		--stdout=$(PWD)/stdout.txt \
 		--stderr=$(PWD)/stderr.txt \
 		--terminate-running-process booted RustWrapper
-	sleep 2
+	sleep 5
 	xcrun simctl io booted screenshot swift-screenshot.png
