@@ -70,7 +70,7 @@ jobs:
       - name: start simulator
         run: |
           xcrun simctl boot 'iPhone 16'
-          for i in 1..20; do xcrun simctl list devices booted; sleep 1; done
+          sleep 20
 
       - name: Run example and take screenshot
         run: |
@@ -80,7 +80,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         id: screenshot
         with:
-          name: swift-screenshot
+          name: screenshot
           path: swift-example/swift-screenshot.png
           compression-level: 0 # no compression
 
