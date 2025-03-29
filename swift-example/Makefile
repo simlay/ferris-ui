@@ -5,7 +5,7 @@ swift-example-build:
 		-Xswiftc "-target" -Xswiftc "x86_64-apple-ios18.0-simulator" \
 
 swift-example-bundle: swift-example-build
-	cp .build/debug/swift-example ../RustWrapper.app/
+	cp .build/debug/swift-example ../RustWrapper.app/simple
 
 swift-example-install: swift-example-bundle
 	xcrun simctl install booted ../RustWrapper.app/
