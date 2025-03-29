@@ -81,7 +81,7 @@ jobs:
         id: screenshot
         with:
           name: swift-screenshot
-          path: swift-screenshot.png
+          path: swift-example/swift-screenshot.png
           compression-level: 0 # no compression
 
       - uses: actions/upload-artifact@v4
