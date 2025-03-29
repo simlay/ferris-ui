@@ -19,5 +19,5 @@ swift-example-screenshot: swift-example-install
 		--stderr=$(PWD)/stderr.txt \
 		--terminate-running-process booted RustWrapper
 	sleep 5
-	xcrun simctl io booted screenshot swift-screenshot-big.png
-	magick swift-screenshot-big.png -resize 50% swift-screenshot.png
+	xcrun simctl io booted screenshot swift-screenshot.png
+	sips -Z 1278 swift-screenshot.png
