@@ -85,9 +85,9 @@ jobs:
           compression-level: 0 # no compression
 
       - uses: actions/upload-artifact@v4
-        id: app-logs
+        id: swift-app-logs
         with:
-          name: app-logs
+          name: swift-app-logs
           path: |
             stdout.txt
             stderr.txt
