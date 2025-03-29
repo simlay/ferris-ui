@@ -70,10 +70,11 @@ jobs:
       - name: start simulator
         run: |
           xcrun simctl boot 'iPhone 16'
-          sleep 20
+          for i in 1..20; do xcrun simctl list devices booted; sleep 1; done
 
       - name: Run example and take screenshot
         run: |
+          xcrun simctl list devices booted
           make -C ./swift-example/ swift-example-screenshot
 
       - uses: actions/upload-artifact@v4
