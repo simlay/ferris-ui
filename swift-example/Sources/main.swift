@@ -1,6 +1,7 @@
 import SwiftUI
+#if os(iOS)
 import UIKit
-
+#endif
 
 @main
 struct MyApp: App {
@@ -15,16 +16,16 @@ struct ContentView: View {
     @State var name: String = "John"
     @State var quantity: Int = 0
     @State var progress: Float = 0
+    @State var isEditing = false
     var body: some View {
         VStack {
             Text("Steppr \(quantity)")
-            Text("Slider \(progress)")
             Button(
                 action: {
                     print("BUTTON PRESSED");
                     // did tap
                 },
-                label: { Text("Click Me") }
+                label: { Text("Click Me \(name)") }
             )
             Button(
                 action: {
@@ -44,7 +45,17 @@ struct ContentView: View {
             .padding()
 
             Stepper(value: $quantity, in: 0...10, label: { Text("Quantity \(quantity)")})
-            Slider(value: $progress, in: 0...100)
+            Slider(
+                value: $progress,
+                in: 0...100,
+                step: 5,
+
+                onEditingChanged: { editing in
+                    isEditing = editing
+                }
+            )
+            Text("Slider \(progress)")
+                .foregroundColor(isEditing ? .red : .blue)
         }
         //.padding()
     }

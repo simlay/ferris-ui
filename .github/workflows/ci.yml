@@ -57,8 +57,8 @@ jobs:
 
       - name: Put screenshot in github summary
         run: |
-          echo 'Artifact ID is ${{ steps.screenshot.outputs.artifact-id }}'
-          echo 'Artifact URL is ${{ steps.screenshot.outputs.artifact-url }}'
+          SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i screenshot.png)" | jq -r '.data.url')
+          export SCREENSHOT_URL
           make gh-summary
           cat Summary.md >> "$GITHUB_STEP_SUMMARY"
 
@@ -92,3 +92,10 @@ jobs:
             stdout.txt
             stderr.txt
           compression-level: 0 # no compression
+
+      - name: upload screenshots to imgbb
+        run: |
+          SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i swift-example/swift-screenshot.png)" | jq -r '.data.url')
+          export SCREENSHOT_URL
+          make gh-summary
+          cat Summary.md >> "$GITHUB_STEP_SUMMARY"

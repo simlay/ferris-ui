@@ -35,7 +35,7 @@ gh-summary:
 	cat stderr.txt >> Summary.md
 	echo \`\`\` >> Summary.md
 	echo "## SCREENSHOT" >> Summary.md
-	echo "![](data:image/png;base64,$(shell base64 -i screenshot.png))" >> Summary.md
+	echo "![Screenshot](${SCREENSHOT_URL})" >> Summary.md
 
 watch:
 	cargo watch -s 'make run' -w ./src -w ./Cargo.toml -w ./examples/
