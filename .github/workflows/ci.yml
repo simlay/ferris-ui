@@ -34,13 +34,6 @@ jobs:
           xcrun simctl boot 'iPhone 16'
           sleep 20
 
-        #- name: Run example and take screenshot
-        #  run: |
-        #    make install
-        #    make run &
-        #    sleep 10
-        #    xcrun simctl io booted screenshot screenshot.png
-
       - name: Run example and take screenshot
         run: |
           make screenshot
@@ -68,3 +61,33 @@ jobs:
           echo 'Artifact URL is ${{ steps.screenshot.outputs.artifact-url }}'
           make gh-summary
           cat Summary.md >> "$GITHUB_STEP_SUMMARY"
+
+  swift-screenshot:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: start simulator
+        run: |
+          xcrun simctl boot 'iPhone 16'
+          sleep 20
+
+      - name: Run example and take screenshot
+        run: |
+          make -C ./swift-example/ swift-example-screenshot
+
+      - uses: actions/upload-artifact@v4
+        id: screenshot
+        with:
+          name: swift-screenshot
+          path: swift-screenshot.png
+          compression-level: 0 # no compression
+
+      - uses: actions/upload-artifact@v4
+        id: app-logs
+        with:
+          name: app-logs
+          path: |
+            stdout.txt
+            stderr.txt
+          compression-level: 0 # no compression

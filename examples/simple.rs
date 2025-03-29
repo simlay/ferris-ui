@@ -65,9 +65,9 @@ impl MyView {
         let vstack = VStack::new(
             mtm,
             vec![
-                Box::new(text_field),
                 Box::new(label.clone()),
                 Box::new(switch.clone()),
+                Box::new(text_field),
             ],
         );
         Box::new(Self { proxy, vstack })
