@@ -78,9 +78,9 @@ jobs:
           make -C ./swift-example/ swift-example-screenshot
 
       - uses: actions/upload-artifact@v4
-        id: screenshot
+        id: swift-screenshot
         with:
-          name: screenshot
+          name: swift-screenshot
           path: swift-example/swift-screenshot.png
           compression-level: 0 # no compression
 
