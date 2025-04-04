@@ -1,0 +1,39 @@
+name: Docs
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  docs:
+    runs-on: macos-15
+    permissions:
+      contents: write           # 'write' access to repository contents
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          targets: aarch64-apple-ios-sim
+          toolchain: nightly
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/git
+            ~/.cargo/registry
+            target
+          key: ${{runner.os}}-${{runner.arch}}-${{ github.workflow }}-${{ github.job }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - run: cargo doc --target aarch64-apple-ios-sim
+      - name: Commit docs to gh-pages
+        run: |
+          git config --global user.email "sebastian.imlay@gmail.com"
+          git config --global user.name "Sebastian Imlay"
+          git checkout --orphan gh-pages
+          echo '<meta http-equiv="refresh" content="0; url=target/aarch64-apple-ios-sim/doc/android_bindings/index.html"><a href="target/aarch64-apple-ios-sim/doc/android_bindings/index.html">Redirect</a>' > index.html
+          git add index.html
+          git add --force target/aarch64-apple-ios-sim/doc/
+          git commit -m "Updated docs for latest changes"
+          git push origin gh-pages --force
+
