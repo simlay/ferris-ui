@@ -1,0 +1,50 @@
+use objc2::rc::Retained;
+use objc2::{AllocAnyThread, msg_send};
+use objc2_core_foundation::CGSize;
+use objc2_foundation::{
+    NSSearchPathDirectory, NSSearchPathDomainMask, NSSearchPathForDirectoriesInDomains,
+};
+use objc2_ui_kit::{
+    UIGraphicsBeginImageContext,
+    //UIGraphicsGetCurrentContext,
+    UIGraphicsEndImageContext,
+    UIGraphicsGetImageFromCurrentImageContext,
+    UIGraphicsImageRenderer,
+    UIGraphicsImageRendererContext,
+    UIImage,
+    UIImagePNGRepresentation,
+    UIImageWriteToSavedPhotosAlbum,
+};
+use std::fs::{File, write};
+use std::io::Write;
+pub fn save_image(image: Retained<UIImage>) {
+    let path = unsafe {
+        NSSearchPathForDirectoriesInDomains(
+            NSSearchPathDirectory::DocumentDirectory,
+            NSSearchPathDomainMask::UserDomainMask,
+            true,
+        )
+    };
+    let data = unsafe { UIImagePNGRepresentation(&image) }
+        .unwrap()
+        .to_vec();
+    println!("DATA IS {:?}", data.len());
+
+    if let Some(path) = path.firstObject() {
+        let path = path.to_string();
+        let path = std::path::Path::new(&path).join("foobar.png");
+        println!("PATH IS {path:?}");
+        //let mut output = File::create(path).unwrap();
+        write(path, data);
+    }
+}
+pub fn take_screenshot(size: CGSize) -> Option<Retained<UIImage>> {
+    println!("Taking screenshot at size: {size:?}");
+    unsafe { UIGraphicsBeginImageContext(size) };
+    let _renderer =
+        unsafe { UIGraphicsImageRenderer::initWithSize(UIGraphicsImageRenderer::alloc(), size) };
+    let image = unsafe { UIGraphicsGetImageFromCurrentImageContext() };
+    let path = NSSearchPathDirectory::PicturesDirectory;
+    unsafe { UIGraphicsEndImageContext() };
+    image
+}
