@@ -413,6 +413,7 @@ dependencies = [
  "env_logger",
  "log",
  "objc2 0.6.0",
+ "objc2-core-foundation",
  "objc2-foundation 0.3.0",
  "objc2-ui-kit 0.3.0",
  "oslog",
@@ -786,6 +787,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "daeaf60f25471d26948a1c2f840e3f7d86f4109e3af4e8e4b5cd70c39690d925"
 dependencies = [
  "bitflags 2.9.0",
+ "block2 0.6.0",
+ "libc",
  "objc2 0.6.0",
 ]
 

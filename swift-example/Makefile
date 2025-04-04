@@ -21,3 +21,5 @@ swift-example-screenshot: swift-example-install
 	sleep 5
 	xcrun simctl io booted screenshot swift-screenshot.png
 	sips -Z 1278 swift-screenshot.png
+watch:
+	watchexec -r -w ./Sources/main.swift -w Package.swift 'make swift-example-run'

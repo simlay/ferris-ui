@@ -1,6 +1,7 @@
 #![cfg_attr(feature = "nightly-debug", feature(core_intrinsics))]
 #![cfg_attr(feature = "nightly", feature(arbitrary_self_types))]
 mod app;
+mod screenshot;
 mod switch;
 mod text;
 mod text_field;

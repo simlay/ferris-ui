@@ -19,11 +19,10 @@ struct ContentView: View {
     @State var isEditing = false
     var body: some View {
         VStack {
-            Text("Steppr \(quantity)")
+            Text("Stepper \(quantity)")
             Button(
                 action: {
                     print("BUTTON PRESSED");
-                    // did tap
                 },
                 label: { Text("Click Me \(name)") }
             )

@@ -1,3 +1,4 @@
+use crate::screenshot::{save_image, take_screenshot};
 use crate::{GUIEvent, View};
 use log::{debug, error};
 use objc2::rc::Retained;
@@ -30,10 +31,16 @@ impl App {
         }
     }
 }
-
 impl ApplicationHandler<GUIEvent> for App {
     fn user_event(&mut self, _event_loop: &ActiveEventLoop, event: GUIEvent) {
         debug!("NEW EVENT: {event:?}");
+        let view = self.root_ui_view.clone().unwrap();
+        let image = take_screenshot(view.bounds().size);
+        if let Some(image) = image {
+            save_image(image);
+        }
+        /*
+         */
     }
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         let window = event_loop
