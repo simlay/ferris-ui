@@ -1,5 +1,5 @@
 use objc2::rc::Retained;
-use objc2::{AllocAnyThread, msg_send};
+use objc2::AllocAnyThread;
 use objc2_core_foundation::CGSize;
 use objc2_foundation::{
     NSSearchPathDirectory, NSSearchPathDomainMask, NSSearchPathForDirectoriesInDomains,
@@ -10,13 +10,12 @@ use objc2_ui_kit::{
     UIGraphicsEndImageContext,
     UIGraphicsGetImageFromCurrentImageContext,
     UIGraphicsImageRenderer,
-    UIGraphicsImageRendererContext,
+    //UIGraphicsImageRendererContext,
     UIImage,
     UIImagePNGRepresentation,
-    UIImageWriteToSavedPhotosAlbum,
+    //UIImageWriteToSavedPhotosAlbum,
 };
-use std::fs::{File, write};
-use std::io::Write;
+use std::fs::write;
 pub fn save_image(image: Retained<UIImage>) {
     let path = unsafe {
         NSSearchPathForDirectoriesInDomains(
@@ -35,7 +34,7 @@ pub fn save_image(image: Retained<UIImage>) {
         let path = std::path::Path::new(&path).join("foobar.png");
         println!("PATH IS {path:?}");
         //let mut output = File::create(path).unwrap();
-        write(path, data);
+        let _ = write(path, data);
     }
 }
 pub fn take_screenshot(size: CGSize) -> Option<Retained<UIImage>> {
@@ -44,7 +43,7 @@ pub fn take_screenshot(size: CGSize) -> Option<Retained<UIImage>> {
     let _renderer =
         unsafe { UIGraphicsImageRenderer::initWithSize(UIGraphicsImageRenderer::alloc(), size) };
     let image = unsafe { UIGraphicsGetImageFromCurrentImageContext() };
-    let path = NSSearchPathDirectory::PicturesDirectory;
+    //let path = NSSearchPathDirectory::PicturesDirectory;
     unsafe { UIGraphicsEndImageContext() };
     image
 }

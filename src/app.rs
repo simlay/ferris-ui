@@ -39,8 +39,6 @@ impl ApplicationHandler<GUIEvent> for App {
         if let Some(image) = image {
             save_image(image);
         }
-        /*
-         */
     }
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         let window = event_loop

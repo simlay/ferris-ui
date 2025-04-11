@@ -6,6 +6,8 @@ mod switch;
 mod text;
 mod text_field;
 mod vstack;
+mod image;
+
 pub use app::App;
 pub use switch::Switch;
 pub use text::Text;

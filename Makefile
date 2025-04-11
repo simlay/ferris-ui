@@ -1,3 +1,4 @@
+EMULATOR='iPhone 16'
 
 build:
 	cargo build --target aarch64-apple-ios-sim --example simple
@@ -6,25 +7,25 @@ bundle: build
 	cp ./target/aarch64-apple-ios-sim/debug/examples/simple ./RustWrapper.app/
 
 install: bundle
-	xcrun simctl install booted ./RustWrapper.app/
+	xcrun simctl install $(EMULATOR) ./RustWrapper.app/
 
 debug: install
-	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --wait-for-debugger --console --terminate-running-process booted RustWrapper
+	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --wait-for-debugger --console --terminate-running-process $(EMULATOR) RustWrapper
 
 run: install
-	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --console --terminate-running-process booted RustWrapper
+	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --console --terminate-running-process $(EMULATOR) RustWrapper
 
 screenshot: install
-	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process booted RustWrapper
+	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process $(EMULATOR) RustWrapper
 	sleep 2
-	xcrun simctl io booted screenshot screenshot.png
+	xcrun simctl io $(EMULATOR) screenshot screenshot.png
 	sips -Z 1278 screenshot.png
 
 record: install
-	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process booted RustWrapper --record
-	xcrun simctl io booted recordVideo -f record.mp4 &
+	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process $(EMULATOR) RustWrapper --record
+	xcrun simctl io $(EMULATOR) recordVideo -f record.mp4 &
 	sleep 2
-	ps | grep 'simctl io booted recordVideo' | grep -v grep | awk '{print $$1}' | xargs kill -s SIGINT
+	ps | grep 'simctl io $(EMULATOR)  recordVideo' | grep -v grep | awk '{print $$1}' | xargs kill -s SIGINT
 
 gh-summary:
 	echo "## APP STDOUT" > Summary.md

@@ -69,7 +69,7 @@ jobs:
 
       - name: start simulator
         run: |
-          xcrun simctl boot 'iPhone 16'
+          xcrun simctl boot 'iPhone 16 Pro'
           sleep 20
 
       - name: Run example and take screenshot
