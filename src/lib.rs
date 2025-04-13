@@ -4,15 +4,19 @@ mod app;
 mod screenshot;
 mod switch;
 mod text;
-mod text_field;
+mod text_view;
 mod vstack;
 mod image;
 
 pub use app::App;
 pub use switch::Switch;
 pub use text::Text;
-pub use text_field::TextField;
+pub use text_view::TextView;
 pub use vstack::VStack;
+pub use image::{
+    Image,
+    ImageType,
+};
 
 use objc2::rc::Retained;
 use objc2_ui_kit::{UIColor, UIView};

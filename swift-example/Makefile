@@ -1,8 +1,8 @@
 swift-example-build:
 	swift build -vvv  \
-		-Xswiftc "-sdk" -Xswiftc "$(shell xcrun --sdk iphonesimulator --show-sdk-path)" \
-		-Xcc "-isysroot" -Xcc "$(shell xcrun --sdk iphonesimulator --show-sdk-path)" \
-		-Xswiftc "-target" -Xswiftc "x86_64-apple-ios18.0-simulator" \
+		-Xswiftc -sdk -Xswiftc $(shell xcrun --sdk iphonesimulator --show-sdk-path) \
+		-Xcc -isysroot -Xcc $(shell xcrun --sdk iphonesimulator --show-sdk-path) \
+		-Xswiftc -target -Xswiftc x86_64-apple-ios18.0-simulator \
 
 EMULATOR='iPhone 16 Pro'
 

@@ -1,4 +1,4 @@
-use ferris_ui::{App, GUIEvent, Switch, Text, TextField, VStack, View};
+use ferris_ui::{App, GUIEvent, Switch, Text, TextView, VStack, View, Image, ImageType};
 use objc2::MainThreadMarker;
 use objc2_ui_kit::{UIColor, UIView};
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopProxy};
@@ -37,6 +37,9 @@ impl MyView {
         let label = Text::new(mtm)
             .with_background_color(unsafe { UIColor::redColor() })
             .with_text("Current text: ");
+        unsafe {
+            label.setContentMode(objc2_ui_kit::UIViewContentMode::Center);
+        }
 
         let switch_label_cloned = label.clone();
 
@@ -44,7 +47,7 @@ impl MyView {
             .with_event_fn(Box::new(move |switch| {
                 let is_on = switch.is_on();
                 let new_color = if is_on {
-                    unsafe { &UIColor::blueColor() }
+                    unsafe { &UIColor::purpleColor() }
                 } else {
                     unsafe { &UIColor::cyanColor() }
                 };
@@ -54,7 +57,7 @@ impl MyView {
             .with_background_color(unsafe { UIColor::cyanColor() });
 
         let cloned_label = label.clone();
-        let text_field = TextField::new(mtm, proxy.clone())
+        let text_view = TextView::new(mtm, proxy.clone())
             .with_event_fn(Box::new(move |text_field| {
                 let new_text = text_field.get_text();
                 let text = format!("Current text: {new_text}");
@@ -62,12 +65,15 @@ impl MyView {
             }))
             .with_background_color(unsafe { UIColor::blueColor() });
 
+        let image = Image::new(mtm, ImageType::SystemIcon("clock".into()));
+
         let vstack = VStack::new(
             mtm,
             vec![
+                Box::new(text_view),
                 Box::new(label.clone()),
+                Box::new(image.clone()),
                 Box::new(switch.clone()),
-                Box::new(text_field),
             ],
         );
         Box::new(Self { proxy, vstack })

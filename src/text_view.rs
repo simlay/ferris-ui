@@ -2,25 +2,25 @@ use crate::{GUIEvent, View};
 use objc2::rc::Retained;
 use objc2::runtime::ProtocolObject;
 use objc2::{DeclaredClass, MainThreadOnly, define_class, msg_send};
-use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol};
+use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol, NSAttributedString};
 use objc2_ui_kit::{UIResponder, UIScrollViewDelegate, UITextView, UITextViewDelegate, UIView};
 use std::cell::RefCell;
 use winit::event_loop::EventLoopProxy;
 
-pub struct TextFieldState {
+pub struct TextViewState {
     delegate: RefCell<Retained<TextFieldDelegate>>,
     proxy: EventLoopProxy<GUIEvent>,
-    event_fn: RefCell<Option<Box<dyn Fn(&TextField)>>>,
+    event_fn: RefCell<Option<Box<dyn Fn(&TextView)>>>,
 }
 
 define_class!(
     #[unsafe(super(UITextView, UIView, UIResponder, NSObject))]
     #[thread_kind = MainThreadOnly]
     #[name = "FerrisUITextView"]
-    #[ivars = TextFieldState]
-    pub struct TextField;
+    #[ivars = TextViewState]
+    pub struct TextView;
 
-    impl TextField { }
+    impl TextView { }
 );
 
 define_class!(
@@ -33,7 +33,7 @@ define_class!(
     unsafe impl UIScrollViewDelegate for TextFieldDelegate {}
     unsafe impl UITextViewDelegate for TextFieldDelegate {
         #[unsafe(method(textViewDidBeginEditing:))]
-        fn text_field_did_begin_editing(&self, _sender: &TextField) {
+        fn text_field_did_begin_editing(&self, _sender: &TextView) {
             /*
             let text = sender.text();
             println!("DidBeginEditing: {text}");
@@ -41,7 +41,7 @@ define_class!(
         }
 
         #[unsafe(method(textViewDidEndEditing:))]
-        fn text_field_did_end_editing(&self, _sender: &TextField) {
+        fn text_field_did_end_editing(&self, _sender: &TextView) {
             /*
             let text = sender.text();
             println!("DidEndEditing: {text}");
@@ -49,7 +49,7 @@ define_class!(
         }
 
         #[unsafe(method(textViewDidChange:))]
-        fn text_field_did_change(&self, sender: &TextField) {
+        fn text_field_did_change(&self, sender: &TextView) {
             /*
             let text = sender.text();
             println!("textViewDidChange: {text}");
@@ -59,19 +59,23 @@ define_class!(
     }
 );
 
-impl TextField {
+impl TextView {
     pub fn new(mtm: MainThreadMarker, proxy: EventLoopProxy<GUIEvent>) -> Retained<Self> {
         let delegate: Retained<TextFieldDelegate> =
             unsafe { objc2::msg_send![TextFieldDelegate::alloc(mtm), init] };
-        let this = Self::alloc(mtm).set_ivars(TextFieldState {
+        let this = Self::alloc(mtm).set_ivars(TextViewState {
             delegate: RefCell::new(delegate),
             proxy,
             event_fn: RefCell::new(None),
         });
-        let this: Retained<TextField> = unsafe { msg_send![super(this), init] };
+        let this: Retained<TextView> = unsafe { msg_send![super(this), init] };
         {
             let delegate = this.ivars().delegate.borrow();
             unsafe { this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone()))) };
+        }
+        let alt_text = NSAttributedString::new();
+        unsafe {
+            this.setAttributedText(Some(&alt_text));
         }
 
         this
@@ -91,7 +95,7 @@ impl TextField {
     }
 }
 
-impl View for TextField {
+impl View for TextView {
     fn ui_view(&self) -> Box<&UIView> {
         Box::new(self.as_ref())
     }

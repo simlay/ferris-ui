@@ -3,7 +3,7 @@ use objc2::rc::{
     Retained,
     PartialInit,
 };
-use objc2::{MainThreadMarker, MainThreadOnly, define_class, msg_send};
+use objc2::{MainThreadMarker, MainThreadOnly, AllocAnyThread, define_class, msg_send};
 use objc2_foundation::{NSObject, NSString};
 use objc2_ui_kit::{UIImageView, UIImage, UILabel, UIView};
 
@@ -16,39 +16,30 @@ define_class!(
     impl Image { }
 );
 
-trait IntoImage: Sized {
-    fn into_image(self) -> UIImage;
-}
 pub enum ImageType {
     SystemIcon(String),
 }
-
-impl IntoImage for ImageType {
-    fn into_image(self) -> UIImage {
-        todo!();
+impl Into<Option<Retained<UIImage>>> for ImageType {
+    fn into(self) -> Option<Retained<UIImage>> {
+        match self {
+            Self::SystemIcon(icon_name) => {
+                unsafe {
+                    UIImage::systemImageNamed(&NSString::from_str(icon_name.as_str()))
+                }
+            }
+        }
     }
 }
 
 impl Image {
-    pub fn new(mtm: MainThreadMarker) -> Retained<Self> {
+    pub fn new<T: Into<Option<Retained<UIImage>>>>(mtm: MainThreadMarker, image: T) -> Retained<Self> {
         let this : PartialInit<Self>= mtm.alloc().set_ivars(());
         let this : Retained<Self> = unsafe { msg_send![super(this), init] };
-        this
-    }
-
-    pub fn set_image<T: IntoImage>(&self, new_image: T) {
-        // UNANSWERED: Is this safe?
         unsafe {
-            self.setImage(Some(&new_image.into_image()))
+            this.setImage(image.into().as_deref());
         }
-    }
 
-    pub fn with_text<T: IntoImage>(self: Retained<Self>, new_text: T) -> Retained<Self> {
-        self.set_image(new_text);
-        self
-    }
-
-    pub fn clear_text(&self) {
+        this
     }
 }
 impl View for Image {
