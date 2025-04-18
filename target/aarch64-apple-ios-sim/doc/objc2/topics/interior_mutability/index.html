@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Interior mutability"><title>objc2::topics::interior_mutability - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-7dda4a46.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="objc2" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0-nightly (a15cce269 2025-04-17)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-4e99c027.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../objc2/index.html">objc2</a><span class="version">0.6.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module interior_<wbr>mutability</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#interior-mutability" title="Interior mutability">Interior mutability</a><ul><li><a href="#interior-mutability-in-practice" title="Interior mutability in practice">Interior mutability in practice</a></li><li><a href="#thread-safety" title="Thread safety">Thread safety</a></li></ul></li></ul></section><div id="rustdoc-modnav"><h2><a href="../index.html">In objc2::<wbr>topics</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../../index.html">objc2</a>::<wbr><a href="../index.html">topics</a></div><h1>Module <span>interior_mutability</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../src/objc2/topics/mod.rs.html#20">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="interior-mutability"><a class="doc-anchor" href="#interior-mutability">§</a>Interior mutability</h2>
+<p>Everything in Objective-C is an object, and objects can be freely shared between each other. This is done especially in GUI code where e.g. the application keeps a reference to all the currently open windows, while views can also access their parent window.</p>
+<p>In Rust, we generally dislike this, since it leads to designs that are more interlinked, rarely thread safe, harder for the compiler to optimize, and harder to understand, so instead mutability is restricted to <code>&amp;mut</code> references, which ensures that the references is not <a href="https://doc.rust-lang.org/nomicon/aliasing.html">aliased</a>.</p>
+<p>The original design of <code>objc2</code> did actually use <code>&amp;mut</code> references in certain circumstances, see <a href="https://github.com/madsmtm/objc2/issues/563">#563</a> and <a href="https://github.com/madsmtm/objc2/issues/265">#265</a>, but we have since removed that functionality, since it is just too error prone and restrictive.</p>
+<p>So what are we to do? Well, luckily, Rust lets us “opt-out” of the usual rules using <a href="https://doc.rust-lang.org/nightly/core/cell/struct.UnsafeCell.html" title="struct core::cell::UnsafeCell"><code>UnsafeCell</code></a>, which tells the compiler that a type is actually mutable within a <code>&amp;</code> reference, so that’s what we do; every object is <code>UnsafeCell</code> internally.</p>
+<h3 id="interior-mutability-in-practice"><a class="doc-anchor" href="#interior-mutability-in-practice">§</a>Interior mutability in practice</h3>
+<p>So what does this mean in practice?</p>
+<p>Well, it means that when you define classes yourself, <strong>you will have to use interior mutability helpers like <a href="https://doc.rust-lang.org/nightly/core/cell/struct.Cell.html" title="struct core::cell::Cell"><code>Cell</code></a> and <a href="https://doc.rust-lang.org/nightly/core/cell/struct.RefCell.html" title="struct core::cell::RefCell"><code>RefCell</code></a> before you can modify properties</strong>. This is a bit annoying, and can be a bit confusing if you’re not used to it.</p>
+<p>Let’s take an example: We define a class that contains an <a href="https://doc.rust-lang.org/nightly/std/primitive.i32.html" title="primitive i32"><code>i32</code></a> and a <a href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec"><code>Vec</code></a>. In usual Rust, both would just be in a <code>struct</code>, and you wouldn’t have to do anything extra to access them, but since the class is only mutable from shared references like <code>&amp;</code>, we have to wrap the integer in <code>Cell</code> and the vector in <code>RefCell</code> before we can safely mutate them:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::cell::{Cell, RefCell};
+<span class="kw">use </span>objc2::{define_class, DefinedClass};
+<span class="kw">use </span>objc2::runtime::NSObject;
+
+<span class="comment">// Usually, you would just do:
+
+</span><span class="kw">struct </span>MyStruct {
+    my_int: i32,
+    my_vec: Vec&lt;i32&gt;,
+}
+
+<span class="kw">impl </span>MyStruct {
+    <span class="kw">fn </span>add_next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.my_int += <span class="number">1</span>;
+        <span class="self">self</span>.my_vec.push(<span class="self">self</span>.my_int);
+    }
+}
+
+<span class="comment">// But when interfacing with Objective-C, you have to do:
+
+</span><span class="kw">struct </span>Ivars {
+    <span class="comment">// `Copy` types that we want to mutate have to be wrapped in Cell
+    </span>my_int: Cell&lt;i32&gt;,
+    <span class="comment">// non-`Copy` types that we want to mutate have to be wrapped in RefCell
+    </span>my_vec: RefCell&lt;Vec&lt;i32&gt;&gt;,
+}
+
+<span class="macro">define_class!</span>(
+    <span class="attr">#[<span class="kw">unsafe</span>(<span class="kw">super</span>(NSObject))]
+    #[name = <span class="string">"MyClass"</span>]
+    #[ivars = Ivars]
+    </span><span class="kw">struct </span>MyClass;
+
+    <span class="kw">impl </span>MyClass {
+        <span class="attr">#[<span class="kw">unsafe</span>(method(myMethod))]
+        </span><span class="kw">fn </span>add_next(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+            <span class="kw">let </span>ivars = <span class="self">self</span>.ivars();
+
+            <span class="comment">// self.my_int += 1;
+            </span>ivars.my_int.set(ivars.my_int.get() + <span class="number">1</span>);
+
+            <span class="comment">// self.my_vec.push(self.my_int);
+            </span>ivars.my_vec.borrow_mut().push(ivars.my_int.get());
+        }
+    }
+);</code></pre></div>
+<p>Note how this makes your class no longer <a href="https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html" title="trait core::marker::Sync"><code>Sync</code></a>, since there could be a race condition if we tried to call <code>add_next</code> from two threads at the same time. If you wanted to make it thread safe, you would have to use <a href="https://doc.rust-lang.org/nightly/core/sync/atomic/struct.AtomicI32.html" title="struct core::sync::atomic::AtomicI32"><code>AtomicI32</code></a>, with all of the difficulties inherent in that.</p>
+<h3 id="thread-safety"><a class="doc-anchor" href="#thread-safety">§</a>Thread safety</h3>
+<p>This hints at a general observation: <strong>very few Objective-C classes are thread safe</strong>, because they allow mutation while aliased elsewhere. So that’s the other major place where interior mutability is likely to affect you.</p>
+<p>Even something as basic as <code>NSString</code> is not thread safe, because it may have come from a <code>NSMutableString</code> (see <a href="../about_generated/deref/index.html" title="mod objc2::topics::about_generated::deref">the notes on deref</a>), and as such could be mutated from a separate thread without the type-system knowing that.</p>
+<p>See also the <a href="../../struct.MainThreadMarker.html" title="struct objc2::MainThreadMarker"><code>MainThreadMarker</code></a> and <a href="../../trait.MainThreadOnly.html" title="trait objc2::MainThreadOnly"><code>MainThreadOnly</code></a> for a similar, even harder restriction, where some types are only usable on the main thread because they access global statics.</p>
+</div></details></section></div></main></body></html>

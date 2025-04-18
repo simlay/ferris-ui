@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Searches the array for the value using a binary search algorithm."><title>CFArrayBSearchValues in objc2_core_foundation - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-7dda4a46.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="objc2_core_foundation" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0-nightly (a15cce269 2025-04-17)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../static.files/storage-4e99c027.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../objc2_core_foundation/index.html">objc2_<wbr>core_<wbr>foundation</a><span class="version">0.3.0</span></h2></div><div class="sidebar-elems"><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">objc2_core_foundation</a></div><h1>Function <span class="fn">CFArrayBSearchValues</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/objc2_core_foundation/generated/CFArray.rs.html#614-620">Source</a> </span></div><pre class="rust item-decl"><code>pub unsafe extern &quot;C-unwind&quot; fn CFArrayBSearchValues(
+    the_array: &amp;<a class="struct" href="struct.CFArray.html" title="struct objc2_core_foundation::CFArray">CFArray</a>,
+    range: <a class="struct" href="struct.CFRange.html" title="struct objc2_core_foundation::CFRange">CFRange</a>,
+    value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*const </a><a class="enum" href="https://doc.rust-lang.org/nightly/core/ffi/enum.c_void.html" title="enum core::ffi::c_void">c_void</a>,
+    comparator: <a class="type" href="type.CFComparatorFunction.html" title="type objc2_core_foundation::CFComparatorFunction">CFComparatorFunction</a>,
+    context: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="enum" href="https://doc.rust-lang.org/nightly/core/ffi/enum.c_void.html" title="enum core::ffi::c_void">c_void</a>,
+) -&gt; <a class="type" href="type.CFIndex.html" title="type objc2_core_foundation::CFIndex">CFIndex</a></code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Searches the array for the value using a binary search algorithm.</p>
+<p>Parameter <code>theArray</code>: The array to be searched. If this parameter is not a
+valid CFArray, the behavior is undefined. If the array is
+not sorted from least to greatest according to the
+comparator function, the behavior is undefined.</p>
+<p>Parameter <code>range</code>: The range within the array to search. If the range
+location or end point (defined by the location plus length
+minus 1) is outside the index space of the array (0 to
+N-1 inclusive, where N is the count of the array), the
+behavior is undefined. If the range length is negative, the
+behavior is undefined. The range may be empty (length 0).</p>
+<p>Parameter <code>value</code>: The value for which to find a match in the array. If
+value, or any of the values in the array, are not understood
+by the comparator callback, the behavior is undefined.</p>
+<p>Parameter <code>comparator</code>: The function with the comparator function type
+signature which is used in the binary search operation to
+compare values in the array with the given value. If this
+parameter is not a pointer to a function of the correct
+prototype, the behavior is undefined. If there are values
+in the range which the comparator function does not expect
+or cannot properly compare, the behavior is undefined.</p>
+<p>Parameter <code>context</code>: A pointer-sized user-defined value, which is passed
+as the third parameter to the comparator function, but is
+otherwise unused by this function. If the context is not
+what is expected by the comparator function, the behavior is
+undefined.</p>
+<p>Returns: The return value is either 1) the index of a value that
+matched, if the target value matches one or more in the
+range, 2) greater than or equal to the end point of the
+range, if the value is greater than all the values in the
+range, or 3) the index of the value greater than the target
+value, if the value lies between two of (or less than all
+of) the values in the range.</p>
+</div></details></section></div></main></body></html>

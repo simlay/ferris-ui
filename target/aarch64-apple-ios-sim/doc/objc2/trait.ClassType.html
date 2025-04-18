@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Marks types that represent specific classes."><title>ClassType in objc2 - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-7dda4a46.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="objc2" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0-nightly (a15cce269 2025-04-17)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../static.files/storage-4e99c027.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../objc2/index.html">objc2</a><span class="version">0.6.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Class<wbr>Type</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#safety" title="Safety">Safety</a></li><li><a href="#examples" title="Examples">Examples</a></li></ul><h3><a href="#required-associated-consts">Required Associated Constants</a></h3><ul class="block"><li><a href="#associatedconstant.NAME" title="NAME">NAME</a></li></ul><h3><a href="#required-associated-types">Required Associated Types</a></h3><ul class="block"><li><a href="#associatedtype.Super" title="Super">Super</a></li><li><a href="#associatedtype.ThreadKind" title="ThreadKind">ThreadKind</a></li></ul><h3><a href="#required-methods">Required Methods</a></h3><ul class="block"><li><a href="#tymethod.as_super" title="as_super">as_super</a></li><li><a href="#tymethod.class" title="class">class</a></li></ul><h3><a href="#dyn-compatibility">Dyn Compatibility</a></h3><h3><a href="#implementors">Implementors</a></h3></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="index.html">In crate objc2</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">objc2</a></div><h1>Trait <span class="trait">ClassType</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/objc2/top_level_traits.rs.html#211-271">Source</a> </span></div><pre class="rust item-decl"><code>pub unsafe trait ClassType: <a class="trait" href="trait.Message.html" title="trait objc2::Message">Message</a> {
+    type <a href="#associatedtype.Super" class="associatedtype">Super</a>: <a class="trait" href="trait.Message.html" title="trait objc2::Message">Message</a>;
+    type <a href="#associatedtype.ThreadKind" class="associatedtype">ThreadKind</a>: ?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="trait.ThreadKind.html" title="trait objc2::ThreadKind">ThreadKind</a>;
+
+    const <a href="#associatedconstant.NAME" class="constant">NAME</a>: &amp;'static <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>;
+
+    // Required methods
+    fn <a href="#tymethod.class" class="fn">class</a>() -&gt; &amp;'static <a class="struct" href="runtime/struct.AnyClass.html" title="struct objc2::runtime::AnyClass">AnyClass</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.as_super" class="fn">as_super</a>(&amp;self) -&gt; &amp;Self::<a class="associatedtype" href="trait.ClassType.html#associatedtype.Super" title="type objc2::ClassType::Super">Super</a>;
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Marks types that represent specific classes.</p>
+<p>Sometimes it is enough to generically know that a type is messageable,
+e.g. <a href="rc/struct.Retained.html" title="struct objc2::rc::Retained"><code>Retained</code></a> works with any type that implements the <a href="trait.Message.html" title="trait objc2::Message"><code>Message</code></a>
+trait. But often, you have an object that you know represents a specific
+Objective-C class - this trait allows you to communicate that, as well as
+a few properties of the class to the rest of the type-system.</p>
+<p>This is implemented for your type by the
+<a href="macro.define_class.html" title="macro objc2::define_class"><code>define_class!</code></a> and
+<a href="macro.extern_class.html" title="macro objc2::extern_class"><code>extern_class!</code></a> macros.</p>
+<h2 id="safety"><a class="doc-anchor" href="#safety">§</a>Safety</h2>
+<p>This is meant to be a sealed trait, and should not be implemented outside
+of the aforementioned macros. See those for safety preconditions.</p>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<p>Use the trait to access the <a href="runtime/struct.AnyClass.html" title="struct objc2::runtime::AnyClass"><code>AnyClass</code></a> of an object.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>objc2::{ClassType, msg_send};
+<span class="kw">use </span>objc2::rc::Retained;
+
+<span class="comment">// Get the class of the object.
+</span><span class="kw">let </span>cls = &lt;MyObject <span class="kw">as </span>ClassType&gt;::class();
+<span class="comment">// Or, since the trait is in scope.
+</span><span class="kw">let </span>cls = MyObject::class();
+
+<span class="comment">// We can now access properties of the class.
+</span><span class="macro">assert_eq!</span>(cls.name().to_str().unwrap(), MyObject::NAME);
+
+<span class="comment">// And we can send messages to the class.
+//
+// SAFETY:
+// - The class is `MyObject`, which can safely be initialized with `new`.
+// - The return type is correctly specified.
+</span><span class="kw">let </span>obj: Retained&lt;MyObject&gt; = <span class="kw">unsafe </span>{ <span class="macro">msg_send!</span>[cls, new] };</code></pre></div>
+<p>Use the trait to allocate a new instance of an object.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>objc2::{msg_send, AllocAnyThread};
+<span class="kw">use </span>objc2::rc::Retained;
+
+<span class="kw">let </span>obj = MyObject::alloc();
+
+<span class="comment">// Now we can call initializers on this newly allocated object.
+//
+// SAFETY: `MyObject` can safely be initialized with `init`.
+</span><span class="kw">let </span>obj: Retained&lt;MyObject&gt; = <span class="kw">unsafe </span>{ <span class="macro">msg_send!</span>[obj, init] };</code></pre></div>
+<p>Use the <a href="macro.extern_class.html" title="macro objc2::extern_class"><code>extern_class!</code></a> macro to implement this
+trait for a type.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>objc2::runtime::NSObject;
+<span class="kw">use </span>objc2::{extern_class, ClassType, AllocAnyThread};
+
+<span class="macro">extern_class!</span>(
+    <span class="comment">// SAFETY: The superclass is correctly specified, and the class can be
+    // safely used from any thread.
+    </span><span class="attr">#[<span class="kw">unsafe</span>(<span class="kw">super</span>(NSObject))]
+    </span><span class="kw">struct </span>MyClass;
+);
+
+<span class="kw">let </span>cls = MyClass::class();
+<span class="kw">let </span>obj = MyClass::alloc();</code></pre></div>
+</div></details><h2 id="required-associated-consts" class="section-header">Required Associated Constants<a href="#required-associated-consts" class="anchor">§</a></h2><div class="methods"><details class="toggle" open><summary><section id="associatedconstant.NAME" class="method"><a class="src rightside" href="../src/objc2/top_level_traits.rs.html#243">Source</a><h4 class="code-header">const <a href="#associatedconstant.NAME" class="constant">NAME</a>: &amp;'static <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a></h4></section></summary><div class="docblock"><p>The name of the Objective-C class that this type represents.</p>
+<p><code>T::NAME</code> is the <code>const</code> version of <code>T::class().name()</code>.</p>
+<p>This must not contain any NUL bytes.</p>
+</div></details></div><h2 id="required-associated-types" class="section-header">Required Associated Types<a href="#required-associated-types" class="anchor">§</a></h2><div class="methods"><details class="toggle" open><summary><section id="associatedtype.Super" class="method"><a class="src rightside" href="../src/objc2/top_level_traits.rs.html#222">Source</a><h4 class="code-header">type <a href="#associatedtype.Super" class="associatedtype">Super</a>: <a class="trait" href="trait.Message.html" title="trait objc2::Message">Message</a></h4></section></summary><div class="docblock"><p>The superclass of this class.</p>
+<p>If you have implemented <a href="https://doc.rust-lang.org/nightly/core/ops/deref/trait.Deref.html" title="trait core::ops::deref::Deref"><code>Deref</code></a> for your type, it is highly
+recommended that this is equal to <a href="https://doc.rust-lang.org/nightly/core/ops/deref/trait.Deref.html#associatedtype.Target" title="associated type core::ops::deref::Deref::Target"><code>Deref::Target</code></a>.</p>
+<p>This may be <a href="runtime/struct.AnyObject.html" title="struct objc2::runtime::AnyObject"><code>AnyObject</code></a> if the class is a root class.</p>
+</div></details><details class="toggle" open><summary><section id="associatedtype.ThreadKind" class="method"><a class="src rightside" href="../src/objc2/top_level_traits.rs.html#234">Source</a><h4 class="code-header">type <a href="#associatedtype.ThreadKind" class="associatedtype">ThreadKind</a>: ?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="trait.ThreadKind.html" title="trait objc2::ThreadKind">ThreadKind</a></h4></section></summary><div class="docblock"><p>Whether the type can be used from any thread, or from only the main
+thread.</p>
+<p>One of <a href="trait.AllocAnyThread.html" title="trait objc2::AllocAnyThread"><code>dyn AllocAnyThread</code></a> or <a href="trait.MainThreadOnly.html" title="trait objc2::MainThreadOnly"><code>dyn MainThreadOnly</code></a>.</p>
+<p>Setting this makes <code>ClassType</code> provide an implementation of either
+<a href="trait.AllocAnyThread.html" title="trait objc2::AllocAnyThread"><code>AllocAnyThread</code></a> or <a href="trait.MainThreadOnly.html" title="trait objc2::MainThreadOnly"><code>MainThreadOnly</code></a>.</p>
+</div></details></div><h2 id="required-methods" class="section-header">Required Methods<a href="#required-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="tymethod.class" class="method"><a class="src rightside" href="../src/objc2/top_level_traits.rs.html#255">Source</a><h4 class="code-header">fn <a href="#tymethod.class" class="fn">class</a>() -&gt; &amp;'static <a class="struct" href="runtime/struct.AnyClass.html" title="struct objc2::runtime::AnyClass">AnyClass</a></h4></section></summary><div class="docblock"><p>Get a reference to the Objective-C class that this type represents.</p>
+<p>May register the class with the runtime if it wasn’t already.</p>
+<h5 id="panics"><a class="doc-anchor" href="#panics">§</a>Panics</h5>
+<p>This may panic if something went wrong with getting or creating the
+class, e.g. if the program is not properly linked to the framework
+that defines the class.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.as_super" class="method"><a class="src rightside" href="../src/objc2/top_level_traits.rs.html#260">Source</a><h4 class="code-header">fn <a href="#tymethod.as_super" class="fn">as_super</a>(&amp;self) -&gt; &amp;Self::<a class="associatedtype" href="trait.ClassType.html#associatedtype.Super" title="type objc2::ClassType::Super">Super</a></h4></section></summary><div class="docblock"><p>Get an immutable reference to the superclass.</p>
+</div></details></div><h2 id="dyn-compatibility" class="section-header">Dyn Compatibility<a href="#dyn-compatibility" class="anchor">§</a></h2><div class="dyn-compatibility-info"><p>This trait is <b>not</b> <a href="https://doc.rust-lang.org/nightly/reference/items/traits.html#dyn-compatibility">dyn compatible</a>.</p><p><i>In older versions of Rust, dyn compatibility was called "object safety", so this trait is not object safe.</i></p></div><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><details class="toggle implementors-toggle"><summary><section id="impl-ClassType-for-NSObject" class="impl"><a class="src rightside" href="../src/objc2/runtime/nsobject.rs.html#79-98">Source</a><a href="#impl-ClassType-for-NSObject" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.ClassType.html" title="trait objc2::ClassType">ClassType</a> for <a class="struct" href="runtime/struct.NSObject.html" title="struct objc2::runtime::NSObject">NSObject</a></h3></section></summary><div class="impl-items"><section id="associatedconstant.NAME-1" class="associatedconstant trait-impl"><a class="src rightside" href="../src/objc2/runtime/nsobject.rs.html#82">Source</a><a href="#associatedconstant.NAME-1" class="anchor">§</a><h4 class="code-header">const <a href="#associatedconstant.NAME" class="constant">NAME</a>: &amp;'static <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a> = &quot;NSObject&quot;</h4></section><section id="associatedtype.Super-1" class="associatedtype trait-impl"><a class="src rightside" href="../src/objc2/runtime/nsobject.rs.html#80">Source</a><a href="#associatedtype.Super-1" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Super" class="associatedtype">Super</a> = <a class="struct" href="runtime/struct.AnyObject.html" title="struct objc2::runtime::AnyObject">AnyObject</a></h4></section><section id="associatedtype.ThreadKind-1" class="associatedtype trait-impl"><a class="src rightside" href="../src/objc2/runtime/nsobject.rs.html#81">Source</a><a href="#associatedtype.ThreadKind-1" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.ThreadKind" class="associatedtype">ThreadKind</a> = dyn <a class="trait" href="trait.AllocAnyThread.html" title="trait objc2::AllocAnyThread">AllocAnyThread</a></h4></section></div></details></div><script src="../trait.impl/objc2/top_level_traits/trait.ClassType.js" async></script></section></div></main></body></html>

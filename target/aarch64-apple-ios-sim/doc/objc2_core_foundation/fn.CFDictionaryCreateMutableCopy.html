@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Creates a new mutable dictionary with the key-value pairs from the given dictionary."><title>CFDictionaryCreateMutableCopy in objc2_core_foundation - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-7dda4a46.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="objc2_core_foundation" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0-nightly (a15cce269 2025-04-17)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../static.files/storage-4e99c027.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../objc2_core_foundation/index.html">objc2_<wbr>core_<wbr>foundation</a><span class="version">0.3.0</span></h2></div><div class="sidebar-elems"><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">objc2_core_foundation</a></div><h1>Function <span class="fn">CFDictionaryCreateMutableCopy</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/objc2_core_foundation/generated/CFDictionary.rs.html#512-526">Source</a> </span></div><pre class="rust item-decl"><code>pub unsafe extern &quot;C-unwind&quot; fn CFDictionaryCreateMutableCopy(
+    allocator: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.CFAllocator.html" title="struct objc2_core_foundation::CFAllocator">CFAllocator</a>&gt;,
+    capacity: <a class="type" href="type.CFIndex.html" title="type objc2_core_foundation::CFIndex">CFIndex</a>,
+    the_dict: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.CFDictionary.html" title="struct objc2_core_foundation::CFDictionary">CFDictionary</a>&gt;,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="struct.CFRetained.html" title="struct objc2_core_foundation::CFRetained">CFRetained</a>&lt;<a class="struct" href="struct.CFMutableDictionary.html" title="struct objc2_core_foundation::CFMutableDictionary">CFMutableDictionary</a>&gt;&gt;</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Creates a new mutable dictionary with the key-value pairs from
+the given dictionary.</p>
+<p>Parameter <code>allocator</code>: The CFAllocator which should be used to allocate
+memory for the dictionary and its storage for values. This
+parameter may be NULL in which case the current default
+CFAllocator is used. If this reference is not a valid
+CFAllocator, the behavior is undefined.</p>
+<p>Parameter <code>capacity</code>: A hint about the number of values that will be held
+by the CFDictionary. Pass 0 for no hint. The implementation may
+ignore this hint, or may use it to optimize various
+operations. A dictionary’s actual capacity is only limited by
+address space and available memory constraints).
+This parameter must be greater than or equal
+to the count of the dictionary which is to be copied, or the
+behavior is undefined. If this parameter is negative, the
+behavior is undefined.</p>
+<p>Parameter <code>theDict</code>: The dictionary which is to be copied. The keys and values
+from the dictionary are copied as pointers into the new
+dictionary (that is, the values themselves are copied, not
+that which the values point to, if anything). However, the
+keys and values are also retained by the new dictionary using
+the retain function of the original dictionary.
+The count of the new dictionary will be the same as the
+given dictionary. The new dictionary uses the same callbacks
+as the dictionary to be copied. If this parameter is
+not a valid CFDictionary, the behavior is undefined.</p>
+<p>Returns: A reference to the new mutable CFDictionary.</p>
+</div></details></section></div></main></body></html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Alternatives to `objc2`"><title>objc2::topics::alternatives - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-7dda4a46.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="objc2" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0-nightly (a15cce269 2025-04-17)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-4e99c027.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../objc2/index.html">objc2</a><span class="version">0.6.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module alternatives</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#alternatives-to-objc2" title="Alternatives to `objc2`">Alternatives to <code>objc2</code></a><ul><li><a href="#example" title="Example">Example</a></li></ul></li></ul></section><div id="rustdoc-modnav"><h2><a href="../index.html">In objc2::<wbr>topics</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../../index.html">objc2</a>::<wbr><a href="../index.html">topics</a></div><h1>Module <span>alternatives</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../src/objc2/topics/mod.rs.html#7">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="alternatives-to-objc2"><a class="doc-anchor" href="#alternatives-to-objc2">§</a>Alternatives to <code>objc2</code></h2>
+<p><code>objc2</code> is quite strict in its approach to interfacing with Objective-C, and encourages writing everything in Rust. This is, however, not always ideal, as our support for Objective-C will always be worse than that of the Objective-C compiler itself.</p>
+<p>But there is another way: If you are willing to write a bit of Objective-C glue-code yourself, you can write a C wrapper, and interface with that instead of directly interoperating with Objective-C bindings.</p>
+<h3 id="example"><a class="doc-anchor" href="#example">§</a>Example</h3>
+<p>Let’s say you would like to know the user’s current locale. This could be done using a C binding like the following:</p>
+<div class="example-wrap"><pre class="language-objective-c"><code>// src/helper.m
+#import &lt;Foundation/Foundation.h&gt;
+#import &lt;string.h&gt;
+
+const char* copy_current_locale_identifier(void) {
+    NSString* identifier = [[NSLocale currentLocale] localeIdentifier];
+    const char* s = [identifier UTF8String];
+    return strdup(s);
+}</code></pre></div>
+<p>Which is compiled in your <code>build.rs</code> (uses the <code>cc</code> crate).</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="comment">// build.rs
+</span><span class="kw">fn </span>main() {
+    <span class="macro">println!</span>(<span class="string">"cargo::rerun-if-changed=build.rs"</span>);
+
+    <span class="kw">let </span><span class="kw-2">mut </span>builder = cc::Build::new();
+    builder.flag(<span class="string">"-xobjective-c"</span>);
+    builder.flag(<span class="string">"-fobjc-arc"</span>);
+    builder.flag(<span class="string">"-fmodules"</span>);
+
+    builder.file(<span class="string">"src/helper.m"</span>);
+    <span class="macro">println!</span>(<span class="string">"cargo::rerun-if-changed=src/helper.m"</span>);
+
+    builder.compile(<span class="string">"libhelper.a"</span>);
+}</code></pre></div>
+<p>And then exposed to Rust like this:</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="comment">// src/lib.rs
+</span><span class="kw">use </span>libc::free;
+<span class="kw">use </span>std::ffi::{c_char, c_void, CStr, CString};
+
+<span class="kw">extern </span><span class="string">"C-unwind" </span>{
+    <span class="kw">fn </span>copy_current_locale_identifier() -&gt; <span class="kw-2">*const </span>c_char;
+}
+
+<span class="kw">pub fn </span>current_locale() -&gt; CString {
+    <span class="kw">let </span>ptr = <span class="kw">unsafe </span>{ copy_current_locale_identifier() };
+    <span class="kw">let </span>ret = <span class="kw">unsafe </span>{ CStr::from_ptr(ptr).to_owned() };
+    <span class="kw">unsafe </span>{ free(ptr <span class="kw">as </span><span class="kw-2">*mut </span>c_void) };
+    ret
+}</code></pre></div>
+</div></details></section></div></main></body></html>

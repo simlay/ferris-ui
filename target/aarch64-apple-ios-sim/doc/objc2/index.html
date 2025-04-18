@@ -1,0 +1,195 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Objective-C interface and runtime bindings"><title>objc2 - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-7dda4a46.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="objc2" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0-nightly (a15cce269 2025-04-17)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../static.files/storage-4e99c027.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../objc2/index.html">objc2</a><span class="version">0.6.0</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#objective-c-interface-and-runtime-bindings" title="Objective-C interface and runtime bindings">Objective-C interface and runtime bindings</a><ul><li><a href="#example" title="Example">Example</a></li><li><a href="#crate-features" title="Crate features">Crate features</a></li><li><a href="#supported-operating-systems" title="Supported operating systems">Supported operating systems</a></li><li><a href="#minimum-supported-rust-version-msrv" title="Minimum Supported Rust Version (MSRV)">Minimum Supported Rust Version (MSRV)</a></li></ul></li></ul><h3><a href="#reexports">Crate Items</a></h3><ul class="block"><li><a href="#reexports" title="Re-exports">Re-exports</a></li><li><a href="#modules" title="Modules">Modules</a></li><li><a href="#macros" title="Macros">Macros</a></li><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#traits" title="Traits">Traits</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>objc2</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/objc2/lib.rs.html#1-226">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="objective-c-interface-and-runtime-bindings"><a class="doc-anchor" href="#objective-c-interface-and-runtime-bindings">§</a>Objective-C interface and runtime bindings</h2>
+<p>Quick links:</p>
+<ul>
+<li><a href="topics/index.html" title="mod objc2::topics">All Topics</a>.</li>
+<li><a href="topics/about_generated/index.html" title="mod objc2::topics::about_generated">About framework crates</a>.</li>
+<li><a href="topics/about_generated/list/index.html" title="mod objc2::topics::about_generated::list">List of framework crates</a>.</li>
+</ul>
+<p>Objective-C was the standard programming language on Apple platforms like
+macOS, iOS, iPadOS, tvOS and watchOS. It is an object-oriented language
+centered around “sending messages” to its instances - this can for the
+most part be viewed as a function call.</p>
+<p>It has since been superseded by Swift, but most of the core libraries and
+frameworks that are in use on Apple systems are still written in
+Objective-C, and hence we would like the ability to interact with these
+using Rust. This crate enables bi-directional interop with Objective-C, in
+as safe a manner as possible.</p>
+<h3 id="example"><a class="doc-anchor" href="#example">§</a>Example</h3>
+<p>Most of the time, you’ll want to use one of <a href="topics/about_generated/index.html" title="mod objc2::topics::about_generated">the framework crates</a>, which
+contain bindings to <code>CoreFoundation</code>, <code>Foundation</code>, <code>AppKit</code>, <code>Metal</code>,
+<code>UIKit</code>, <code>WebKit</code> and so on.</p>
+<p>In this example we’re going to be using <a href="https://docs.rs/objc2-foundation"><code>objc2-foundation</code></a> and
+<a href="https://docs.rs/objc2-app-kit"><code>objc2-app-kit</code></a> to create a simple GUI application that displays a
+“Hello World” label.</p>
+<div class="example-wrap"><pre class="language-console"><code>$ # Add the necessary crates to your project.
+$ cargo add objc2 objc2-foundation objc2-app-kit</code></pre></div>
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#![deny(unsafe_op_in_unsafe_fn)]
+</span><span class="kw">use </span>std::cell::OnceCell;
+
+<span class="kw">use </span>objc2::rc::Retained;
+<span class="kw">use </span>objc2::runtime::ProtocolObject;
+<span class="kw">use </span>objc2::{define_class, msg_send, DefinedClass, MainThreadOnly};
+<span class="kw">use </span>objc2_app_kit::{
+    NSApplication, NSApplicationActivationPolicy, NSApplicationDelegate, NSAutoresizingMaskOptions,
+    NSBackingStoreType, NSColor, NSFont, NSTextAlignment, NSTextField, NSWindow, NSWindowDelegate,
+    NSWindowStyleMask,
+};
+<span class="kw">use </span>objc2_foundation::{
+    ns_string, MainThreadMarker, NSNotification, NSObject, NSObjectProtocol, NSPoint, NSRect,
+    NSSize,
+};
+
+<span class="attr">#[derive(Debug, Default)]
+</span><span class="kw">struct </span>AppDelegateIvars {
+    window: OnceCell&lt;Retained&lt;NSWindow&gt;&gt;,
+}
+
+<span class="macro">define_class!</span>(
+    <span class="comment">// SAFETY:
+    // - The superclass NSObject does not have any subclassing requirements.
+    // - `Delegate` does not implement `Drop`.
+    </span><span class="attr">#[<span class="kw">unsafe</span>(<span class="kw">super </span>= NSObject)]
+    #[thread_kind = MainThreadOnly]
+    #[name = <span class="string">"Delegate"</span>]
+    #[ivars = AppDelegateIvars]
+    </span><span class="kw">struct </span>Delegate;
+
+    <span class="comment">// SAFETY: `NSObjectProtocol` has no safety requirements.
+    </span><span class="kw">unsafe impl </span>NSObjectProtocol <span class="kw">for </span>Delegate {}
+
+    <span class="comment">// SAFETY: `NSApplicationDelegate` has no safety requirements.
+    </span><span class="kw">unsafe impl </span>NSApplicationDelegate <span class="kw">for </span>Delegate {
+        <span class="comment">// SAFETY: The signature is correct.
+        </span><span class="attr">#[<span class="kw">unsafe</span>(method(applicationDidFinishLaunching:))]
+        </span><span class="kw">fn </span>did_finish_launching(<span class="kw-2">&amp;</span><span class="self">self</span>, notification: <span class="kw-2">&amp;</span>NSNotification) {
+            <span class="kw">let </span>mtm = <span class="self">self</span>.mtm();
+
+            <span class="kw">let </span>app = <span class="kw">unsafe </span>{ notification.object() }
+                .unwrap()
+                .downcast::&lt;NSApplication&gt;()
+                .unwrap();
+
+            <span class="kw">let </span>text_field = <span class="kw">unsafe </span>{
+                <span class="kw">let </span>text_field = NSTextField::labelWithString(<span class="macro">ns_string!</span>(<span class="string">"Hello, World!"</span>), mtm);
+                text_field.setFrame(NSRect::new(
+                    NSPoint::new(<span class="number">5.0</span>, <span class="number">100.0</span>),
+                    NSSize::new(<span class="number">290.0</span>, <span class="number">100.0</span>),
+                ));
+                text_field.setTextColor(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>NSColor::colorWithSRGBRed_green_blue_alpha(
+                    <span class="number">0.0</span>, <span class="number">0.5</span>, <span class="number">0.0</span>, <span class="number">1.0</span>,
+                )));
+                text_field.setAlignment(NSTextAlignment::Center);
+                text_field.setFont(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>NSFont::systemFontOfSize(<span class="number">45.0</span>)));
+                text_field.setAutoresizingMask(
+                    NSAutoresizingMaskOptions::ViewWidthSizable
+                        | NSAutoresizingMaskOptions::ViewHeightSizable,
+                );
+                text_field
+            };
+
+            <span class="comment">// SAFETY: We disable releasing when closed below.
+            </span><span class="kw">let </span>window = <span class="kw">unsafe </span>{
+                NSWindow::initWithContentRect_styleMask_backing_defer(
+                    NSWindow::alloc(mtm),
+                    NSRect::new(NSPoint::new(<span class="number">0.0</span>, <span class="number">0.0</span>), NSSize::new(<span class="number">300.0</span>, <span class="number">300.0</span>)),
+                    NSWindowStyleMask::Titled
+                        | NSWindowStyleMask::Closable
+                        | NSWindowStyleMask::Miniaturizable
+                        | NSWindowStyleMask::Resizable,
+                    NSBackingStoreType::Buffered,
+                    <span class="bool-val">false</span>,
+                )
+            };
+            <span class="comment">// SAFETY: Disable auto-release when closing windows.
+            // This is required when creating `NSWindow` outside a window
+            // controller.
+            </span><span class="kw">unsafe </span>{ window.setReleasedWhenClosed(<span class="bool-val">false</span>) };
+
+            <span class="comment">// Set various window properties.
+            </span>window.setTitle(<span class="macro">ns_string!</span>(<span class="string">"A window"</span>));
+            <span class="kw">let </span>view = window.contentView().expect(<span class="string">"window must have content view"</span>);
+            <span class="kw">unsafe </span>{ view.addSubview(<span class="kw-2">&amp;</span>text_field) };
+            window.center();
+            <span class="kw">unsafe </span>{ window.setContentMinSize(NSSize::new(<span class="number">300.0</span>, <span class="number">300.0</span>)) };
+            window.setDelegate(<span class="prelude-val">Some</span>(ProtocolObject::from_ref(<span class="self">self</span>)));
+
+            <span class="comment">// Show the window.
+            </span>window.makeKeyAndOrderFront(<span class="prelude-val">None</span>);
+
+            <span class="comment">// Store the window in the delegate.
+            </span><span class="self">self</span>.ivars().window.set(window).unwrap();
+
+            app.setActivationPolicy(NSApplicationActivationPolicy::Regular);
+
+            <span class="comment">// Activate the application.
+            // Required when launching unbundled (as is done with Cargo).
+            </span><span class="attr">#[allow(deprecated)]
+            </span>app.activateIgnoringOtherApps(<span class="bool-val">true</span>);
+        }
+    }
+
+    <span class="comment">// SAFETY: `NSWindowDelegate` has no safety requirements.
+    </span><span class="kw">unsafe impl </span>NSWindowDelegate <span class="kw">for </span>Delegate {
+        <span class="attr">#[<span class="kw">unsafe</span>(method(windowWillClose:))]
+        </span><span class="kw">fn </span>window_will_close(<span class="kw-2">&amp;</span><span class="self">self</span>, _notification: <span class="kw-2">&amp;</span>NSNotification) {
+            <span class="comment">// Quit the application when the window is closed.
+            </span><span class="kw">unsafe </span>{ NSApplication::sharedApplication(<span class="self">self</span>.mtm()).terminate(<span class="prelude-val">None</span>) };
+        }
+    }
+);
+
+<span class="kw">impl </span>Delegate {
+    <span class="kw">fn </span>new(mtm: MainThreadMarker) -&gt; Retained&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">let </span>this = <span class="self">Self</span>::alloc(mtm).set_ivars(AppDelegateIvars::default());
+        <span class="comment">// SAFETY: The signature of `NSObject`'s `init` method is correct.
+        </span><span class="kw">unsafe </span>{ <span class="macro">msg_send!</span>[<span class="kw">super</span>(this), init] }
+    }
+}
+
+<span class="kw">fn </span>main() {
+    <span class="kw">let </span>mtm = MainThreadMarker::new().unwrap();
+
+    <span class="kw">let </span>app = NSApplication::sharedApplication(mtm);
+    <span class="kw">let </span>delegate = Delegate::new(mtm);
+    app.setDelegate(<span class="prelude-val">Some</span>(ProtocolObject::from_ref(<span class="kw-2">&amp;*</span>delegate)));
+
+    app.run();
+}</code></pre></div>
+<h3 id="crate-features"><a class="doc-anchor" href="#crate-features">§</a>Crate features</h3>
+<p>This crate exports several optional cargo features, see <a href="https://docs.rs/crate/objc2/0.6.0/source/Cargo.toml.orig"><code>Cargo.toml</code></a> for
+an overview and description of these.</p>
+<p>The features in the framework crates are described <a href="topics/about_generated/cargo_features/index.html" title="mod objc2::topics::about_generated::cargo_features">here</a>. Note
+that if you’re developing a library for others to use, you might want to
+reduce compile times by disabling default features and only enabling the
+features you need.</p>
+<h3 id="supported-operating-systems"><a class="doc-anchor" href="#supported-operating-systems">§</a>Supported operating systems</h3>
+<ul>
+<li>macOS: <code>10.12-15.2</code></li>
+<li>iOS: <code>10.0-18.2</code> (includes iPadOS and Mac Catalyst)</li>
+<li>tvOS: <code>10.0-18.2</code></li>
+<li>watchOS: <code>5.0-11.2</code></li>
+<li>visionOS: <code>1.0-2.2</code></li>
+</ul>
+<p>The minimum versions are the same as those supported by <code>rustc</code>. Higher
+versions will also work, but the framework crates will not have bindings
+available for newer APIs.</p>
+<p>The framework bindings are generated from the SDKs in Xcode 16.2. The
+Xcode version will be periodically updated.</p>
+<p>Note that the bindings are currently generated in a very macOS-centric, so
+they may try to use types from AppKit, even on iOS, see for example
+<a href="https://github.com/madsmtm/objc2/issues/637">#637</a>.</p>
+<p>The bindings <em>can</em> also be used on Linux or *BSD utilizing the
+<a href="https://github.com/gnustep/libobjc2">GNUstep Objective-C runtime</a>, see
+the <a href="ffi/index.html" title="mod objc2::ffi"><code>ffi</code></a> module for how to configure this, but this is very much
+second-class.</p>
+<h3 id="minimum-supported-rust-version-msrv"><a class="doc-anchor" href="#minimum-supported-rust-version-msrv">§</a>Minimum Supported Rust Version (MSRV)</h3>
+<p>The <em>currently</em> minimum supported Rust version is <code>1.71</code> (to be able to
+use <code>extern "C-unwind"</code> functions); this is <em>not</em> defined by policy,
+though, so it may change in at any time in a patch release.</p>
+<p>Help us define a policy over in <a href="https://github.com/madsmtm/objc2/issues/203">#203</a>.</p>
+</div></details><h2 id="reexports" class="section-header">Re-exports<a href="#reexports" class="anchor">§</a></h2><dl class="item-table reexports"><dt id="reexport.Encode"><code>pub use self::encode::<a class="trait" href="encode/trait.Encode.html" title="trait objc2::encode::Encode">Encode</a>;</code></dt><dt id="reexport.Encoding"><code>pub use self::encode::<a class="enum" href="encode/enum.Encoding.html" title="enum objc2::encode::Encoding">Encoding</a>;</code></dt><dt id="reexport.RefEncode"><code>pub use self::encode::<a class="trait" href="encode/trait.RefEncode.html" title="trait objc2::encode::RefEncode">RefEncode</a>;</code></dt><dt id="reexport.DeclaredClass"><code>pub use <a class="trait" href="trait.DefinedClass.html" title="trait objc2::DefinedClass">DefinedClass</a> as DeclaredClass;</code></dt></dl><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><dl class="item-table"><dt><a class="mod" href="declare/index.html" title="mod objc2::declare">declare</a><wbr><span class="stab deprecated" title="">Deprecated</span></dt><dd>Deprecated location for a few things that are now in the <a href="runtime/index.html" title="mod objc2::runtime"><code>runtime</code></a>
+module.</dd><dt><a class="mod" href="encode/index.html" title="mod objc2::encode">encode</a></dt><dd>Support for type-encodings.</dd><dt><a class="mod" href="exception/index.html" title="mod objc2::exception">exception</a></dt><dd><code>@throw</code> and <code>@try/@catch</code> exceptions.</dd><dt><a class="mod" href="ffi/index.html" title="mod objc2::ffi">ffi</a></dt><dd>Raw bindings to Objective-C runtimes</dd><dt><a class="mod" href="rc/index.html" title="mod objc2::rc">rc</a></dt><dd>Reference counting utilities.</dd><dt><a class="mod" href="runtime/index.html" title="mod objc2::runtime">runtime</a></dt><dd>Direct runtime bindings.</dd><dt><a class="mod" href="topics/index.html" title="mod objc2::topics">topics</a></dt><dd>Various explanations and topics of discussion.</dd></dl><h2 id="macros" class="section-header">Macros<a href="#macros" class="anchor">§</a></h2><dl class="item-table"><dt><a class="macro" href="macro.available.html" title="macro objc2::available">available</a></dt><dd>Check if APIs from the given operating system versions are available.</dd><dt><a class="macro" href="macro.class.html" title="macro objc2::class">class</a></dt><dd>Gets a reference to an <a href="runtime/struct.AnyClass.html" title="struct objc2::runtime::AnyClass"><code>AnyClass</code></a> from the given name.</dd><dt><a class="macro" href="macro.define_class.html" title="macro objc2::define_class">define_<wbr>class</a></dt><dd>Create a new Objective-C class.</dd><dt><a class="macro" href="macro.extern_class.html" title="macro objc2::extern_class">extern_<wbr>class</a></dt><dd>Create a new type to represent a class.</dd><dt><a class="macro" href="macro.extern_methods.html" title="macro objc2::extern_methods">extern_<wbr>methods</a></dt><dd>Define methods on an external class.</dd><dt><a class="macro" href="macro.extern_protocol.html" title="macro objc2::extern_protocol">extern_<wbr>protocol</a></dt><dd>Create a new trait to represent a protocol.</dd><dt><a class="macro" href="macro.msg_send.html" title="macro objc2::msg_send">msg_<wbr>send</a></dt><dd>Send a message to an object or class.</dd><dt><a class="macro" href="macro.msg_send_bool.html" title="macro objc2::msg_send_bool">msg_<wbr>send_<wbr>bool</a><wbr><span class="stab deprecated" title="">Deprecated</span></dt><dd>Use <a href="macro.msg_send.html" title="macro objc2::msg_send"><code>msg_send!</code></a> instead, it now supports converting to/from <code>bool</code>.</dd><dt><a class="macro" href="macro.msg_send_id.html" title="macro objc2::msg_send_id">msg_<wbr>send_<wbr>id</a><wbr><span class="stab deprecated" title="">Deprecated</span></dt><dd>Use <a href="macro.msg_send.html" title="macro objc2::msg_send"><code>msg_send!</code></a> instead, it now supports converting to/from
+<a href="rc/struct.Retained.html" title="struct objc2::rc::Retained"><code>Retained</code></a>.</dd><dt><a class="macro" href="macro.sel.html" title="macro objc2::sel">sel</a></dt><dd>Register a selector with the Objective-C runtime.</dd></dl><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><dl class="item-table"><dt><a class="struct" href="struct.MainThreadMarker.html" title="struct objc2::MainThreadMarker">Main<wbr>Thread<wbr>Marker</a></dt><dd>A marker type taken by functions that can only be executed on the main
+thread.</dd></dl><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><dl class="item-table"><dt><a class="trait" href="trait.AllocAnyThread.html" title="trait objc2::AllocAnyThread">Alloc<wbr>AnyThread</a></dt><dd>Marker trait for classes (and protocols) that are usable from any thread,
+i.e. the opposite of <a href="trait.MainThreadOnly.html" title="trait objc2::MainThreadOnly"><code>MainThreadOnly</code></a>.</dd><dt><a class="trait" href="trait.ClassType.html" title="trait objc2::ClassType">Class<wbr>Type</a></dt><dd>Marks types that represent specific classes.</dd><dt><a class="trait" href="trait.DefinedClass.html" title="trait objc2::DefinedClass">Defined<wbr>Class</a></dt><dd>Marks class types whose implementation is defined in Rust.</dd><dt><a class="trait" href="trait.DowncastTarget.html" title="trait objc2::DowncastTarget">Downcast<wbr>Target</a></dt><dd>Classes that can be safely downcasted to.</dd><dt><a class="trait" href="trait.MainThreadOnly.html" title="trait objc2::MainThreadOnly">Main<wbr>Thread<wbr>Only</a></dt><dd>Marker trait for classes and protocols that are only safe to use on the
+main thread.</dd><dt><a class="trait" href="trait.Message.html" title="trait objc2::Message">Message</a></dt><dd>Types that can be sent Objective-C messages.</dd><dt><a class="trait" href="trait.ProtocolType.html" title="trait objc2::ProtocolType">Protocol<wbr>Type</a></dt><dd>Marks types that represent specific protocols.</dd><dt><a class="trait" href="trait.ThreadKind.html" title="trait objc2::ThreadKind">Thread<wbr>Kind</a></dt><dd>The allowed values in <a href="trait.ClassType.html#associatedtype.ThreadKind" title="associated type objc2::ClassType::ThreadKind"><code>ClassType::ThreadKind</code></a>.</dd></dl><script type="text/json" id="notable-traits-data">{"Retained<Self>":"<h3>Notable traits for <code><a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;</code></h3><pre><code><div class=\"where\">impl&lt;T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a> for <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    for&lt;'a&gt; <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a>,</div></div><div class=\"where\">impl&lt;'a, T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a> for &amp;'a <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a>,</div></div><div class=\"where\">impl&lt;T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a> for <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    for&lt;'a&gt; <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a>,</div></div><div class=\"where\">impl&lt;'a, T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a> for &amp;'a <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a>,</div></div><div class=\"where\">impl&lt;'a, T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html\" title=\"trait core::future::future::Future\">Future</a> for &amp;'a <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html\" title=\"trait core::future::future::Future\">Future</a>,</div></div><div class=\"where\">    type <a href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html#associatedtype.Output\" class=\"associatedtype\">Output</a> = &lt;<a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a> as <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html\" title=\"trait core::future::future::Future\">Future</a>&gt;::<a class=\"associatedtype\" href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html#associatedtype.Output\" title=\"type core::future::future::Future::Output\">Output</a>;</div>","Retained<T::Super>":"<h3>Notable traits for <code><a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;</code></h3><pre><code><div class=\"where\">impl&lt;T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a> for <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    for&lt;'a&gt; <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a>,</div></div><div class=\"where\">impl&lt;'a, T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a> for &amp;'a <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a>,</div></div><div class=\"where\">impl&lt;T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a> for <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    for&lt;'a&gt; <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a>,</div></div><div class=\"where\">impl&lt;'a, T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a> for &amp;'a <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a>,</div></div><div class=\"where\">impl&lt;'a, T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html\" title=\"trait core::future::future::Future\">Future</a> for &amp;'a <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html\" title=\"trait core::future::future::Future\">Future</a>,</div></div><div class=\"where\">    type <a href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html#associatedtype.Output\" class=\"associatedtype\">Output</a> = &lt;<a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a> as <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html\" title=\"trait core::future::future::Future\">Future</a>&gt;::<a class=\"associatedtype\" href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html#associatedtype.Output\" title=\"type core::future::future::Future::Output\">Output</a>;</div>","Retained<U>":"<h3>Notable traits for <code><a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;</code></h3><pre><code><div class=\"where\">impl&lt;T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a> for <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    for&lt;'a&gt; <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a>,</div></div><div class=\"where\">impl&lt;'a, T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a> for &amp;'a <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Read.html\" title=\"trait std::io::Read\">Read</a>,</div></div><div class=\"where\">impl&lt;T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a> for <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    for&lt;'a&gt; <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a>,</div></div><div class=\"where\">impl&lt;'a, T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a> for &amp;'a <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a>,</div></div><div class=\"where\">impl&lt;'a, T: ?<a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html\" title=\"trait core::marker::Sized\">Sized</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html\" title=\"trait core::future::future::Future\">Future</a> for &amp;'a <a class=\"struct\" href=\"rc/struct.Retained.html\" title=\"struct objc2::rc::Retained\">Retained</a>&lt;T&gt;<div class=\"where\">where\n    <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a>: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html\" title=\"trait core::future::future::Future\">Future</a>,</div></div><div class=\"where\">    type <a href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html#associatedtype.Output\" class=\"associatedtype\">Output</a> = &lt;<a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.reference.html\">&amp;'a T</a> as <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html\" title=\"trait core::future::future::Future\">Future</a>&gt;::<a class=\"associatedtype\" href=\"https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html#associatedtype.Output\" title=\"type core::future::future::Future::Output\">Output</a>;</div>"}</script></section></div></main></body></html>
