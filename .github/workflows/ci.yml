@@ -1,12 +1,10 @@
 name: CI
-
 on:
   workflow_dispatch:
   push:
     branches:
       - main
   pull_request:
-
 jobs:
   build:
     runs-on: macos-15
@@ -16,10 +14,8 @@ jobs:
         with:
           targets: aarch64-apple-ios-sim
           toolchain: nightly
-
       - name: build
         run: cargo build --target aarch64-apple-ios-sim
-
   screenshot:
     runs-on: macos-15
     steps:
@@ -28,24 +24,20 @@ jobs:
         with:
           targets: aarch64-apple-ios-sim
           toolchain: nightly
-
       - name: start simulator
         run: |
           xcrun simctl boot 'iPhone 16'
           sleep 20
-
       - name: Run example and take screenshot
         run: |
           make screenshot
         # xcrun simctl io booted screenshot screenshot.png
-
       - uses: actions/upload-artifact@v4
         id: screenshot
         with:
           name: screenshot
           path: screenshot.png
           compression-level: 0 # no compression
-
       - uses: actions/upload-artifact@v4
         id: app-logs
         with:
@@ -54,36 +46,30 @@ jobs:
             stdout.txt
             stderr.txt
           compression-level: 0 # no compression
-
       - name: Put screenshot in github summary
         run: |
           SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i screenshot.png)" | jq -r '.data.display_url')
           export SCREENSHOT_URL
           make gh-summary
           cat Summary.md >> "$GITHUB_STEP_SUMMARY"
-
   swift-screenshot:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
-
       - name: start simulator
         run: |
           xcrun simctl boot 'iPhone 16 Pro'
           sleep 20
-
       - name: Run example and take screenshot
         run: |
           xcrun simctl list devices booted
           make -C ./swift-example/ swift-example-screenshot
-
       - uses: actions/upload-artifact@v4
         id: swift-screenshot
         with:
           name: swift-screenshot
           path: swift-example/swift-screenshot.png
           compression-level: 0 # no compression
-
       - uses: actions/upload-artifact@v4
         id: swift-app-logs
         with:
@@ -92,7 +78,6 @@ jobs:
             stdout.txt
             stderr.txt
           compression-level: 0 # no compression
-
       - name: upload screenshots to imgbb
         run: |
           SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i swift-example/swift-screenshot.png)" | jq -r '.data.display_url')

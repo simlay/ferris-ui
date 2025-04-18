@@ -17,7 +17,36 @@ struct ContentView: View {
     @State var quantity: Int = 0
     @State var progress: Float = 0
     @State var isEditing = false
+    @State var text: String = "Current Text is: "
+    @State var isShowing: Bool = false
+    @State var isModal: Bool = false
+    var modal: some View {
+        Text("Modal")
+    }
     var body: some View {
+        VStack {
+        //    Spacer()
+            Text("\(text) - switch is \(isShowing)")        .border(.green)
+            Image(systemName: "clock")                      .border(.green)
+            Toggle(isOn: $isShowing) {}                     .border(.green)
+            //.background(Color.purple)
+            TextField("input", text: $text)
+            .border(.green)
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .padding()
+                                                            .border(.green)
+            /*
+            Button("Modal") {
+                self.isModal = true
+            }.sheet(isPresented: $isModal, content: {
+                    self.modal
+                    }).border(.green)
+            Image(systemName: "cloud.heavyrain.fill")
+            .foregroundColor(.red)
+            .font(.title)
+            */
+        }.border(.red)
+        /*
         VStack {
             Text("Stepper \(quantity)")
             Button(
@@ -57,5 +86,8 @@ struct ContentView: View {
                 .foregroundColor(isEditing ? .red : .blue)
         }
         //.padding()
+        */
+        /*
+        */
     }
 }

@@ -7,6 +7,7 @@ mod text;
 mod text_view;
 mod vstack;
 mod image;
+mod text_field;
 
 pub use app::App;
 pub use switch::Switch;
@@ -17,6 +18,7 @@ pub use image::{
     Image,
     ImageType,
 };
+pub use text_field::TextField;
 
 use objc2::rc::Retained;
 use objc2_ui_kit::{UIColor, UIView};

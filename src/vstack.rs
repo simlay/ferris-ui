@@ -18,7 +18,7 @@ impl VStack {
         unsafe {
             stack_view.setAxis(UILayoutConstraintAxis::Vertical);
             stack_view.setAlignment(UIStackViewAlignment::Fill);
-            stack_view.setDistribution(UIStackViewDistribution::EqualSpacing);
+            stack_view.setDistribution(UIStackViewDistribution::FillEqually);
             stack_view.setSpacing(10.);
             stack_view.setBackgroundColor(Some(&*UIColor::whiteColor()));
             stack_view.setTranslatesAutoresizingMaskIntoConstraints(true);

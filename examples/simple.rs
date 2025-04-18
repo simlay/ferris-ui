@@ -1,4 +1,4 @@
-use ferris_ui::{App, GUIEvent, Switch, Text, TextView, VStack, View, Image, ImageType};
+use ferris_ui::{App, GUIEvent, Switch, Text, TextView, VStack, View, Image, ImageType, TextField};
 use objc2::MainThreadMarker;
 use objc2_ui_kit::{UIColor, UIView};
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopProxy};
@@ -56,13 +56,24 @@ impl MyView {
             }))
             .with_background_color(unsafe { UIColor::cyanColor() });
 
-        let cloned_label = label.clone();
+        let label_for_text_view = label.clone();
+        let label_for_text_field = label.clone();
         let text_view = TextView::new(mtm, proxy.clone())
             .with_event_fn(Box::new(move |text_field| {
                 let new_text = text_field.get_text();
                 let text = format!("Current text: {new_text}");
-                cloned_label.set_text(text);
+                label_for_text_view.set_text(text);
             }))
+        .with_place_holder_text("PLACE HOLDER TEXT".into())
+            .with_background_color(unsafe { UIColor::blueColor() });
+
+        let text_field = TextField::new(mtm, proxy.clone())
+            .with_event_fn(Box::new(move |text_field| {
+                let new_text = text_field.get_text().unwrap_or_default();
+                let text = format!("Current text: {new_text}");
+                label_for_text_field.set_text(text);
+            }))
+
             .with_background_color(unsafe { UIColor::blueColor() });
 
         let image = Image::new(mtm, ImageType::SystemIcon("clock".into()));
@@ -70,12 +81,14 @@ impl MyView {
         let vstack = VStack::new(
             mtm,
             vec![
-                Box::new(text_view),
                 Box::new(label.clone()),
                 Box::new(image.clone()),
                 Box::new(switch.clone()),
+                Box::new(text_field),
+                Box::new(text_view),
             ],
         );
+
         Box::new(Self { proxy, vstack })
     }
 }

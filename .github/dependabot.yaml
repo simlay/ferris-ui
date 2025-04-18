@@ -1,20 +1,21 @@
 version: 2
 updates:
-
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
       # Check for updates to GitHub Actions every weekday
-      interval: "daily"
+      interval: daily
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch"] # ignore patch updates
-
+      - dependency-name: '*'
+        update-types:
+          - version-update:semver-patch
   # Maintain dependencies for Cargo
-  - package-ecosystem: "cargo"
-    directory: "/"
+  - # ignore patch updates
+    package-ecosystem: cargo
+    directory: /
     schedule:
-      interval: "daily"
+      interval: daily
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch"] # ignore patch updates
+      - dependency-name: '*'
+        update-types:
+          - version-update:semver-patch

@@ -2,8 +2,8 @@ use crate::{GUIEvent, View};
 use objc2::rc::Retained;
 use objc2::runtime::ProtocolObject;
 use objc2::{DeclaredClass, MainThreadOnly, define_class, msg_send};
-use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol, NSAttributedString};
-use objc2_ui_kit::{UIResponder, UIScrollViewDelegate, UITextView, UITextViewDelegate, UIView};
+use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol, NSAttributedString, NSString, NSRange};
+use objc2_ui_kit::{UIResponder, UIScrollViewDelegate, UITextView, UITextViewDelegate, UIView, UIColor};
 use std::cell::RefCell;
 use winit::event_loop::EventLoopProxy;
 
@@ -11,6 +11,7 @@ pub struct TextViewState {
     delegate: RefCell<Retained<TextFieldDelegate>>,
     proxy: EventLoopProxy<GUIEvent>,
     event_fn: RefCell<Option<Box<dyn Fn(&TextView)>>>,
+    place_holder_text: RefCell<Option<String>>,
 }
 
 define_class!(
@@ -32,28 +33,21 @@ define_class!(
     unsafe impl NSObjectProtocol for TextFieldDelegate {}
     unsafe impl UIScrollViewDelegate for TextFieldDelegate {}
     unsafe impl UITextViewDelegate for TextFieldDelegate {
+        #[unsafe(method(textViewDidChangeSelection:))]
+        fn did_change_selection(&self, sender: &TextView) {
+        }
         #[unsafe(method(textViewDidBeginEditing:))]
-        fn text_field_did_begin_editing(&self, _sender: &TextView) {
-            /*
-            let text = sender.text();
-            println!("DidBeginEditing: {text}");
-            */
+        fn did_begin_editing(&self, sender: &TextView) {
+            sender.began_editing();
         }
 
         #[unsafe(method(textViewDidEndEditing:))]
-        fn text_field_did_end_editing(&self, _sender: &TextView) {
-            /*
-            let text = sender.text();
-            println!("DidEndEditing: {text}");
-            */
+        fn did_end_editing(&self, sender: &TextView) {
+            sender.ended_editing();
         }
 
         #[unsafe(method(textViewDidChange:))]
-        fn text_field_did_change(&self, sender: &TextView) {
-            /*
-            let text = sender.text();
-            println!("textViewDidChange: {text}");
-            */
+        fn did_change(&self, sender: &TextView) {
             sender.text_changed();
         }
     }
@@ -67,36 +61,57 @@ impl TextView {
             delegate: RefCell::new(delegate),
             proxy,
             event_fn: RefCell::new(None),
+            place_holder_text: RefCell::new(None),
         });
         let this: Retained<TextView> = unsafe { msg_send![super(this), init] };
         {
             let delegate = this.ivars().delegate.borrow();
             unsafe { this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone()))) };
         }
-        let alt_text = NSAttributedString::new();
-        unsafe {
-            this.setAttributedText(Some(&alt_text));
-        }
 
         this
     }
 
     pub fn get_text(&self) -> String {
-        // UNANSWERED: Is this safe?
         unsafe { self.text() }.to_string()
+    }
+
+    fn began_editing(&self) {
+        unsafe {
+            self.setText(None);
+            self.setTextColor(Some(&UIColor::blackColor()));
+        }
+    }
+
+    fn ended_editing(&self) {
+        let place_holder_text = self.ivars().place_holder_text.borrow().clone().unwrap_or_default();
+        if !place_holder_text.is_empty() {
+            unsafe {
+                self.setText(Some(&NSString::from_str(place_holder_text.as_str())));
+                self.setTextColor(Some(&UIColor::grayColor()));
+            }
+        }
     }
 
     fn text_changed(&self) {
         let text = self.get_text();
+
         let _ = self.ivars().proxy.send_event(GUIEvent::Text(text.clone()));
+
         if let Some(event_fn) = &*self.ivars().event_fn.borrow() {
             event_fn(self);
         }
+    }
+
+    pub fn with_place_holder_text(self: Retained<Self>, place_holder: String) -> Retained<Self> {
+        *self.ivars().place_holder_text.borrow_mut() = Some(place_holder);
+        self
     }
 }
 
 impl View for TextView {
     fn ui_view(&self) -> Box<&UIView> {
+        self.ended_editing();
         Box::new(self.as_ref())
     }
     #[cfg(feature = "nightly")]
