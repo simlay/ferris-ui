@@ -61,28 +61,29 @@ device-build:
 
 device-bundle: device-build
 	cp ./target/aarch64-apple-ios/debug/examples/simple ./RustWrapper.app/
+	make sign-bundle
 
-device-clear-entitlements:
-	/usr/libexec/PlistBuddy -x -c "Delete :application-identifier" ./RustWrapper.app/entitlements.plist
-	/usr/libexec/PlistBuddy -x -c "Delete :com.apple.developer.team-identifier" ./RustWrapper.app/entitlements.plist
-device-add-entitlements:
-	/usr/libexec/PlistBuddy -x -c "Add :application-identifier string $(TEAM_ID).com.simlay.net.Dinghy" ./RustWrapper.app/entitlements.plist
-	/usr/libexec/PlistBuddy -x -c "Add :com.apple.developer.team-identifier string $(TEAM_ID)" ./RustWrapper.app/entitlements.plist
-
-device-sign: device-bundle
-	make device-clear-entitlements
-	make device-add-entitlements
-	codesign -vvv -f -s "sebastian.imlay@gmail.com" --entitlements ./RustWrapper.app/entitlements.plist ./RustWrapper.app/
-	codesign -vvv -d  --entitlements - --xml ./RustWrapper.app/
-
-device-install: device-sign
+device-install: device-bundle
 	make xcrun-install
 
 device-run: device-install
 	make xcrun-run
+
+device-clear-entitlements:
+	/usr/libexec/PlistBuddy -x -c "Delete :application-identifier" ./RustWrapper.app/entitlements.plist || true
+	/usr/libexec/PlistBuddy -x -c "Delete :com.apple.developer.team-identifier" ./RustWrapper.app/entitlements.plist || true
+
+device-add-entitlements:
+	/usr/libexec/PlistBuddy -x -c "Add :application-identifier string $(TEAM_ID).com.simlay.net.Dinghy" ./RustWrapper.app/entitlements.plist
+	/usr/libexec/PlistBuddy -x -c "Add :com.apple.developer.team-identifier string $(TEAM_ID)" ./RustWrapper.app/entitlements.plist
 
 xcrun-install:
 	xcrun devicectl device install app --device $(DEVICE_ID) ./RustWrapper.app/
 
 xcrun-run:
 	xcrun devicectl device  process launch --device $(DEVICE_ID) com.simlay.net.Dinghy
+sign-bundle:
+	make device-clear-entitlements
+	make device-add-entitlements
+	codesign -vvv -f -s "sebastian.imlay@gmail.com" --entitlements ./RustWrapper.app/entitlements.plist ./RustWrapper.app/
+	codesign -vvv -d  --entitlements - --xml ./RustWrapper.app/

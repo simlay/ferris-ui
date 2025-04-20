@@ -1,10 +1,10 @@
+EMULATOR='iPhone 16 Pro'
+
 build:
 	swift build -vvv  \
 		-Xswiftc -sdk -Xswiftc $(shell xcrun --sdk iphonesimulator --show-sdk-path) \
 		-Xcc -isysroot -Xcc $(shell xcrun --sdk iphonesimulator --show-sdk-path) \
 		-Xswiftc -target -Xswiftc arm64-apple-ios18.0-simulator
-
-EMULATOR='iPhone 16 Pro'
 
 bundle: build
 	cp .build/debug/swift-example ../RustWrapper.app/simple
@@ -35,14 +35,9 @@ build-device:
 
 bundle-device: build-device
 	cp .build/debug/swift-example ../RustWrapper.app/simple
+	make -C ../ sign-bundle
 
-sign-device: bundle-device
-	make -C ../ device-clear-entitlements
-	make -C ../ device-add-entitlements
-	codesign -vvv -f -s "sebastian.imlay@gmail.com" --entitlements ../RustWrapper.app/entitlements.plist ../RustWrapper.app/
-	codesign -vvv -d  --entitlements - --xml ../RustWrapper.app/
-
-device-install: sign-device
+device-install: bundle-device
 	make -C ../ xcrun-install
 
 device-run: device-install
