@@ -21,7 +21,7 @@ pub use image::{
 pub use text_field::TextField;
 
 use objc2::rc::Retained;
-use objc2_ui_kit::{UIColor, UIView};
+use objc2_ui_kit::{UIColor, UIView, UIEdgeInsets};
 
 pub trait View {
     fn event(&mut self, _event: GUIEvent) {}

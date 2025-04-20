@@ -70,3 +70,5 @@ features = [
     "NSThread",
     "NSSet",
 ]
+[target.'cfg(target_os = "ios")'.dependencies.objc2-quartz-core]
+version = "0.3.0"
