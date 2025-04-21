@@ -19,13 +19,13 @@ screenshot: install
 	xcrun simctl launch \
 		--stdout=$(PWD)/stdout.txt \
 		--stderr=$(PWD)/stderr.txt \
-		--terminate-running-process $(EMULATOR) RustWrapper
+		--terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
 	sleep 10
 	xcrun simctl io $(EMULATOR) screenshot swift-screenshot.png
 	sips -Z 1278 swift-screenshot.png
 
 watch:
-	watchexec -r -w ./Sources/main.swift -w Package.swift 'make swift-example-run'
+	watchexec -r -w ./Sources/main.swift -w Package.swift 'make run'
 
 build-device:
 	swift build -vvv  \
