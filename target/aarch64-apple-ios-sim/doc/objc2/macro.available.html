@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Check if APIs from the given operating system versions are available."><title>available in objc2 - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-20739d33.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="objc2" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0-nightly (74509131e 2025-04-29)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../static.files/storage-4e99c027.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../objc2/index.html">objc2</a><span class="version">0.6.1</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">available</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#operating-systems" title="Operating systems">Operating systems</a></li><li><a href="#optimizations" title="Optimizations">Optimizations</a></li><li><a href="#alternatives" title="Alternatives">Alternatives</a></li><li><a href="#examples" title="Examples">Examples</a></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="index.html">In crate objc2</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">objc2</a></div><h1>Macro <span class="macro">available</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/objc2/macros/available.rs.html#132-182">Source</a> </span></div><pre class="rust item-decl"><code>macro_rules! available {
+    (
+        // Returns `false` on unspecified platforms.
+        $(
+            $os:ident $(= $major:literal $(. $minor:literal $(. $patch:literal)?)?)?
+        ),* $(,)?
+    ) =&gt; { ... };
+    (
+        // Returns `true` on unspecified platforms because of the trailing `..`.
+        $(
+            $os:ident $(= $major:literal $(. $minor:literal $(. $patch:literal)?)?)?,
+        )*
+        ..
+    ) =&gt; { ... };
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Check if APIs from the given operating system versions are available.</p>
+<p>Apple adds new APIs with new OS releases, and as a developer, you often
+want to use those to give your users the best behaviour, while still
+supporting older OS versions that don’t have those APIs (instead of
+crashing e.g. because of an undefined selector).</p>
+<p>This macro allows you to conditionally execute code depending on if the
+current OS version is higher than or equal to the version given in the
+macro.</p>
+<p>If no version is specified for a certain OS, the API will be assumed to be
+unavailable there. This default can be changed by adding a trailing <code>..</code>
+to the macro invocation.</p>
+<p>This is very similar to <code>@available</code> in Objective-C and <code>#available</code> in
+Swift, see <a href="https://developer.apple.com/documentation/xcode/running-code-on-a-specific-version#Require-a-minimum-operating-system-version-for-a-feature">Apple’s documentation</a>. Another great introduction
+to availability can be found in <a href="https://epir.at/2019/10/30/api-availability-and-target-conditionals/">here</a>.</p>
+<h2 id="operating-systems"><a class="doc-anchor" href="#operating-systems">§</a>Operating systems</h2>
+<p>The operating system names this macro accepts, the standard environment
+variables that you use to raise the deployment target (the minimum
+supported OS version) and the current default versions are all summarized
+in the table below.</p>
+<div><table><thead><tr><th>OS Value</th><th>Name</th><th>Environment Variable</th><th>Default</th></tr></thead><tbody>
+<tr><td><code>ios</code></td><td>iOS/iPadOS/Mac Catalyst</td><td><code>IPHONEOS_DEPLOYMENT_TARGET</code></td><td>10.0</td></tr>
+<tr><td><code>macos</code></td><td>macOS</td><td><code>MACOSX_DEPLOYMENT_TARGET</code></td><td>10.12</td></tr>
+<tr><td><code>tvos</code></td><td>tvOS</td><td><code>TVOS_DEPLOYMENT_TARGET</code></td><td>10.0</td></tr>
+<tr><td><code>visionos</code></td><td>visionOS</td><td><code>XROS_DEPLOYMENT_TARGET</code></td><td>1.0</td></tr>
+<tr><td><code>watchos</code></td><td>watchOS</td><td><code>WATCHOS_DEPLOYMENT_TARGET</code></td><td>5.0</td></tr>
+</tbody></table>
+</div>
+<p>The default version is the same as that of <code>rustc</code> itself.</p>
+<h2 id="optimizations"><a class="doc-anchor" href="#optimizations">§</a>Optimizations</h2>
+<p>This macro will statically be set to <code>true</code> when the deployment target is
+high enough.</p>
+<p>If a runtime check is deemed necessary, the version lookup will be cached.</p>
+<h2 id="alternatives"><a class="doc-anchor" href="#alternatives">§</a>Alternatives</h2>
+<p>Instead of checking the version at runtime, you could do one of the
+following instead:</p>
+<ol>
+<li>
+<p>Check statically that you’re compiling for a version where the API is
+available, e.g. by checking the <code>*_DEPLOYMENT_TARGET</code> variables in a
+build script or at <code>const</code> time.</p>
+</li>
+<li>
+<p>Check at runtime that a class, method or symbol is available, using
+e.g. <a href="runtime/struct.AnyClass.html#method.get" title="associated function objc2::runtime::AnyClass::get"><code>AnyClass::get</code></a>, <a href="runtime/trait.NSObjectProtocol.html#method.respondsToSelector" title="method objc2::runtime::NSObjectProtocol::respondsToSelector"><code>respondsToSelector</code></a> or <a href="https://github.com/rust-lang/rust/issues/29603">weak linking</a>.</p>
+</li>
+</ol>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<p>Use the <a href="https://developer.apple.com/documentation/appkit/nsapplication/2967171-effectiveappearance?language=objc"><code>effectiveAppearance</code></a> API that was added in macOS 10.14.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>objc2_app_kit::{NSApplication, NSAppearance, NSAppearanceNameAqua};
+<span class="kw">use </span>objc2::available;
+
+<span class="kw">let </span>appearance = <span class="kw">if </span><span class="macro">available!</span>(macos = <span class="number">10.14</span>) {
+    <span class="comment">// Dark mode and `effectiveAppearance` was added in macOS 10.14.
+    </span>NSApplication::sharedApplication(mtm).effectiveAppearance()
+} <span class="kw">else </span>{
+    <span class="comment">// Fall back to `NSAppearanceNameAqua` on macOS 10.13 and below.
+    </span>NSAppearance::appearanceNamed(NSAppearanceNameAqua).unwrap()
+};</code></pre></div>
+<p>Use an API added in Xcode 16.0 SDKs.</p>
+<p>We use <code>..</code> here in case Apple adds a new operating system in the future,
+then we probably also want the branch to be taken there.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>objc2::available;
+
+<span class="kw">if </span><span class="macro">available!</span>(ios = <span class="number">18.0</span>, macos = <span class="number">15.0</span>, tvos = <span class="number">18.0</span>, visionos = <span class="number">2.0</span>, watchos = <span class="number">11.0</span>, ..) {
+    <span class="comment">// Use some recent API here.
+</span>}</code></pre></div>
+<p>Set the <a href="https://developer.apple.com/documentation/quartzcore/cametallayer/1478161-wantsextendeddynamicrangecontent"><code>wantsExtendedDynamicRangeContent</code></a> property, which is available
+since iOS 16.0, macOS 10.11 and visionOS 1.0, but is not available on tvOS
+and watchOS.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>objc2::available;
+
+<span class="kw">if </span><span class="macro">available!</span>(ios = <span class="number">16.0</span>, macos = <span class="number">10.11</span>, visionos = <span class="number">1.0</span>) {
+    layer.setWantsExtendedDynamicRangeContent(<span class="bool-val">true</span>);
+}</code></pre></div>
+<p>Work around problems in a specific range of versions (an example of this
+in the real world can be seen in <a href="https://github.com/madsmtm/objc2/issues/662">#662</a>).</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>objc2::available;
+
+<span class="kw">if </span><span class="macro">available!</span>(macos = <span class="number">15.0</span>) &amp;&amp; !<span class="macro">available!</span>(macos = <span class="number">15.1</span>) {
+    <span class="comment">// Do something on macOS 15.0 and 15.0.1.
+</span>} <span class="kw">else </span>{
+    <span class="comment">// Do something else on all other versions.
+</span>}</code></pre></div>
+</div></details></section></div></main></body></html>

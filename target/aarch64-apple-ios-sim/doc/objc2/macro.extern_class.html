@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Create a new type to represent a class."><title>extern_class in objc2 - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-20739d33.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="objc2" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0-nightly (74509131e 2025-04-29)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../static.files/storage-4e99c027.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../objc2/index.html">objc2</a><span class="version">0.6.1</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">extern_<wbr>class</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#specification" title="Specification">Specification</a><ul><li><a href="#attributes" title="Attributes">Attributes</a></li></ul></li><li><a href="#safety" title="Safety">Safety</a></li><li><a href="#examples" title="Examples">Examples</a></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="index.html">In crate objc2</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">objc2</a></div><h1>Macro <span class="macro">extern_class</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/objc2/macros/extern_class.rs.html#175-225">Source</a> </span></div><pre class="rust item-decl"><code>macro_rules! extern_class {
+    (
+        // The following special attributes are supported:
+        // - #[unsafe(super($($superclasses:path),*))]
+        // - #[unsafe(super = $superclass:path)]
+        // - #[thread_kind = $thread_kind:path]
+        // - #[name = $name:literal]
+        //
+        // As well as the following standard attributes:
+        // - #[derive(Eq, PartialEq, Hash, Debug)] (only those four are supported)
+        // - #[cfg(...)]
+        // - #[cfg_attr(..., ...)] (only for standard attributes)
+        // - #[doc(...)]
+        // - #[deprecated(...)]
+        // - #[allow/expect/warn/deny/forbid]
+        //
+        // Note that `#[repr(...)]` and `#[non_exhaustive]` are intentionally not supported.
+        $(#[$($attrs:tt)*])*
+        $v:vis struct $class:ident;
+    ) =&gt; { ... };
+    (
+        // Generic version. Currently pretty ill supported.
+        $(#[$($attrs:tt)*])*
+        $v:vis struct $class:ident&lt;
+            $($generic:ident $(: $(?$bound_sized:ident)? $($bound:ident)?)? $(= $default:ty)?),*
+            $(,)?
+        &gt;;
+    ) =&gt; { ... };
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Create a new type to represent a class.</p>
+<p>This is similar to an <code>@interface</code> declaration in Objective-C.</p>
+<p>It is useful for things like <code>objc2-foundation</code>, which needs to create
+interfaces to existing, externally defined classes like <code>NSString</code>,
+<code>NSURL</code> and so on, but can also be useful for users that have custom
+classes written in Objective-C that they want to access from Rust.</p>
+<h2 id="specification"><a class="doc-anchor" href="#specification">§</a>Specification</h2>
+<p>The syntax is similar enough to Rust syntax that if you invoke the macro
+with parentheses (as opposed to curly brackets), <a href="https://github.com/rust-lang/rustfmt/discussions/5437"><code>rustfmt</code> will be able to
+format the contents</a> (so e.g. as <code>extern_class!( ... );</code>).</p>
+<p>The macro creates an opaque struct containing the superclass (which means
+that auto traits are inherited from the superclass), and implements the
+following traits for it to allow easier usage as an Objective-C object:</p>
+<ul>
+<li><a href="encode/trait.RefEncode.html" title="trait objc2::encode::RefEncode"><code>RefEncode</code></a></li>
+<li><a href="trait.Message.html" title="trait objc2::Message"><code>Message</code></a></li>
+<li><a href="https://doc.rust-lang.org/nightly/core/ops/deref/trait.Deref.html" title="trait core::ops::deref::Deref"><code>Deref&lt;Target = $superclass&gt;</code></a></li>
+<li><a href="trait.ClassType.html" title="trait objc2::ClassType"><code>ClassType</code></a></li>
+<li>[<code>DowncastTarget</code>][$crate::DowncastTarget]</li>
+<li><a href="https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html" title="trait core::convert::AsRef"><code>AsRef&lt;$inheritance_chain&gt;</code></a></li>
+<li><a href="https://doc.rust-lang.org/nightly/core/borrow/trait.Borrow.html" title="trait core::borrow::Borrow"><code>Borrow&lt;$inheritance_chain&gt;</code></a></li>
+</ul>
+<p>If generics are specified, these will be placed in a <a href="https://doc.rust-lang.org/nightly/core/marker/struct.PhantomData.html" title="struct core::marker::PhantomData"><code>PhantomData</code></a>.</p>
+<h3 id="attributes"><a class="doc-anchor" href="#attributes">§</a>Attributes</h3>
+<p>You can add most normal attributes to the class, including <code>#[cfg(...)]</code>,
+<code>#[allow(...)]</code> and doc comments.</p>
+<p>Exceptions and special attributes are noted below.</p>
+<h4 id="unsafesuper-required"><a class="doc-anchor" href="#unsafesuper-required">§</a><code>#[unsafe(super(...))]</code> (required)</h4>
+<p>Controls the <a href="trait.ClassType.html#associatedtype.Super" title="associated type objc2::ClassType::Super">superclass</a> and the rest of the
+inheritance chain. This attribute is required.</p>
+<p>Due to Rust trait limitations, specifying e.g. the superclass <code>NSData</code>
+would not give you the ability to convert via <code>AsRef</code> to <code>NSObject</code>.
+Therefore, you can optionally specify additional parts of the inheritance
+in this attribute.</p>
+<h4 id="thread_kind---optional"><a class="doc-anchor" href="#thread_kind---optional">§</a><code>#[thread_kind = ...]</code> (optional)</h4>
+<p>Controls the <a href="trait.ClassType.html#associatedtype.ThreadKind" title="associated type objc2::ClassType::ThreadKind">thread kind</a>, i.e. it can be
+set to <a href="trait.MainThreadOnly.html" title="trait objc2::MainThreadOnly"><code>MainThreadOnly</code></a> if the object is only usable on the main thread.</p>
+<h4 id="name---optional"><a class="doc-anchor" href="#name---optional">§</a><code>#[name = "..."]</code> (optional)</h4>
+<p>Controls the <a href="trait.ClassType.html#associatedconstant.NAME" title="associated constant objc2::ClassType::NAME">name</a> of the class.</p>
+<p>If not specified, this will default to the struct name.</p>
+<h4 id="derive"><a class="doc-anchor" href="#derive">§</a><code>#[derive(...)]</code></h4>
+<p>This is overridden, and only works with <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html" title="trait core::cmp::PartialEq"><code>PartialEq</code></a>, <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html" title="trait core::cmp::Eq"><code>Eq</code></a>, <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html" title="trait core::hash::Hash"><code>Hash</code></a>
+and <a href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug"><code>Debug</code></a>.</p>
+<h4 id="cfg_attr-"><a class="doc-anchor" href="#cfg_attr-">§</a><code>#[cfg_attr(..., ...)]</code></h4>
+<p>This is only supported for attributes that apply to the struct itself
+(i.e. not supported for attributes that apply to implementations, or any
+of the custom attributes).</p>
+<h4 id="repr"><a class="doc-anchor" href="#repr">§</a><code>#[repr(...)]</code></h4>
+<p>Not allowed (the macro uses this attribute internally).</p>
+<h2 id="safety"><a class="doc-anchor" href="#safety">§</a>Safety</h2>
+<p>When writing <code>#[unsafe(super(...))]</code>, you must ensure that:</p>
+<ol>
+<li>The first superclass is correct.</li>
+<li>The thread kind is set to <code>MainThreadOnly</code> if the class can only be
+used from the main thread.</li>
+</ol>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<p>Create a new type to represent the <code>NSFormatter</code> class (for demonstration,
+<code>objc2_foundation::NSFormatter</code> exist for exactly this purpose).</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>objc2_foundation::{NSCoding, NSCopying, NSObjectProtocol};
+<span class="kw">use </span>objc2::rc::Retained;
+<span class="kw">use </span>objc2::runtime::NSObject;
+<span class="kw">use </span>objc2::{extern_class, extern_conformance, msg_send, ClassType};
+
+<span class="macro">extern_class!</span>(
+    <span class="doccomment">/// An example description, to show that doc comments work.
+    </span><span class="comment">// Specify the superclass, in this case `NSObject`
+    </span><span class="attr">#[<span class="kw">unsafe</span>(<span class="kw">super</span>(NSObject))]
+    </span><span class="comment">// We could specify that the class is only usable on the main thread.
+    // #[thread_kind = MainThreadOnly];
+    // And specify the name of the class, if it differed from the struct.
+    // #[name = "NSFormatter"];
+    // These derives use the superclass' implementation.
+    </span><span class="attr">#[derive(PartialEq, Eq, Hash, Debug)]
+    </span><span class="kw">pub struct </span>NSFormatter;
+);
+
+<span class="comment">// Note: We have to specify the protocols for the superclasses as well,
+// since Rust doesn't do inheritance.
+</span><span class="macro">extern_conformance!</span>(<span class="kw">unsafe impl </span>NSObjectProtocol <span class="kw">for </span>NSFormatter {});
+<span class="macro">extern_conformance!</span>(<span class="kw">unsafe impl </span>NSCopying <span class="kw">for </span>NSFormatter {});
+<span class="macro">extern_conformance!</span>(<span class="kw">unsafe impl </span>NSCoding <span class="kw">for </span>NSFormatter {});
+
+<span class="kw">fn </span>main() {
+    <span class="comment">// Provided by the implementation of `ClassType`
+    </span><span class="kw">let </span>cls = NSFormatter::class();
+
+    <span class="comment">// `NSFormatter` implements `Message`:
+    </span><span class="kw">let </span>obj: Retained&lt;NSFormatter&gt; = <span class="kw">unsafe </span>{ <span class="macro">msg_send!</span>[cls, new] };
+}</code></pre></div>
+<p>Represent the <code>NSDateFormatter</code> class, using the <code>NSFormatter</code> type we
+declared previously to specify as its superclass.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>objc2_foundation::{NSCoding, NSCopying, NSObjectProtocol};
+<span class="kw">use </span>objc2::runtime::NSObject;
+<span class="kw">use </span>objc2::{extern_class, extern_conformance, ClassType};
+
+<span class="macro">extern_class!</span>(
+    <span class="comment">// Specify the correct inheritance chain
+    </span><span class="attr">#[<span class="kw">unsafe</span>(<span class="kw">super</span>(NSFormatter, NSObject))]
+    #[derive(PartialEq, Eq, Hash, Debug)]
+    </span><span class="kw">pub struct </span>NSDateFormatter;
+);
+
+<span class="comment">// Similarly, we can specify the protocols that this implements here:
+</span><span class="macro">extern_conformance!</span>(<span class="kw">unsafe impl </span>NSObjectProtocol <span class="kw">for </span>NSDateFormatter {});
+<span class="macro">extern_conformance!</span>(<span class="kw">unsafe impl </span>NSCopying <span class="kw">for </span>NSDateFormatter {});
+<span class="macro">extern_conformance!</span>(<span class="kw">unsafe impl </span>NSCoding <span class="kw">for </span>NSDateFormatter {});</code></pre></div>
+<p>See the source code of <code>objc2-foundation</code> for many more examples.</p>
+</div></details></section></div></main></body></html>

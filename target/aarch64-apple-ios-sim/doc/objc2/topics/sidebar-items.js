@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["about_generated","alternatives","changelog","crate_interop","cross_compiling","interior_mutability","kvo","layered_safety","migrating_from_objc","mvc","run_loop","swift","weak_property"]};

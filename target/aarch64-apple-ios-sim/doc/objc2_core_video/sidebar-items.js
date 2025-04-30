@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"static":["kCVIndefiniteTime","kCVZeroTime"],"struct":["CVSMPTETime","CVSMPTETimeFlags","CVSMPTETimeType","CVTime","CVTimeFlags","CVTimeStamp","CVTimeStampFlags"],"type":["CVOptionFlags"]};

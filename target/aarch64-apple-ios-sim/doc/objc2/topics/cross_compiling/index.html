@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Cross-compiling from Linux/Windows"><title>objc2::topics::cross_compiling - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-20739d33.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="objc2" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0-nightly (74509131e 2025-04-29)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-4e99c027.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../objc2/index.html">objc2</a><span class="version">0.6.1</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module cross_<wbr>compiling</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#cross-compiling-from-linuxwindows" title="Cross-compiling from Linux/Windows">Cross-compiling from Linux/Windows</a><ul><li><a href="#sdk" title="SDK">SDK</a></li></ul></li></ul></section><div id="rustdoc-modnav"><h2><a href="../index.html">In objc2::<wbr>topics</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../../index.html">objc2</a>::<wbr><a href="../index.html">topics</a></div><h1>Module <span>cross_compiling</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../src/objc2/topics/mod.rs.html#12">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="cross-compiling-from-linuxwindows"><a class="doc-anchor" href="#cross-compiling-from-linuxwindows">§</a>Cross-compiling from Linux/Windows</h2>
+<p>When compiling for e.g. iOS, you’re always doing cross-compilation, since the host platform (macOS) is different from the target platform (iOS). This means that Apple’s tooling generally has pretty good support for cross-compilation.</p>
+<p>To cross-compile Rust applications, you need a few things:</p>
+<ol>
+<li>A cross-compiler.</li>
+</ol>
+<ul>
+<li>Rust is a cross-compiler by default, though you’ll need to install the standard library for <a href="https://doc.rust-lang.org/rustc/platform-support.html">the relevant target</a> via. <code>rustup target add $TARGET</code>, or use <a href="https://doc.rust-lang.org/cargo/reference/unstable.html#build-std">Cargo’s unstable <code>-Zbuild-std</code></a>.</li>
+</ul>
+<ol start="2">
+<li>A cross-linker.</li>
+</ol>
+<ul>
+<li><a href="https://github.com/apple-oss-distributions/ld64"><code>ld64</code></a> is Apple’s native linker. It used to be open source, though the new implementation <a href="https://developer.apple.com/forums/thread/749558">hasn’t been open sourced</a>.</li>
+<li><a href="https://lld.llvm.org/">LLVM’s <code>lld</code></a> is a fairly good alternative, it comes bundled with Rust as <code>rust-lld</code>.</li>
+</ul>
+<ol start="3">
+<li>Linker stubs (<code>*.tbd</code> files).</li>
+</ol>
+<ul>
+<li>Used to figure out which dynamic system library each symbol comes from.</li>
+<li>These stubs are located inside the SDK.</li>
+</ul>
+<ol start="4">
+<li>If compiling C code using e.g. <code>cc-rs</code>, you will need:</li>
+</ol>
+<ul>
+<li>A C cross-compiler (Clang is a good choice here).</li>
+<li>C headers. Also located inside the SDK.</li>
+</ul>
+<p>In the end, you should end up with something like the following:</p>
+<div class="example-wrap"><pre class="language-console"><code>$ rustup target add aarch64-apple-darwin
+$ export CARGO_TARGET_AARCH64_APPLE_DARWIN_LINKER=rust-lld
+$ export SDKROOT=$(pwd)/MacOSX.sdk
+$ export CC=clang CXX=clang++ AR=llvm-ar # If compiling C code
+$ cargo build --target aarch64-apple-darwin</code></pre></div>
+<p>For more details, see <a href="https://github.com/japaric/rust-cross">Rust Cross</a>, this has a good explanation of how cross-compiling Rust works in general. <a href="https://github.com/tpoechtrager/osxcross">OSXCross</a> is also a good resource, it outlines how to create a complete compiler toolchain (including <code>ld64</code>).</p>
+<h3 id="sdk"><a class="doc-anchor" href="#sdk">§</a>SDK</h3>
+<p>The required <code>MacOSX.sdk</code>, <code>iPhoneOS.sdk</code> etc. are bundled with Xcode. Please make sure to review <a href="https://www.apple.com/legal/sla/docs/xcode.pdf">the Xcode SLA</a>, especially the sections regarding required use on Apple-branded computers.</p>
+<p>Once you’ve done that, you can <a href="https://developer.apple.com/download/all/?q=xcode">download Xcode here</a> (requires logging in with an Apple ID). If you only need to cross-compile to macOS, downloading just the Command Line Tools for Xcode will suffice.</p>
+<p>Once downloaded, you need to extract and find the <code>MacOSX.sdk</code> folder, and pass that to <code>rustc</code> using the <code>SDKROOT</code> environment variable.</p>
+<p>It may also be possible to find these SDKs elsewhere on the web by searching for e.g. “MacOSX.sdk”, though we will not endorse any such links here, as the legality of such a re-distribution is a grey area.</p>
+</div></details></section></div></main></body></html>

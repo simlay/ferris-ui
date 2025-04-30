@@ -1,0 +1,370 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Bindings to the `Metal` framework"><title>objc2_metal - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-20739d33.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="objc2_metal" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0-nightly (74509131e 2025-04-29)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../static.files/storage-4e99c027.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../objc2_metal/index.html">objc2_<wbr>metal</a><span class="version">0.3.1</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#bindings-to-the-metal-framework" title="Bindings to the `Metal` framework">Bindings to the <code>Metal</code> framework</a><ul><li><a href="#example" title="Example">Example</a></li></ul></li></ul><h3><a href="#structs">Crate Items</a></h3><ul class="block"><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#constants" title="Constants">Constants</a></li><li><a href="#statics" title="Statics">Statics</a></li><li><a href="#traits" title="Traits">Traits</a></li><li><a href="#functions" title="Functions">Functions</a></li><li><a href="#types" title="Type Aliases">Type Aliases</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>objc2_metal</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/objc2_metal/lib.rs.html#1-90">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="bindings-to-the-metal-framework"><a class="doc-anchor" href="#bindings-to-the-metal-framework">§</a>Bindings to the <code>Metal</code> framework</h2>
+<p>See <a href="https://developer.apple.com/documentation/metal/">Apple’s docs</a> and <a href="https://docs.rs/objc2/latest/objc2/topics/about_generated/index.html">the general docs on framework crates</a> for more information.</p>
+<p>Metal has tools for validating that you’re using it correctly, using these
+is highly recommended! See <a href="https://developer.apple.com/documentation/metal/">Apple’s documentation on it</a>, or
+run <code>man MetalValidation</code> to get information on environment variables.</p>
+<p>NOTE: To use <a href="fn.MTLCreateSystemDefaultDevice.html" title="fn objc2_metal::MTLCreateSystemDefaultDevice"><code>MTLCreateSystemDefaultDevice</code></a> you need to link to
+<code>CoreGraphics</code>, this can be done by using <code>objc2-core-graphics</code>, or by
+doing:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[link(name = <span class="string">"CoreGraphics"</span>, kind = <span class="string">"framework"</span>)]
+</span><span class="kw">extern </span><span class="string">"C" </span>{}</code></pre></div>
+<h3 id="example"><a class="doc-anchor" href="#example">§</a>Example</h3>
+<p>Drawing a rotating triangle.</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#![deny(unsafe_op_in_unsafe_fn)]
+#![allow(clippy::incompatible_msrv)]
+#![cfg_attr(not(target_os = <span class="string">"macos"</span>), allow(dead_code, unused))]
+
+</span><span class="kw">use </span>core::{cell::OnceCell, ptr::NonNull};
+
+<span class="kw">use </span>objc2::rc::Retained;
+<span class="kw">use </span>objc2::runtime::ProtocolObject;
+<span class="kw">use </span>objc2::{define_class, msg_send, DefinedClass, MainThreadMarker, MainThreadOnly};
+<span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)]
+</span><span class="kw">use </span>objc2_app_kit::{
+    NSApplication, NSApplicationActivationPolicy, NSApplicationDelegate, NSBackingStoreType,
+    NSWindow, NSWindowStyleMask,
+};
+<span class="kw">use </span>objc2_foundation::{
+    ns_string, NSDate, NSNotification, NSObject, NSObjectProtocol, NSPoint, NSRect, NSSize,
+};
+<span class="kw">use </span>objc2_metal::{
+    MTLCommandBuffer, MTLCommandEncoder, MTLCommandQueue, MTLCreateSystemDefaultDevice,
+    MTLDevice <span class="kw">as _</span>, MTLLibrary, MTLPackedFloat3, MTLPrimitiveType, MTLRenderCommandEncoder,
+    MTLRenderPipelineDescriptor, MTLRenderPipelineState,
+};
+<span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)]
+</span><span class="kw">use </span>objc2_metal_kit::{MTKView, MTKViewDelegate};
+
+<span class="attr">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">struct </span>SceneProperties {
+    time: f32,
+}
+
+<span class="attr">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">struct </span>VertexInput {
+    position: MTLPackedFloat3,
+    color: MTLPackedFloat3,
+}
+
+<span class="macro">macro_rules!</span> idcell {
+    (<span class="macro-nonterminal">$name</span>:ident =&gt; <span class="macro-nonterminal">$this</span>:expr) =&gt; {
+        <span class="macro-nonterminal">$this</span>.ivars().<span class="macro-nonterminal">$name</span>.set(<span class="macro-nonterminal">$name</span>).expect(<span class="kw-2">&amp;</span><span class="macro">format!</span>(
+            <span class="string">"ivar should not already be initialized: `{}`"</span>,
+            <span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>)
+        ));
+    };
+    (<span class="macro-nonterminal">$name</span>:ident &lt;= <span class="macro-nonterminal">$this</span>:expr) =&gt; {
+        <span class="attr">#[rustfmt::skip]
+        </span><span class="kw">let </span><span class="prelude-val">Some</span>(<span class="macro-nonterminal">$name</span>) = <span class="macro-nonterminal">$this</span>.ivars().<span class="macro-nonterminal">$name</span>.get() <span class="kw">else </span>{
+            <span class="macro">unreachable!</span>(
+                <span class="string">"ivar should be initialized: `{}`"</span>,
+                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>)
+            )
+        };
+    };
+}
+
+<span class="comment">// The state of our application.
+</span><span class="kw">struct </span>Ivars {
+    start_date: Retained&lt;NSDate&gt;,
+    command_queue: OnceCell&lt;Retained&lt;ProtocolObject&lt;<span class="kw">dyn </span>MTLCommandQueue&gt;&gt;&gt;,
+    pipeline_state: OnceCell&lt;Retained&lt;ProtocolObject&lt;<span class="kw">dyn </span>MTLRenderPipelineState&gt;&gt;&gt;,
+    <span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)]
+    </span>window: OnceCell&lt;Retained&lt;NSWindow&gt;&gt;,
+}
+
+<span class="macro">define_class!</span>(
+    <span class="comment">// SAFETY:
+    // - The superclass NSObject does not have any subclassing requirements.
+    // - `MainThreadOnly` is correct, since this is an application delegate.
+    // - `Delegate` does not implement `Drop`.
+    </span><span class="attr">#[<span class="kw">unsafe</span>(<span class="kw">super</span>(NSObject))]
+    #[thread_kind = MainThreadOnly]
+    #[ivars = Ivars]
+    </span><span class="kw">struct </span>Delegate;
+
+    <span class="kw">unsafe impl </span>NSObjectProtocol <span class="kw">for </span>Delegate {}
+
+    <span class="comment">// define the delegate methods for the `NSApplicationDelegate` protocol
+    </span><span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)]
+    </span><span class="kw">unsafe impl </span>NSApplicationDelegate <span class="kw">for </span>Delegate {
+        <span class="attr">#[<span class="kw">unsafe</span>(method(applicationDidFinishLaunching:))]
+        #[allow(non_snake_case)]
+        </span><span class="kw">unsafe fn </span>applicationDidFinishLaunching(<span class="kw-2">&amp;</span><span class="self">self</span>, _notification: <span class="kw-2">&amp;</span>NSNotification) {
+            <span class="kw">let </span>mtm = <span class="self">self</span>.mtm();
+            <span class="comment">// create the app window
+            </span><span class="kw">let </span>window = {
+                <span class="kw">let </span>content_rect = NSRect::new(NSPoint::new(<span class="number">0.</span>, <span class="number">0.</span>), NSSize::new(<span class="number">768.</span>, <span class="number">768.</span>));
+                <span class="kw">let </span>style = NSWindowStyleMask::Closable
+                    | NSWindowStyleMask::Resizable
+                    | NSWindowStyleMask::Titled;
+                <span class="kw">let </span>backing_store_type = NSBackingStoreType::Buffered;
+                <span class="kw">let </span>flag = <span class="bool-val">false</span>;
+                <span class="kw">unsafe </span>{
+                    NSWindow::initWithContentRect_styleMask_backing_defer(
+                        NSWindow::alloc(mtm),
+                        content_rect,
+                        style,
+                        backing_store_type,
+                        flag,
+                    )
+                }
+            };
+
+            <span class="comment">// get the default device
+            </span><span class="kw">let </span>device =
+                MTLCreateSystemDefaultDevice().expect(<span class="string">"failed to get default system device"</span>);
+
+            <span class="comment">// create the command queue
+            </span><span class="kw">let </span>command_queue = device
+                .newCommandQueue()
+                .expect(<span class="string">"Failed to create a command queue."</span>);
+
+            <span class="comment">// create the metal view
+            </span><span class="kw">let </span>mtk_view = {
+                <span class="kw">let </span>frame_rect = window.frame();
+                <span class="kw">unsafe </span>{
+                    MTKView::initWithFrame_device(MTKView::alloc(mtm), frame_rect, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>device))
+                }
+            };
+
+            <span class="comment">// create the pipeline descriptor
+            </span><span class="kw">let </span>pipeline_descriptor = MTLRenderPipelineDescriptor::new();
+
+            <span class="kw">unsafe </span>{
+                pipeline_descriptor
+                    .colorAttachments()
+                    .objectAtIndexedSubscript(<span class="number">0</span>)
+                    .setPixelFormat(mtk_view.colorPixelFormat());
+            }
+
+            <span class="comment">// compile the shaders
+            </span><span class="kw">let </span>library = device
+                .newLibraryWithSource_options_error(
+                    <span class="macro">ns_string!</span>(<span class="macro">include_str!</span>(<span class="string">"triangle.metal"</span>)),
+                    <span class="prelude-val">None</span>,
+                )
+                .expect(<span class="string">"Failed to create a library."</span>);
+
+            <span class="comment">// configure the vertex shader
+            </span><span class="kw">let </span>vertex_function = library.newFunctionWithName(<span class="macro">ns_string!</span>(<span class="string">"vertex_main"</span>));
+            pipeline_descriptor.setVertexFunction(vertex_function.as_deref());
+
+            <span class="comment">// configure the fragment shader
+            </span><span class="kw">let </span>fragment_function = library.newFunctionWithName(<span class="macro">ns_string!</span>(<span class="string">"fragment_main"</span>));
+            pipeline_descriptor.setFragmentFunction(fragment_function.as_deref());
+
+            <span class="comment">// create the pipeline state
+            </span><span class="kw">let </span>pipeline_state = device
+                .newRenderPipelineStateWithDescriptor_error(<span class="kw-2">&amp;</span>pipeline_descriptor)
+                .expect(<span class="string">"Failed to create a pipeline state."</span>);
+
+            <span class="comment">// configure the metal view delegate
+            </span><span class="kw">unsafe </span>{
+                <span class="kw">let </span>object = ProtocolObject::from_ref(<span class="self">self</span>);
+                mtk_view.setDelegate(<span class="prelude-val">Some</span>(object));
+            }
+
+            <span class="comment">// configure the window
+            </span>window.setContentView(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>mtk_view));
+            window.center();
+            window.setTitle(<span class="macro">ns_string!</span>(<span class="string">"metal example"</span>));
+            window.makeKeyAndOrderFront(<span class="prelude-val">None</span>);
+
+            <span class="comment">// initialize the delegate state
+            </span><span class="macro">idcell!</span>(command_queue =&gt; <span class="self">self</span>);
+            <span class="macro">idcell!</span>(pipeline_state =&gt; <span class="self">self</span>);
+            <span class="macro">idcell!</span>(window =&gt; <span class="self">self</span>);
+        }
+    }
+
+    <span class="comment">// define the delegate methods for the `MTKViewDelegate` protocol
+    </span><span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)] </span><span class="comment">// TODO: Support iOS
+    </span><span class="kw">unsafe impl </span>MTKViewDelegate <span class="kw">for </span>Delegate {
+        <span class="attr">#[<span class="kw">unsafe</span>(method(drawInMTKView:))]
+        #[allow(non_snake_case)]
+        </span><span class="kw">unsafe fn </span>drawInMTKView(<span class="kw-2">&amp;</span><span class="self">self</span>, mtk_view: <span class="kw-2">&amp;</span>MTKView) {
+            <span class="macro">idcell!</span>(command_queue &lt;= <span class="self">self</span>);
+            <span class="macro">idcell!</span>(pipeline_state &lt;= <span class="self">self</span>);
+
+            <span class="comment">// prepare for drawing
+            </span><span class="kw">let </span><span class="prelude-val">Some</span>(current_drawable) = (<span class="kw">unsafe </span>{ mtk_view.currentDrawable() }) <span class="kw">else </span>{
+                <span class="kw">return</span>;
+            };
+            <span class="kw">let </span><span class="prelude-val">Some</span>(command_buffer) = command_queue.commandBuffer() <span class="kw">else </span>{
+                <span class="kw">return</span>;
+            };
+            <span class="kw">let </span><span class="prelude-val">Some</span>(pass_descriptor) = (<span class="kw">unsafe </span>{ mtk_view.currentRenderPassDescriptor() }) <span class="kw">else </span>{
+                <span class="kw">return</span>;
+            };
+            <span class="kw">let </span><span class="prelude-val">Some</span>(encoder) = command_buffer.renderCommandEncoderWithDescriptor(<span class="kw-2">&amp;</span>pass_descriptor)
+            <span class="kw">else </span>{
+                <span class="kw">return</span>;
+            };
+
+            <span class="comment">// compute the scene properties
+            </span><span class="kw">let </span>scene_properties_data = <span class="kw-2">&amp;</span>SceneProperties {
+                time: <span class="kw">unsafe </span>{ <span class="self">self</span>.ivars().start_date.timeIntervalSinceNow() } <span class="kw">as </span>f32,
+            };
+            <span class="comment">// write the scene properties to the vertex shader argument buffer at index 0
+            </span><span class="kw">let </span>scene_properties_bytes = NonNull::from(scene_properties_data);
+            <span class="kw">unsafe </span>{
+                encoder.setVertexBytes_length_atIndex(
+                    scene_properties_bytes.cast::&lt;core::ffi::c_void&gt;(),
+                    core::mem::size_of_val(scene_properties_data),
+                    <span class="number">0</span>,
+                )
+            };
+
+            <span class="comment">// compute the triangle geometry
+            </span><span class="kw">let </span>vertex_input_data: <span class="kw-2">&amp;</span>[VertexInput] = <span class="kw-2">&amp;</span>[
+                VertexInput {
+                    position: MTLPackedFloat3 {
+                        x: -f32::sqrt(<span class="number">3.0</span>) / <span class="number">4.0</span>,
+                        y: -<span class="number">0.25</span>,
+                        z: <span class="number">0.</span>,
+                    },
+                    color: MTLPackedFloat3 {
+                        x: <span class="number">1.</span>,
+                        y: <span class="number">0.</span>,
+                        z: <span class="number">0.</span>,
+                    },
+                },
+                VertexInput {
+                    position: MTLPackedFloat3 {
+                        x: f32::sqrt(<span class="number">3.0</span>) / <span class="number">4.0</span>,
+                        y: -<span class="number">0.25</span>,
+                        z: <span class="number">0.</span>,
+                    },
+                    color: MTLPackedFloat3 {
+                        x: <span class="number">0.</span>,
+                        y: <span class="number">1.</span>,
+                        z: <span class="number">0.</span>,
+                    },
+                },
+                VertexInput {
+                    position: MTLPackedFloat3 {
+                        x: <span class="number">0.</span>,
+                        y: <span class="number">0.5</span>,
+                        z: <span class="number">0.</span>,
+                    },
+                    color: MTLPackedFloat3 {
+                        x: <span class="number">0.</span>,
+                        y: <span class="number">0.</span>,
+                        z: <span class="number">1.</span>,
+                    },
+                },
+            ];
+            <span class="comment">// write the triangle geometry to the vertex shader argument buffer at index 1
+            </span><span class="kw">let </span>vertex_input_bytes = NonNull::from(vertex_input_data);
+            <span class="kw">unsafe </span>{
+                encoder.setVertexBytes_length_atIndex(
+                    vertex_input_bytes.cast::&lt;core::ffi::c_void&gt;(),
+                    core::mem::size_of_val(vertex_input_data),
+                    <span class="number">1</span>,
+                )
+            };
+
+            <span class="comment">// configure the encoder with the pipeline and draw the triangle
+            </span>encoder.setRenderPipelineState(pipeline_state);
+            <span class="kw">unsafe </span>{
+                encoder.drawPrimitives_vertexStart_vertexCount(MTLPrimitiveType::Triangle, <span class="number">0</span>, <span class="number">3</span>)
+            };
+            encoder.endEncoding();
+
+            <span class="comment">// schedule the command buffer for display and commit
+            </span>command_buffer.presentDrawable(ProtocolObject::from_ref(<span class="kw-2">&amp;*</span>current_drawable));
+            command_buffer.commit();
+        }
+
+        <span class="attr">#[<span class="kw">unsafe</span>(method(mtkView:drawableSizeWillChange:))]
+        #[allow(non_snake_case)]
+        </span><span class="kw">unsafe fn </span>mtkView_drawableSizeWillChange(<span class="kw-2">&amp;</span><span class="self">self</span>, _view: <span class="kw-2">&amp;</span>MTKView, _size: NSSize) {
+            <span class="comment">// println!("mtkView_drawableSizeWillChange");
+        </span>}
+    }
+);
+
+<span class="kw">impl </span>Delegate {
+    <span class="kw">fn </span>new(mtm: MainThreadMarker) -&gt; Retained&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">let </span>this = <span class="self">Self</span>::alloc(mtm);
+        <span class="kw">let </span>this = this.set_ivars(Ivars {
+            start_date: <span class="kw">unsafe </span>{ NSDate::now() },
+            command_queue: OnceCell::default(),
+            pipeline_state: OnceCell::default(),
+            <span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)]
+            </span>window: OnceCell::default(),
+        });
+        <span class="kw">unsafe </span>{ <span class="macro">msg_send!</span>[<span class="kw">super</span>(this), init] }
+    }
+}
+
+<span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)]
+</span><span class="kw">fn </span>main() {
+    <span class="kw">let </span>mtm = MainThreadMarker::new().unwrap();
+    <span class="comment">// configure the app
+    </span><span class="kw">let </span>app = NSApplication::sharedApplication(mtm);
+    app.setActivationPolicy(NSApplicationActivationPolicy::Regular);
+
+    <span class="comment">// configure the application delegate
+    </span><span class="kw">let </span>delegate = Delegate::new(mtm);
+    <span class="kw">let </span>object = ProtocolObject::from_ref(<span class="kw-2">&amp;*</span>delegate);
+    app.setDelegate(<span class="prelude-val">Some</span>(object));
+
+    <span class="comment">// run the app
+    </span>app.run();
+}
+
+<span class="attr">#[cfg(not(target_os = <span class="string">"macos"</span>))]
+</span><span class="kw">fn </span>main() {
+    <span class="macro">panic!</span>(<span class="string">"This example is currently only supported on macOS"</span>);
+}</code></pre></div>
+<p>With the following shader.</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code>#include &lt;metal_stdlib&gt;
+
+<span class="kw">struct </span>SceneProperties {
+    float time;
+};
+
+<span class="kw">struct </span>VertexInput {
+    metal::packed_float3 position;
+    metal::packed_float3 color;
+};
+
+<span class="kw">struct </span>VertexOutput {
+    metal::float4 position [[position]];
+    metal::float4 color;
+};
+
+vertex VertexOutput vertex_main(
+    device <span class="kw">const </span>SceneProperties&amp; properties [[buffer(<span class="number">0</span>)]],
+    device <span class="kw">const </span>VertexInput* vertices [[buffer(<span class="number">1</span>)]],
+    uint vertex_idx [[vertex_id]]
+) {
+    VertexOutput out;
+    VertexInput <span class="kw">in </span>= vertices[vertex_idx];
+    out.position =
+        metal::float4(
+            metal::float2x2(
+                metal::cos(properties.time), -metal::sin(properties.time),
+                metal::sin(properties.time),  metal::cos(properties.time)
+            ) * <span class="kw">in</span>.position.xy,
+            <span class="kw">in</span>.position.z,
+            <span class="number">1</span>);
+    out.color = metal::float4(<span class="kw">in</span>.color, <span class="number">1</span>);
+    <span class="kw">return </span>out;
+}
+
+fragment metal::float4 fragment_main(VertexOutput <span class="kw">in </span>[[stage_in]]) {
+    <span class="kw">return in</span>.color;
+}</code></pre></div>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><dl class="item-table"><dt><a class="struct" href="struct.MTLAccelerationStructureSizes.html" title="struct objc2_metal::MTLAccelerationStructureSizes">MTLAcceleration<wbr>Structure<wbr>Sizes</a></dt><dd>Describes the memory requirements for an acceleration structure</dd><dt><a class="struct" href="struct.MTLArchitecture.html" title="struct objc2_metal::MTLArchitecture">MTLArchitecture</a></dt><dd>Contains information about the device’s architecture</dd><dt><a class="struct" href="struct.MTLArgumentBuffersTier.html" title="struct objc2_metal::MTLArgumentBuffersTier">MTLArgument<wbr>Buffers<wbr>Tier</a></dt><dd>MTLArgumentBuffersTier determines support level for argument buffers.</dd><dt><a class="struct" href="struct.MTLArgumentDescriptor.html" title="struct objc2_metal::MTLArgumentDescriptor">MTLArgument<wbr>Descriptor</a></dt><dd>Represents a member of an argument buffer</dd><dt><a class="struct" href="struct.MTLCPUCacheMode.html" title="struct objc2_metal::MTLCPUCacheMode">MTLCPU<wbr>Cache<wbr>Mode</a></dt><dd>Describes what CPU cache mode is used for the CPU’s mapping of a texture resource.</dd><dt><a class="struct" href="struct.MTLCounterSamplingPoint.html" title="struct objc2_metal::MTLCounterSamplingPoint">MTLCounter<wbr>Sampling<wbr>Point</a></dt><dd>MTLCounterSamplingPoint determines type of sampling points that are supported on given device.</dd><dt><a class="struct" href="struct.MTLDeviceLocation.html" title="struct objc2_metal::MTLDeviceLocation">MTLDevice<wbr>Location</a></dt><dd>Specifies the location of the GPU on macOS</dd><dt><a class="struct" href="struct.MTLFeatureSet.html" title="struct objc2_metal::MTLFeatureSet">MTLFeature<wbr>Set</a><wbr><span class="stab deprecated" title="">Deprecated</span></dt><dd><a href="https://developer.apple.com/documentation/metal/mtlfeatureset?language=objc">Apple’s documentation</a></dd><dt><a class="struct" href="struct.MTLGPUFamily.html" title="struct objc2_metal::MTLGPUFamily">MTLGPU<wbr>Family</a></dt><dd><a href="https://developer.apple.com/documentation/metal/mtlgpufamily?language=objc">Apple’s documentation</a></dd><dt><a class="struct" href="struct.MTLHazardTrackingMode.html" title="struct objc2_metal::MTLHazardTrackingMode">MTLHazard<wbr>Tracking<wbr>Mode</a></dt><dd>Describes how hazard tracking is performed.</dd><dt><a class="struct" href="struct.MTLIOCompressionMethod.html" title="struct objc2_metal::MTLIOCompressionMethod">MTLIO<wbr>Compression<wbr>Method</a></dt><dd><a href="https://developer.apple.com/documentation/metal/mtliocompressionmethod?language=objc">Apple’s documentation</a></dd><dt><a class="struct" href="struct.MTLPipelineOption.html" title="struct objc2_metal::MTLPipelineOption">MTLPipeline<wbr>Option</a></dt><dd>Controls the creation of the pipeline</dd><dt><a class="struct" href="struct.MTLPixelFormat.html" title="struct objc2_metal::MTLPixelFormat">MTLPixel<wbr>Format</a></dt><dd><a href="https://developer.apple.com/documentation/metal/mtlpixelformat?language=objc">Apple’s documentation</a></dd><dt><a class="struct" href="struct.MTLPurgeableState.html" title="struct objc2_metal::MTLPurgeableState">MTLPurgeable<wbr>State</a></dt><dd>Options for setPurgeable call.</dd><dt><a class="struct" href="struct.MTLReadWriteTextureTier.html" title="struct objc2_metal::MTLReadWriteTextureTier">MTLRead<wbr>Write<wbr>Texture<wbr>Tier</a></dt><dd>MTLReadWriteTextureTier determines support level for read-write texture formats.</dd><dt><a class="struct" href="struct.MTLResourceOptions.html" title="struct objc2_metal::MTLResourceOptions">MTLResource<wbr>Options</a></dt><dd><a href="https://developer.apple.com/documentation/metal/mtlresourceoptions?language=objc">Apple’s documentation</a></dd><dt><a class="struct" href="struct.MTLSharedTextureHandle.html" title="struct objc2_metal::MTLSharedTextureHandle">MTLShared<wbr>Texture<wbr>Handle</a></dt><dd><a href="https://developer.apple.com/documentation/metal/mtlsharedtexturehandle?language=objc">Apple’s documentation</a></dd><dt><a class="struct" href="struct.MTLSizeAndAlign.html" title="struct objc2_metal::MTLSizeAndAlign">MTLSize<wbr>AndAlign</a></dt><dd>Represent a memory size and alignment in bytes.</dd><dt><a class="struct" href="struct.MTLSparsePageSize.html" title="struct objc2_metal::MTLSparsePageSize">MTLSparse<wbr>Page<wbr>Size</a></dt><dd>Physical size of sparse resource page in KBs.</dd><dt><a class="struct" href="struct.MTLSparseTextureRegionAlignmentMode.html" title="struct objc2_metal::MTLSparseTextureRegionAlignmentMode">MTLSparse<wbr>Texture<wbr>Region<wbr>Alignment<wbr>Mode</a></dt><dd>MTLSparseTextureRegionAlignmentMode determines type of alignment used when converting from pixel region to tile region.</dd><dt><a class="struct" href="struct.MTLStorageMode.html" title="struct objc2_metal::MTLStorageMode">MTLStorage<wbr>Mode</a></dt><dd>Describes location and CPU mapping of MTLTexture.</dd><dt><a class="struct" href="struct.MTLTextureCompressionType.html" title="struct objc2_metal::MTLTextureCompressionType">MTLTexture<wbr>Compression<wbr>Type</a></dt><dd><a href="https://developer.apple.com/documentation/metal/mtltexturecompressiontype?language=objc">Apple’s documentation</a></dd><dt><a class="struct" href="struct.MTLTextureDescriptor.html" title="struct objc2_metal::MTLTextureDescriptor">MTLTexture<wbr>Descriptor</a></dt><dd><a href="https://developer.apple.com/documentation/metal/mtltexturedescriptor?language=objc">Apple’s documentation</a></dd><dt><a class="struct" href="struct.MTLTextureSwizzle.html" title="struct objc2_metal::MTLTextureSwizzle">MTLTexture<wbr>Swizzle</a></dt><dd><a href="https://developer.apple.com/documentation/metal/mtltextureswizzle?language=objc">Apple’s documentation</a></dd><dt><a class="struct" href="struct.MTLTextureSwizzleChannels.html" title="struct objc2_metal::MTLTextureSwizzleChannels">MTLTexture<wbr>Swizzle<wbr>Channels</a></dt><dd><a href="https://developer.apple.com/documentation/metal/mtltextureswizzlechannels?language=objc">Apple’s documentation</a></dd><dt><a class="struct" href="struct.MTLTextureType.html" title="struct objc2_metal::MTLTextureType">MTLTexture<wbr>Type</a></dt><dd>MTLTextureType describes the dimensionality of each image, and if multiple images are arranged into an array or cube.</dd><dt><a class="struct" href="struct.MTLTextureUsage.html" title="struct objc2_metal::MTLTextureUsage">MTLTexture<wbr>Usage</a></dt><dd>MTLTextureUsage declares how the texture will be used over its lifetime (bitwise OR for multiple uses).</dd></dl><h2 id="constants" class="section-header">Constants<a href="#constants" class="anchor">§</a></h2><dl class="item-table"><dt><a class="constant" href="constant.MTLResourceCPUCacheModeMask.html" title="constant objc2_metal::MTLResourceCPUCacheModeMask">MTLResourceCPU<wbr>Cache<wbr>Mode<wbr>Mask</a></dt><dt><a class="constant" href="constant.MTLResourceCPUCacheModeShift.html" title="constant objc2_metal::MTLResourceCPUCacheModeShift">MTLResourceCPU<wbr>Cache<wbr>Mode<wbr>Shift</a></dt><dt><a class="constant" href="constant.MTLResourceHazardTrackingModeMask.html" title="constant objc2_metal::MTLResourceHazardTrackingModeMask">MTLResource<wbr>Hazard<wbr>Tracking<wbr>Mode<wbr>Mask</a></dt><dt><a class="constant" href="constant.MTLResourceHazardTrackingModeShift.html" title="constant objc2_metal::MTLResourceHazardTrackingModeShift">MTLResource<wbr>Hazard<wbr>Tracking<wbr>Mode<wbr>Shift</a></dt><dt><a class="constant" href="constant.MTLResourceStorageModeMask.html" title="constant objc2_metal::MTLResourceStorageModeMask">MTLResource<wbr>Storage<wbr>Mode<wbr>Mask</a></dt><dt><a class="constant" href="constant.MTLResourceStorageModeShift.html" title="constant objc2_metal::MTLResourceStorageModeShift">MTLResource<wbr>Storage<wbr>Mode<wbr>Shift</a></dt><dt><a class="constant" href="constant.MTLTextureSwizzleChannelsDefault.html" title="constant objc2_metal::MTLTextureSwizzleChannelsDefault">MTLTexture<wbr>Swizzle<wbr>Channels<wbr>Default</a></dt></dl><h2 id="statics" class="section-header">Statics<a href="#statics" class="anchor">§</a></h2><dl class="item-table"><dt><a class="static" href="static.MTLDeviceRemovalRequestedNotification.html" title="static objc2_metal::MTLDeviceRemovalRequestedNotification">MTLDevice<wbr>Removal<wbr>Requested<wbr>Notification</a><sup title="unsafe static">⚠</sup></dt><dd>This notification is posted when the user has requested that applications cease using a particular device.  Applications
+should assume that the device will be removed (terminated) imminently.  Additionally, the device will be removed from the internal
+device array prior to this notification being posted.  Applications should immediately begin the process of releasing all resources
+created on the given device, as well as any references to the device itself.</dd><dt><a class="static" href="static.MTLDeviceWasAddedNotification.html" title="static objc2_metal::MTLDeviceWasAddedNotification">MTLDevice<wbr>WasAdded<wbr>Notification</a><sup title="unsafe static">⚠</sup></dt><dd>This notification is posted when a new Metal device is added to the system</dd><dt><a class="static" href="static.MTLDeviceWasRemovedNotification.html" title="static objc2_metal::MTLDeviceWasRemovedNotification">MTLDevice<wbr>WasRemoved<wbr>Notification</a><sup title="unsafe static">⚠</sup></dt><dd>This notification is posted if the device is removed while there are still outstanding references to it, due to either a surprise
+or forced disconnect by the user.  Applications must expect that any attempt to use the device after this point will fail.</dd></dl><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><dl class="item-table"><dt><a class="trait" href="trait.MTLAllocation.html" title="trait objc2_metal::MTLAllocation">MTLAllocation</a></dt><dd><a href="https://developer.apple.com/documentation/metal/mtlallocation?language=objc">Apple’s documentation</a></dd><dt><a class="trait" href="trait.MTLDevice.html" title="trait objc2_metal::MTLDevice">MTLDevice</a></dt><dd>MTLDevice represents a processor capable of data parallel computations</dd><dt><a class="trait" href="trait.MTLDrawable.html" title="trait objc2_metal::MTLDrawable">MTLDrawable</a></dt><dd>All “drawable” objects (such as those coming from CAMetalLayer) are expected to conform to this protocol</dd><dt><a class="trait" href="trait.MTLResource.html" title="trait objc2_metal::MTLResource">MTLResource</a></dt><dd>Common APIs available for MTLBuffer and MTLTexture instances</dd><dt><a class="trait" href="trait.MTLTexture.html" title="trait objc2_metal::MTLTexture">MTLTexture</a></dt><dd>MTLTexture represents a collection of 1D, 2D, or 3D images.</dd></dl><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><dl class="item-table"><dt><a class="fn" href="fn.MTLCopyAllDevices.html" title="fn objc2_metal::MTLCopyAllDevices">MTLCopy<wbr>AllDevices</a></dt><dd>Returns all Metal devices in the system.</dd><dt><a class="fn" href="fn.MTLCreateSystemDefaultDevice.html" title="fn objc2_metal::MTLCreateSystemDefaultDevice">MTLCreate<wbr>System<wbr>Default<wbr>Device</a></dt><dd>Returns a reference to the preferred system default Metal device.</dd><dt><a class="fn" href="fn.MTLRemoveDeviceObserver.html" title="fn objc2_metal::MTLRemoveDeviceObserver">MTLRemove<wbr>Device<wbr>Observer</a><sup title="unsafe function">⚠</sup></dt><dd>Removes a previously installed observer for device change notifications.</dd></dl><h2 id="types" class="section-header">Type Aliases<a href="#types" class="anchor">§</a></h2><dl class="item-table"><dt><a class="type" href="type.MTLDeviceNotificationName.html" title="type objc2_metal::MTLDeviceNotificationName">MTLDevice<wbr>Notification<wbr>Name</a></dt><dd>Type for device notifications</dd><dt><a class="type" href="type.MTLTimestamp.html" title="type objc2_metal::MTLTimestamp">MTLTimestamp</a></dt><dd><a href="https://developer.apple.com/documentation/metal/mtltimestamp?language=objc">Apple’s documentation</a></dd></dl></section></div></main></body></html>

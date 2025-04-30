@@ -1,0 +1,74 @@
+[package]
+name = "ferris-ui"
+version = "0.1.0"
+edition = "2024"
+[features]
+nightly = []
+nightly-debug = []
+default = ["nightly"]
+
+[target.'cfg(target_os = "ios")'.dependencies]
+objc2 = "0.6.0"
+winit = { version = "0.30", features = ["rwh_06" ] }
+objc2-core-foundation = "0.3.0"
+log = "0.4"
+[target.'cfg(target_os = "ios")'.dev-dependencies]
+oslog = "0.2"
+env_logger = "0.11"
+
+[[example]]
+name = "simple"
+required-features = ["nightly"]
+
+
+[target.'cfg(target_os = "ios")'.dependencies.objc2-ui-kit]
+version = "0.3.0"
+features = [
+#"all",
+    "UIApplication",
+    "UIDevice",
+    "UIEvent",
+    "UIGeometry",
+    "UIGestureRecognizer",
+    "UIOrientation",
+    "UIPanGestureRecognizer",
+    "UIPinchGestureRecognizer",
+    "UIResponder",
+    "UIRotationGestureRecognizer",
+    "UIScreen",
+    "UIScreenMode",
+    "UITapGestureRecognizer",
+    "UITouch",
+    "UITraitCollection",
+    "UIView",
+    "UIViewController",
+    "UIWindow",
+    "UITextView",
+    "UIScrollView",
+    "UISwitch",
+
+    "UIControl",
+    "UILabel",
+
+    "UIColor",
+    "UIStackView",
+    "UITabBar",
+    "UIToolbar",
+    "UIBarButtonItem",
+    "UIBarItem",
+]
+[target.'cfg(target_os = "ios")'.dependencies.objc2-foundation]
+version = "0.3.0"
+features = [
+#"dispatch",
+    "NSArray",
+    "NSEnumerator",
+    "NSGeometry",
+    "NSObjCRuntime",
+    "NSString",
+    "NSProcessInfo",
+    "NSThread",
+    "NSSet",
+]
+[target.'cfg(target_os = "ios")'.dependencies.objc2-quartz-core]
+version = "0.3.0"
