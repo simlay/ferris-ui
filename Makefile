@@ -1,6 +1,7 @@
 EMULATOR='iPhone 16'
-DEVICE_ID=YOUR_DEVICE_ID
-TEAM_ID=YOUR_TEAM_ID
+OTHER_EMULATOR='iPhone 16e'
+DEVICE_ID=aoeu
+TEAM_ID=aoeu
 
 build:
 	cargo build --target aarch64-apple-ios-sim --example simple
@@ -16,6 +17,21 @@ debug: install
 
 run: install
 	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --console --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
+
+CURR_EMULATOR:=$(shell cat ./target/emulator)
+run-no-wait: bundle
+	xcrun simctl install "$(CURR_EMULATOR)" ./RustWrapper.app/
+	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch "$(CURR_EMULATOR)" com.simlay.net.Dinghy
+	if [ -z "$(CURR_EMULATOR)" ]; then echo $(OTHER_EMULATOR) > ./target/emulator; fi
+	if [ "$(CURR_EMULATOR)" = $(EMULATOR) ]; then echo $(OTHER_EMULATOR) > ./target/emulator; fi
+	if [ "$(CURR_EMULATOR)" = $(OTHER_EMULATOR) ]; then echo $(EMULATOR) > ./target/emulator; fi
+
+
+watch-swap:
+	cargo watch -s 'make run-no-wait' -w ./src -w ./Cargo.toml -w ./examples/
+
+watch:
+	cargo watch -s 'make run' -w ./src -w ./Cargo.toml -w ./examples/
 
 screenshot: install
 	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
@@ -40,9 +56,6 @@ gh-summary:
 	echo \`\`\` >> Summary.md
 	echo "## SCREENSHOT" >> Summary.md
 	echo "![Screenshot](${SCREENSHOT_URL})" >> Summary.md
-
-watch:
-	cargo watch -s 'make run' -w ./src -w ./Cargo.toml -w ./examples/
 
 build-macabi:
 	cargo build --target aarch64-apple-ios-macabi -Zbuild-std --example simple

@@ -5,6 +5,7 @@ use objc2_ui_kit::{
     UILayoutConstraintAxis,
     UIStackView, UIStackViewAlignment, UIStackViewDistribution, UIView,
     UIColor, UIEdgeInsets,
+    NSDirectionalEdgeInsets,
 };
 
 
@@ -20,20 +21,37 @@ impl VStack {
         let stack_view = unsafe { UIStackView::new(mtm) };
         unsafe {
             stack_view.setAxis(UILayoutConstraintAxis::Vertical);
-            stack_view.setAlignment(UIStackViewAlignment::Fill);
+            //stack_view.setAlignment(UIStackViewAlignment::Fill);
             stack_view.setDistribution(UIStackViewDistribution::FillEqually);
             //stack_view.setSpacing(10.);
-            stack_view.setBackgroundColor(Some(&*UIColor::whiteColor()));
             stack_view.setTranslatesAutoresizingMaskIntoConstraints(true);
+            stack_view.setLayoutMarginsRelativeArrangement(true);
+            /*
+            stack_view.setDirectionalLayoutMargins(
+                NSDirectionalEdgeInsets {
+                    top: 20.,
+                    leading: 50.,
+                    bottom: 20.,
+                    trailing: 50.,
+                }
+            );
+            */
             stack_view.setLayoutMargins(
                 UIEdgeInsets {
-                    top: 20.,
-                    left: 20.,
-                    bottom: 20.,
-                    right: 20.,
+                    top: 50.,
+                    left: 50.,
+                    bottom: 50.,
+                    right: 50.,
                 }
-            )
+            );
+            /*
+            */
         };
+        let layer = stack_view.layer();
+        layer.setBorderWidth(1.);
+        unsafe {
+            layer.setBorderColor(Some(&UIColor::redColor().CGColor()));
+        }
 
         Self {
             children,

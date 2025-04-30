@@ -32,6 +32,7 @@ pub trait View {
     {
         let ui_view = self.ui_view();
         ui_view.setBackgroundColor(Some(&color));
+
         self
     }
     #[cfg(feature = "nightly")]

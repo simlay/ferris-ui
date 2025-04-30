@@ -35,10 +35,10 @@ impl MyView {
     pub fn new(proxy: EventLoopProxy<GUIEvent>) -> Box<dyn View> {
         let mtm = MainThreadMarker::new().unwrap();
         let label = Text::new(mtm)
-            .with_background_color(unsafe { UIColor::redColor() })
+            //.with_background_color(unsafe { UIColor::redColor() })
             .with_text("Current text: ");
         unsafe {
-            label.setContentMode(objc2_ui_kit::UIViewContentMode::Center);
+            label.setContentMode(objc2_ui_kit::UIViewContentMode::Top);
         }
 
         let switch_label_cloned = label.clone();
@@ -54,7 +54,8 @@ impl MyView {
                 switch.setBackgroundColor(Some(new_color));
                 switch_label_cloned.set_text(format!("Switch is {}", is_on));
             }))
-            .with_background_color(unsafe { UIColor::cyanColor() });
+            //.with_background_color(unsafe { UIColor::cyanColor() })
+                ;
 
         let label_for_text_view = label.clone();
         let label_for_text_field = label.clone();
@@ -64,8 +65,9 @@ impl MyView {
                 let text = format!("Current text: {new_text}");
                 label_for_text_view.set_text(text);
             }))
-        .with_place_holder_text("PLACE HOLDER TEXT".into())
-            .with_background_color(unsafe { UIColor::blueColor() });
+        .with_place_holder_text("PLACE HOLDER TEXT".into());
+            //.with_background_color(unsafe { UIColor::blueColor() })
+                ;
 
         let text_field = TextField::new(mtm, proxy.clone())
             .with_event_fn(Box::new(move |text_field| {
@@ -74,7 +76,8 @@ impl MyView {
                 label_for_text_field.set_text(text);
             }))
 
-            .with_background_color(unsafe { UIColor::blueColor() });
+            //.with_background_color(unsafe { UIColor::blueColor() })
+                ;
 
         let image = Image::new(mtm, ImageType::SystemIcon("clock".into()));
 
@@ -87,7 +90,9 @@ impl MyView {
                 Box::new(text_field),
                 Box::new(text_view),
             ],
-        );
+        )
+            .with_background_color(unsafe {UIColor::whiteColor()});
+            ;
 
         Box::new(Self { proxy, vstack })
     }
