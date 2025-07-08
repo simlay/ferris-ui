@@ -30,7 +30,7 @@ jobs:
           git config --global user.email "sebastian.imlay@gmail.com"
           git config --global user.name "Sebastian Imlay"
           git checkout --orphan gh-pages
-          echo '<meta http-equiv="refresh" content="0; url=target/aarch64-apple-ios-sim/doc/android_bindings/index.html"><a href="target/aarch64-apple-ios-sim/doc/android_bindings/index.html">Redirect</a>' > index.html
+          echo '<meta http-equiv="refresh" content="0; url=target/aarch64-apple-ios-sim/doc/ferris_ui/index.html"><a href="target/aarch64-apple-ios-sim/doc/ferris_ui/index.html">Redirect</a>' > index.html
           git add index.html
           git add --force target/aarch64-apple-ios-sim/doc/
           git commit -m "Updated docs for latest changes"

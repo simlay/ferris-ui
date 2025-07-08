@@ -5,7 +5,7 @@ use objc2::rc::{
 };
 use objc2::{MainThreadMarker, MainThreadOnly, AllocAnyThread, define_class, msg_send};
 use objc2_foundation::{NSObject, NSString};
-use objc2_ui_kit::{UIImageView, UIImage, UILabel, UIView};
+use objc2_ui_kit::{UIImageView, UIImage, UILabel, UIView, UIEdgeInsets};
 
 define_class!(
     #[unsafe(super(UIImageView, UIView, NSObject))]
@@ -35,7 +35,16 @@ impl Image {
     pub fn new<T: Into<Option<Retained<UIImage>>>>(mtm: MainThreadMarker, image: T) -> Retained<Self> {
         let this : PartialInit<Self>= mtm.alloc().set_ivars(());
         let this : Retained<Self> = unsafe { msg_send![super(this), init] };
+
         unsafe {
+            this.setLayoutMargins(
+                UIEdgeInsets {
+                    top: 100.,
+                    left: 100.,
+                    bottom: 50.,
+                    right: 50.,
+                }
+            );
             this.setImage(image.into().as_deref());
         }
 
