@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Direct runtime bindings."><title>objc2::runtime - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="objc2" data-themes="" data-resource-suffix="" data-rustdoc-version="1.90.0-nightly (a2d45f73c 2025-07-07)" data-channel="nightly" data-search-js="search-179e01a3.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-673ee1e0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../objc2/index.html">objc2</a><span class="version">0.6.1</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module runtime</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#direct-runtime-bindings" title="Direct runtime bindings.">Direct runtime bindings.</a></li><li><a href="#example" title="Example">Example</a></li></ul><h3><a href="#reexports">Module Items</a></h3><ul class="block"><li><a href="#reexports" title="Re-exports">Re-exports</a></li><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#traits" title="Traits">Traits</a></li><li><a href="#types" title="Type Aliases">Type Aliases</a></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="../index.html">In crate objc2</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../index.html">objc2</a></div><h1>Module <span>runtime</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../src/objc2/runtime/mod.rs.html#1-1911">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="direct-runtime-bindings"><a class="doc-anchor" href="#direct-runtime-bindings">§</a>Direct runtime bindings.</h2>
+<p>This module contains safe(r) bindings to common parts of the Objective-C
+runtime. See the <a href="../ffi/index.html" title="mod objc2::ffi"><code>ffi</code></a> module for details on the raw
+bindings.</p>
+<h2 id="example"><a class="doc-anchor" href="#example">§</a>Example</h2>
+<p>Using features of the runtime to query information about <code>NSObject</code>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>objc2::runtime::{AnyClass, NSObject};
+<span class="kw">use </span>objc2::{sel, ClassType, Encode};
+
+<span class="kw">fn </span>main() {
+    <span class="comment">// Get the class representing `NSObject`
+    </span><span class="kw">let </span>cls = NSObject::class();
+
+    <span class="comment">// Inspect various properties of the class
+    </span><span class="macro">println!</span>(<span class="string">"NSObject superclass: {:?}"</span>, cls.superclass());
+    <span class="macro">println!</span>(<span class="string">"NSObject size: {}"</span>, cls.instance_size());
+    <span class="macro">println!</span>(
+        <span class="string">"-[NSObject alloc] would work: {}"</span>,
+        cls.responds_to(<span class="macro">sel!</span>(alloc))
+    );
+    <span class="macro">println!</span>(
+        <span class="string">"+[NSObject alloc] would work: {}"</span>,
+        cls.metaclass().responds_to(<span class="macro">sel!</span>(alloc))
+    );
+
+    <span class="comment">// Inspect an instance variable on the class
+    //
+    // Note: You should not rely on the `isa` ivar being available,
+    // this is only for demonstration.
+    </span><span class="kw">let </span>ivar = cls
+        .instance_variable(<span class="string">c"isa"</span>)
+        .expect(<span class="string">"no ivar with name 'isa' found on NSObject"</span>);
+    <span class="macro">println!</span>(
+        <span class="string">"Instance variable {:?} has type encoding {:?}"</span>,
+        ivar.name(),
+        ivar.type_encoding()
+    );
+    <span class="macro">assert!</span>(&lt;<span class="kw-2">*const </span>AnyClass&gt;::ENCODING.equivalent_to_str(ivar.type_encoding().to_str().unwrap()));
+
+    <span class="comment">// Inspect a method of the class
+    </span><span class="kw">let </span>method = cls.instance_method(<span class="macro">sel!</span>(hash)).unwrap();
+    <span class="macro">println!</span>(
+        <span class="string">"-[NSObject hash] takes {} parameters"</span>,
+        method.arguments_count()
+    );
+    <span class="kw">let </span>hash_return = method.return_type();
+    <span class="macro">println!</span>(<span class="string">"-[NSObject hash] return type: {hash_return:?}"</span>);
+    <span class="macro">assert!</span>(usize::ENCODING.equivalent_to_str(hash_return.to_str().unwrap()));
+
+    <span class="comment">// Create an instance
+    </span><span class="kw">let </span>obj = NSObject::new();
+
+    <span class="macro">println!</span>(<span class="string">"NSObject address: {obj:p}"</span>);
+
+    <span class="comment">// Read an ivar on the object
+    </span><span class="kw">let </span>isa: <span class="kw-2">*const </span>AnyClass = <span class="kw">unsafe </span>{ <span class="kw-2">*</span>ivar.load(<span class="kw-2">&amp;</span>obj) };
+    <span class="macro">println!</span>(<span class="string">"NSObject isa: {isa:?}"</span>);
+}</code></pre></div>
+</div></details><h2 id="reexports" class="section-header">Re-exports<a href="#reexports" class="anchor">§</a></h2><dl class="item-table reexports"><dt id="reexport.BOOL"><code>pub use crate::ffi::<a class="type" href="../ffi/type.BOOL.html" title="type objc2::ffi::BOOL">BOOL</a>;</code><wbr><span class="stab deprecated" title="">Deprecated</span></dt><dt id="reexport.NO"><code>pub use crate::ffi::<a class="constant" href="../ffi/constant.NO.html" title="constant objc2::ffi::NO">NO</a>;</code><wbr><span class="stab deprecated" title="">Deprecated</span></dt><dt id="reexport.YES"><code>pub use crate::ffi::<a class="constant" href="../ffi/constant.YES.html" title="constant objc2::ffi::YES">YES</a>;</code><wbr><span class="stab deprecated" title="">Deprecated</span></dt></dl><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><dl class="item-table"><dt><a class="struct" href="struct.AnyClass.html" title="struct objc2::runtime::AnyClass">AnyClass</a></dt><dd>An opaque type that represents an Objective-C class.</dd><dt><a class="struct" href="struct.AnyObject.html" title="struct objc2::runtime::AnyObject">AnyObject</a></dt><dd>An Objective-C object.</dd><dt><a class="struct" href="struct.AnyProtocol.html" title="struct objc2::runtime::AnyProtocol">AnyProtocol</a></dt><dd>An opaque type that represents a protocol in the Objective-C runtime.</dd><dt><a class="struct" href="struct.Bool.html" title="struct objc2::runtime::Bool">Bool</a></dt><dd>The Objective-C <code>BOOL</code> type.</dd><dt><a class="struct" href="struct.ClassBuilder.html" title="struct objc2::runtime::ClassBuilder">Class<wbr>Builder</a></dt><dd>A type for creating a new class and adding new methods and ivars to it
+before registering it.</dd><dt><a class="struct" href="struct.Ivar.html" title="struct objc2::runtime::Ivar">Ivar</a></dt><dd>An opaque type that represents an instance variable.</dd><dt><a class="struct" href="struct.Method.html" title="struct objc2::runtime::Method">Method</a></dt><dd>A type that represents a method in a class definition.</dd><dt><a class="struct" href="struct.NSObject.html" title="struct objc2::runtime::NSObject">NSObject</a></dt><dd>The root class of most Objective-C class hierarchies.</dd><dt><a class="struct" href="struct.NSZone.html" title="struct objc2::runtime::NSZone">NSZone</a></dt><dd>A type used to identify and manage memory zones.</dd><dt><a class="struct" href="struct.ProtocolBuilder.html" title="struct objc2::runtime::ProtocolBuilder">Protocol<wbr>Builder</a></dt><dd>A type for creating a new protocol and adding new methods to it
+before registering it.</dd><dt><a class="struct" href="struct.ProtocolObject.html" title="struct objc2::runtime::ProtocolObject">Protocol<wbr>Object</a></dt><dd>An object representing any object that implements a specified protocol.</dd><dt><a class="struct" href="struct.Sel.html" title="struct objc2::runtime::Sel">Sel</a></dt><dd>A method selector.</dd><dt><a class="struct" href="struct.VerificationError.html" title="struct objc2::runtime::VerificationError">Verification<wbr>Error</a></dt><dd>Failed verifying selector on a class.</dd></dl><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><dl class="item-table"><dt><a class="trait" href="trait.ImplementedBy.html" title="trait objc2::runtime::ImplementedBy">Implemented<wbr>By</a></dt><dd>An internal helper trait for <a href="struct.ProtocolObject.html" title="struct objc2::runtime::ProtocolObject"><code>ProtocolObject</code></a>.</dd><dt><a class="trait" href="trait.MessageReceiver.html" title="trait objc2::runtime::MessageReceiver">Message<wbr>Receiver</a></dt><dd>Types that can directly be used as the receiver of Objective-C messages.</dd><dt><a class="trait" href="trait.MethodImplementation.html" title="trait objc2::runtime::MethodImplementation">Method<wbr>Implementation</a></dt><dd>Types that can be used as the implementation of an Objective-C method.</dd><dt><a class="trait" href="trait.NSObjectProtocol.html" title="trait objc2::runtime::NSObjectProtocol">NSObject<wbr>Protocol</a></dt><dd>The methods that are fundamental to most Objective-C objects.</dd></dl><h2 id="types" class="section-header">Type Aliases<a href="#types" class="anchor">§</a></h2><dl class="item-table"><dt><a class="type" href="type.Class.html" title="type objc2::runtime::Class">Class</a><wbr><span class="stab deprecated" title="">Deprecated</span></dt><dd>Use <a href="struct.AnyClass.html" title="struct objc2::runtime::AnyClass"><code>AnyClass</code></a> instead.</dd><dt><a class="type" href="type.Imp.html" title="type objc2::runtime::Imp">Imp</a></dt><dd>A pointer to the start of a method implementation.</dd><dt><a class="type" href="type.Object.html" title="type objc2::runtime::Object">Object</a><wbr><span class="stab deprecated" title="">Deprecated</span></dt><dd>Use <a href="struct.AnyObject.html" title="struct objc2::runtime::AnyObject"><code>AnyObject</code></a> instead.</dd><dt><a class="type" href="type.Protocol.html" title="type objc2::runtime::Protocol">Protocol</a><wbr><span class="stab deprecated" title="">Deprecated</span></dt><dd>Use <a href="struct.AnyProtocol.html" title="struct objc2::runtime::AnyProtocol"><code>AnyProtocol</code></a> instead.</dd></dl></section></div></main></body></html>

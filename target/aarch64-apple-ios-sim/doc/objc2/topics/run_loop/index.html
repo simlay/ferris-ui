@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Run loops and applications"><title>objc2::topics::run_loop - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="objc2" data-themes="" data-resource-suffix="" data-rustdoc-version="1.90.0-nightly (a2d45f73c 2025-07-07)" data-channel="nightly" data-search-js="search-179e01a3.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-4e99c027.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../static.files/main-673ee1e0.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../objc2/index.html">objc2</a><span class="version">0.6.1</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module run_<wbr>loop</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#run-loops-and-applications" title="Run loops and applications">Run loops and applications</a><ul><li><a href="#non-graphical-applications" title="Non-graphical applications">Non-graphical applications</a></li><li><a href="#graphical-applications" title="Graphical applications">Graphical applications</a></li><li><a href="#performance-sensitive-applications" title="Performance sensitive applications">Performance sensitive applications</a></li></ul></li></ul></section><div id="rustdoc-modnav"><h2><a href="../index.html">In objc2::<wbr>topics</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../../index.html">objc2</a>::<wbr><a href="../index.html">topics</a></div><h1>Module <span>run_loop</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../src/objc2/topics/mod.rs.html#29">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="run-loops-and-applications"><a class="doc-anchor" href="#run-loops-and-applications">§</a>Run loops and applications</h2>
+<p>At the core of all Cocoa development sits what is known as the “run loop”. This is Apple’s a mechanism for allowing scheduling different tasks on the same thread, a bit like a Rust <code>async</code> runtime. See <a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html">their introductory documentation</a> for more details.</p>
+<p>A lot of things in various different frameworks assume that the main thread’s run loop is currently running, and will block indefinitely or fail in confusing ways if it is not. To avoid this, you should make sure to, well, run the run loop.</p>
+<h3 id="non-graphical-applications"><a class="doc-anchor" href="#non-graphical-applications">§</a>Non-graphical applications</h3>
+<p>In non-graphical applications, you get the thread’s current <code>NSRunLoop</code>, and run it periodically to allow scheduled work to complete.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>objc2_foundation::{NSDate, NSDefaultRunLoopMode, NSRunLoop};
+
+<span class="kw">fn </span>main() {
+    <span class="kw">let </span>run_loop = <span class="kw">unsafe </span>{ NSRunLoop::currentRunLoop() };
+
+    <span class="comment">// Set up timers, sources, etc.
+
+    </span><span class="kw">let </span><span class="kw-2">mut </span>date = <span class="kw">unsafe </span>{ NSDate::now() };
+    <span class="comment">// Run for roughly 10 seconds
+    </span><span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="number">10 </span>{
+        date = <span class="kw">unsafe </span>{ date.dateByAddingTimeInterval(<span class="number">1.0</span>) };
+        <span class="kw">unsafe </span>{ run_loop.runUntilDate(<span class="kw-2">&amp;</span>date) };
+
+        <span class="comment">// Do something every second (if there are any sources attached)
+    </span>}
+}</code></pre></div>
+<h3 id="graphical-applications"><a class="doc-anchor" href="#graphical-applications">§</a>Graphical applications</h3>
+<p>In graphical applications, the main run loop needs to be managed by the application object. To get feedback during the execution of the application, you usually use a delegate instead, as can be seen in the following example.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>objc2::rc::{Allocated, Retained};
+<span class="kw">use </span>objc2::{define_class, msg_send, ClassType, DefinedClass, MainThreadOnly};
+<span class="kw">use </span>objc2_foundation::{NSNotification, NSObject, NSObjectProtocol};
+
+<span class="comment">// Application delegate protocols happens to share a few methods,
+// we can utilize that to be a bit more platform-generic.
+</span><span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)]
+</span><span class="kw">use </span>objc2_app_kit::NSApplicationDelegate <span class="kw">as </span>DelegateProtocol;
+<span class="attr">#[cfg(not(target_os = <span class="string">"macos"</span>))]
+</span><span class="kw">use </span>objc2_ui_kit::UIApplicationDelegate <span class="kw">as </span>DelegateProtocol;
+
+<span class="attr">#[derive(Default)]
+</span><span class="kw">struct </span>AppState {
+    <span class="comment">// Whatever state you want to store in your delegate.
+</span>}
+
+<span class="macro">define_class!</span>(
+    <span class="comment">// SAFETY:
+    // - NSObject does not have any subclassing requirements.
+    // - `AppDelegate` does not implement `Drop`.
+    </span><span class="attr">#[<span class="kw">unsafe</span>(<span class="kw">super</span>(NSObject))]
+    #[thread_kind = MainThreadOnly]
+    #[ivars = AppState]
+    </span><span class="kw">struct </span>AppDelegate;
+
+    <span class="kw">impl </span>AppDelegate {
+        <span class="comment">// Called by `NSApplicationMain`, `UIApplicationMain`
+        // or our `msg_send![AppDelegate::class(), new]`.
+        </span><span class="attr">#[<span class="kw">unsafe</span>(method_id(init))]
+        </span><span class="kw">fn </span>init(this: Allocated&lt;<span class="self">Self</span>&gt;) -&gt; Retained&lt;<span class="self">Self</span>&gt; {
+            <span class="kw">let </span>this = this.set_ivars(AppState::default());
+            <span class="kw">unsafe </span>{ <span class="macro">msg_send!</span>[<span class="kw">super</span>(this), init] }
+        }
+    }
+
+    <span class="kw">unsafe impl </span>NSObjectProtocol <span class="kw">for </span>AppDelegate {}
+
+    <span class="kw">unsafe impl </span>DelegateProtocol <span class="kw">for </span>AppDelegate {
+        <span class="attr">#[<span class="kw">unsafe</span>(method(applicationDidFinishLaunching:))]
+        </span><span class="kw">fn </span>did_finish_launching(<span class="kw-2">&amp;</span><span class="self">self</span>, _notification: <span class="kw-2">&amp;</span>NSNotification) {
+            <span class="macro">println!</span>(<span class="string">"did finish launching!"</span>);
+
+            <span class="comment">// Do UI initialization in here, such as creating windows, views, etc.
+        </span>}
+
+        <span class="attr">#[<span class="kw">unsafe</span>(method(applicationWillTerminate:))]
+        </span><span class="kw">fn </span>will_terminate(<span class="kw-2">&amp;</span><span class="self">self</span>, _notification: <span class="kw-2">&amp;</span>NSNotification) {
+            <span class="macro">println!</span>(<span class="string">"will terminate!"</span>);
+
+            <span class="comment">// Tear down your application state here. `NSApplicationMain` and
+            // `UIApplicationMain` will not return, this is (roughly) the last
+            // thing that will be called.
+        </span>}
+    }
+);
+
+<span class="comment">// AppKit (macOS).
+</span><span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)]
+</span><span class="kw">fn </span>main() {
+    <span class="kw">let </span>mtm = objc2::MainThreadMarker::new().unwrap();
+    <span class="kw">let </span>app = objc2_app_kit::NSApplication::sharedApplication(mtm);
+    <span class="kw">let </span>delegate: Retained&lt;AppDelegate&gt; = <span class="kw">unsafe </span>{ <span class="macro">msg_send!</span>[AppDelegate::class(), new] };
+    app.setDelegate(<span class="prelude-val">Some</span>(objc2::runtime::ProtocolObject::from_ref(<span class="kw-2">&amp;*</span>delegate)));
+    app.run();
+}
+
+<span class="comment">// AppKit (macOS), if bundled and using a storyboard.
+</span><span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)]
+</span><span class="kw">fn </span>main() {
+    <span class="kw">let </span>mtm = objc2::MainThreadMarker::new().unwrap();
+    <span class="comment">// Initialize the class so that the storyboard can see it.
+    //
+    // The name specified in `define_class!`, i.e. "AppDelegate", must
+    // match what's specified in the storyboard.
+    </span><span class="kw">let </span>_cls = AppDelegate::class();
+    objc2_app_kit::NSApplication::main(mtm);
+}
+
+<span class="comment">// UIKit (iOS/tvOS/watchOS/visionOS).
+</span><span class="attr">#[cfg(not(target_os = <span class="string">"macos"</span>))]
+</span><span class="kw">fn </span>main() {
+    <span class="kw">let </span>mtm = objc2::MainThreadMarker::new().unwrap();
+    <span class="kw">let </span>delegate_class = objc2_foundation::NSString::from_class(AppDelegate::class());
+    objc2_ui_kit::UIApplication::main(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>delegate_class), mtm);
+}</code></pre></div>
+<p>See <a href="https://docs.rs/objc2-app-kit/">the documentation in <code>objc2-app-kit</code></a> and <a href="https://docs.rs/objc2-ui-kit/">in <code>objc2-ui-kit</code></a> for more examples. Note in particular that in UIKit, you may want to use scenes as well.</p>
+<h3 id="performance-sensitive-applications"><a class="doc-anchor" href="#performance-sensitive-applications">§</a>Performance sensitive applications</h3>
+<p>In some performance-sensitive cases, it can make sense to drop into the lower-level details, and directly use <code>dispatch_main</code>, <code>CFRunLoop</code> or similar to run the run loop. Note that this may prevent things that depend on <code>NSRunLoop</code> features from working, so test thoroughly.</p>
+</div></details></section></div></main></body></html>

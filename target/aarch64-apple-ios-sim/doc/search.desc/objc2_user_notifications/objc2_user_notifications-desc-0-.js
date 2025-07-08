@@ -1,0 +1,1 @@
+searchState.loadedDescShard("objc2_user_notifications", 0, "Bindings to the <code>UserNotifications</code> framework\nApple’s documentation\nApple’s documentation\nApple’s documentation\nApple’s documentation\nReturns the argument unchanged.\nReturns the argument unchanged.\nCalls <code>U::from(self)</code>.\nCalls <code>U::from(self)</code>.")
