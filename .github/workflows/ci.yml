@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@nightly
         with:
           targets: aarch64-apple-ios-sim
@@ -19,7 +19,7 @@ jobs:
   screenshot:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@nightly
         with:
           targets: aarch64-apple-ios-sim
@@ -55,7 +55,7 @@ jobs:
   swift-screenshot:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: start simulator
         run: |
           xcrun simctl boot 'iPhone 16 Pro'
