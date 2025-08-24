@@ -1,7 +1,15 @@
 use ferris_ui::{App, GUIEvent, Switch, Text, TextView, VStack, View, Image, ImageType, TextField};
-use objc2::MainThreadMarker;
-use objc2_ui_kit::{UIColor, UIView};
-use winit::event_loop::{ControlFlow, EventLoop, EventLoopProxy};
+use ferris_ui::objc2::MainThreadMarker;
+use ferris_ui::objc2_ui_kit::{UIColor, UIView};
+use ferris_ui::winit::event_loop::{ControlFlow, EventLoop, EventLoopProxy};
+/*
+use objc2_foundation::{
+    NSFileManager,
+    NSURL,
+    NSSearchPathDirectory,
+    NSSearchPathDomainMask,
+};
+*/
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -36,10 +44,24 @@ impl MyView {
         let mtm = MainThreadMarker::new().unwrap();
         let label = Text::new(mtm)
             //.with_background_color(unsafe { UIColor::redColor() })
-            .with_text("Current text: ");
+            .with_text("Current text : ");
         unsafe {
-            label.setContentMode(objc2_ui_kit::UIViewContentMode::Top);
+            label.setContentMode(ferris_ui::objc2_ui_kit::UIViewContentMode::Top);
         }
+        //let path = ferris_ui::screenshot::path(NSSearchPathDirectory::DocumentDirectory);
+        //println!("PATH: {path:?}");
+        /*
+        let manager = unsafe {NSFileManager::defaultManager()};
+        let directories = unsafe{manager.URLsForDirectory_inDomains(
+            NSSearchPathDirectory::DocumentDirectory,
+            NSSearchPathDomainMask::UserDomainMask
+        )};
+        for i in &directories {
+            let path = unsafe {i.relativeString()};
+            println!("PATH: {path:?}");
+        }
+        //NSURL::fileURLWithPath(
+        */
 
         let switch_label_cloned = label.clone();
 

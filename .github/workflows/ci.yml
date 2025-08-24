@@ -84,3 +84,38 @@ jobs:
           export SCREENSHOT_URL
           make gh-summary
           cat Summary.md >> "$GITHUB_STEP_SUMMARY"
+
+  ui-tests:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: start simulator
+        run: |
+          xcrun simctl boot 'iPhone 16 Pro'
+          sleep 20
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          targets: aarch64-apple-ios-sim
+          toolchain: nightly
+
+      - name: Run ui test
+        run: |
+          make ui-tests-run
+
+      - name: Run Copy screenshot
+        run: |
+          cp "$(xcrun simctl get_app_container booted com.simlay.net.RustUITests.xctrunner data)/Documents/screenshot.png" ui_tests.png
+
+      - uses: actions/upload-artifact@v4
+        id: ui-tests
+        with:
+          name: ui-tests
+          path: ui_tests.png
+          compression-level: 0 # no compression
+
+      - name: upload screenshots to imgbb
+        run: |
+          SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i ui_tests.png)" | jq -r '.data.display_url')
+          export SCREENSHOT_URL
+          make gh-summary
+          cat Summary.md >> "$GITHUB_STEP_SUMMARY"

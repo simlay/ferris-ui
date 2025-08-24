@@ -3,9 +3,8 @@ use objc2::rc::Retained;
 use objc2_foundation::MainThreadMarker;
 use objc2_ui_kit::{
     UILayoutConstraintAxis,
-    UIStackView, UIStackViewAlignment, UIStackViewDistribution, UIView,
+    UIStackView, UIStackViewDistribution, UIView,
     UIColor, UIEdgeInsets,
-    NSDirectionalEdgeInsets,
 };
 
 
@@ -17,35 +16,23 @@ pub struct VStack {
 
 impl VStack {
     pub fn new(mtm: MainThreadMarker, children: VStackChildren) -> Self {
-        //let stack_view = unsafe { UIStackView::new(mtm) };
         let stack_view = unsafe { UIStackView::new(mtm) };
         unsafe {
             stack_view.setAxis(UILayoutConstraintAxis::Vertical);
             //stack_view.setAlignment(UIStackViewAlignment::Fill);
             stack_view.setDistribution(UIStackViewDistribution::FillEqually);
-            //stack_view.setSpacing(10.);
+            //stack_view.setDistribution(UIStackViewDistribution::EqualCentering);
+            stack_view.setSpacing(10.);
             stack_view.setTranslatesAutoresizingMaskIntoConstraints(true);
             stack_view.setLayoutMarginsRelativeArrangement(true);
-            /*
-            stack_view.setDirectionalLayoutMargins(
-                NSDirectionalEdgeInsets {
-                    top: 20.,
-                    leading: 50.,
-                    bottom: 20.,
-                    trailing: 50.,
-                }
-            );
-            */
             stack_view.setLayoutMargins(
                 UIEdgeInsets {
-                    top: 50.,
+                    top: 100.,
                     left: 50.,
-                    bottom: 50.,
+                    bottom: 100.,
                     right: 50.,
                 }
             );
-            /*
-            */
         };
         let layer = stack_view.layer();
         layer.setBorderWidth(1.);
@@ -59,6 +46,7 @@ impl VStack {
         }
     }
 }
+
 impl View for VStack {
     fn ui_view(&self) -> Box<&UIView> {
         for child in &self.children {
@@ -72,7 +60,14 @@ impl View for VStack {
             }
 
             unsafe { self.stack_view.addArrangedSubview(child.as_ref()) };
+            println!("CHILD {:?}", child.bounds());
         }
+        /*
+        unsafe {
+            self.scroll_view.addSubview(&self.stack_view);
+        }
+        Box::new(self.scroll_view.as_ref())
+        */
         Box::new(self.stack_view.as_ref())
     }
 }

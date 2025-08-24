@@ -5,10 +5,7 @@
                 "target": "aarch64-apple-ios-sim",
                 "runBuildScripts": true,
                 "features": [],
-                "extraArgs": "-Zbuild-std",
-                "extraEnv": {
-                    "RUSTUP_TOOLCHAIN": "nightly"
-                }
+                "extraArgs": []
             }
         }
     }

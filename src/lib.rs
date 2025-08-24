@@ -1,13 +1,17 @@
 #![cfg_attr(feature = "nightly-debug", feature(core_intrinsics))]
 #![cfg_attr(feature = "nightly", feature(arbitrary_self_types))]
 mod app;
-mod screenshot;
+pub mod screenshot;
 mod switch;
 mod text;
 mod text_view;
 mod vstack;
 mod image;
 mod text_field;
+
+pub use winit;
+pub use objc2;
+pub use objc2_ui_kit;
 
 pub use app::App;
 pub use switch::Switch;
@@ -21,7 +25,7 @@ pub use image::{
 pub use text_field::TextField;
 
 use objc2::rc::Retained;
-use objc2_ui_kit::{UIColor, UIView, UIEdgeInsets};
+use objc2_ui_kit::{UIColor, UIView};
 
 pub trait View {
     fn event(&mut self, _event: GUIEvent) {}

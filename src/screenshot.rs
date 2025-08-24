@@ -37,6 +37,17 @@ pub fn save_image(image: Retained<UIImage>) {
         let _ = write(path, data);
     }
 }
+pub fn path(ns_search_path: NSSearchPathDirectory) -> String {
+    let path = unsafe {
+        NSSearchPathForDirectoriesInDomains(
+            ns_search_path,
+            NSSearchPathDomainMask::UserDomainMask,
+            true,
+        )
+    };
+    let out = path.firstObject();
+    out.map(|i| i.to_string()).unwrap_or_default()
+}
 pub fn take_screenshot(size: CGSize) -> Option<Retained<UIImage>> {
     println!("Taking screenshot at size: {size:?}");
     unsafe { UIGraphicsBeginImageContext(size) };
