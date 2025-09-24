@@ -6,7 +6,7 @@ DEVICE_ID=aoeu
 TEAM_ID=aoeu
 
 build:
-	cargo build --target aarch64-apple-ios-sim --all --all-targets
+	cargo build -vvv --target aarch64-apple-ios-sim --all --all-targets
 
 bundle: build
 	cp ./target/aarch64-apple-ios-sim/debug/examples/simple ./RustWrapper.app/
@@ -104,8 +104,15 @@ sign-bundle:
 	codesign -vvv -f -s "sebastian.imlay@gmail.com" --entitlements ./RustWrapper.app/entitlements.plist ./RustWrapper.app/
 	codesign -vvv -d  --entitlements - --xml ./RustWrapper.app/
 
-ui-tests-bundle: build
-	cp $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/Xcode/Agents/XCTRunner.app/XCTRunner ./RustUITests-Runner.app/
+ui-test-bundle-tools:
+	cp $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/Xcode/Agents/XCTRunner.app/XCTRunner                ./RustUITests-Runner.app/
+	cp -r $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/Frameworks                                       ./RustUITests-Runner.app/
+	cp -r $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestCore.framework           ./RustUITests-Runner.app/Frameworks/
+	cp -r $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestSupport.framework        ./RustUITests-Runner.app/Frameworks/
+	cp -r $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCUnit.framework               ./RustUITests-Runner.app/Frameworks/
+	cp -r $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework ./RustUITests-Runner.app/Frameworks/
+
+ui-tests-bundle: ui-test-bundle-tools install
 	cp ./target/aarch64-apple-ios-sim/debug/ui_tests  ./RustUITests-Runner.app/Plugins/DinghyUITests.xctest/
 
 ui-tests-install: ui-tests-bundle install
@@ -115,7 +122,8 @@ ui-tests-install: ui-tests-bundle install
 ui-tests-run: ui-tests-install
 	@xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner
 	@xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy
-	cat ui_test.xctestconfiguration.base | sed "s:UI_TEST_WRAPPER:$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner):g" | sed "s:RUST_WRAPPER_APP:$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy):g" > ui_test.xctestconfiguration
+	cat ui_tests/ui_tests.xctestconfiguration.base | sed "s:UI_TEST_WRAPPER:$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner):g" | sed "s:RUST_WRAPPER_APP:$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy):g" > ui_tests/ui_tests.xctestconfiguration
 	xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner
 	xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy
-	@SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_test.xctestconfiguration xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner
+	@SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_tests/ui_tests.xctestconfiguration xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner
+	cp "$(shell xcrun simctl get_app_container booted com.simlay.net.RustUITests.xctrunner data)/Documents/screenshot.png" ui_tests.png

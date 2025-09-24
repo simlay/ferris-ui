@@ -102,10 +102,6 @@ jobs:
         run: |
           make ui-tests-run
 
-      - name: Run Copy screenshot
-        run: |
-          cp "$(xcrun simctl get_app_container booted com.simlay.net.RustUITests.xctrunner data)/Documents/screenshot.png" ui_tests.png
-
       - uses: actions/upload-artifact@v4
         id: ui-tests
         with:
