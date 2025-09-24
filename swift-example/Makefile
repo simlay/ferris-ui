@@ -1,4 +1,4 @@
-EMULATOR='iPhone 16 Pro'
+EMULATOR='iPhone 16e'
 
 build:
 	swift build -vvv  \
