@@ -1,5 +1,5 @@
 #EMULATOR='iPad Pro 13-inch (M4)'
-EMULATOR='iPhone 17'
+EMULATOR='iPhone 16'
 #EMULATOR='A40DB8CD-347C-4DDF-9AD0-B16D2A57A41D'
 OTHER_EMULATOR='iPhone 16e'
 DEVICE_ID=aoeu
@@ -126,4 +126,4 @@ ui-tests-run: ui-tests-install
 	xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner
 	xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy
 	@SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_tests/ui_tests.xctestconfiguration xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner
-	cp "$(shell xcrun simctl get_app_container booted com.simlay.net.RustUITests.xctrunner data)/Documents/screenshot.png" ui_tests.png
+	cp "$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner data)/Documents/screenshot.png" ui_tests.png
