@@ -47,7 +47,7 @@ pub trait View {
 
 impl<T: AsRef<UIView>> View for Retained<T> {
     fn ui_view(&self) -> Box<&UIView> {
-        Box::new(self.as_ref().as_ref())
+        Box::new(self.as_ref())
     }
 }
 

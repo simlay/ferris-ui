@@ -3,10 +3,10 @@ use objc2::rc::Retained;
 use objc2::runtime::ProtocolObject;
 use objc2::{DeclaredClass, MainThreadOnly, define_class, msg_send};
 use objc2_foundation::{
-    MainThreadMarker, NSAttributedString, NSObject, NSObjectProtocol, NSString,
+    MainThreadMarker, NSObject, NSObjectProtocol, NSString,
 };
 use objc2_ui_kit::{
-    UIResponder, UIScrollViewDelegate, UITextField, UITextFieldDelegate, UITextViewDelegate, UIView,
+    UIResponder, UIScrollViewDelegate, UITextField, UITextFieldDelegate, UIView,
 };
 use std::cell::RefCell;
 use winit::event_loop::EventLoopProxy;
