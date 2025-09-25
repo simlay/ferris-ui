@@ -45,8 +45,8 @@ impl ApplicationHandler<GUIEvent> for App {
             .create_window(Window::default_attributes())
             .unwrap();
 
-        if let Ok(handle) = window.window_handle() {
-            if let RawWindowHandle::UiKit(handle) = handle.as_raw() {
+        if let Ok(handle) = window.window_handle()
+            && let RawWindowHandle::UiKit(handle) = handle.as_raw() {
                 let ui_view = handle.ui_view.as_ptr();
                 let ui_view: Retained<UIView> =
                     unsafe { Retained::retain(ui_view.cast()) }.unwrap();
@@ -60,7 +60,6 @@ impl ApplicationHandler<GUIEvent> for App {
                 self.root_ui_view = Some(ui_view);
                 self.root_view = Some(root_view);
             }
-        }
 
         self.window = Some(window);
     }

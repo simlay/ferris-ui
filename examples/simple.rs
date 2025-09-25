@@ -1,7 +1,7 @@
-use ferris_ui::{App, GUIEvent, Switch, Text, TextView, VStack, View, Image, ImageType, TextField};
-use objc2::MainThreadMarker;
-use objc2_ui_kit::{UIColor, UIView};
-use winit::event_loop::{ControlFlow, EventLoop, EventLoopProxy};
+use ferris_ui::objc2::MainThreadMarker;
+use ferris_ui::objc2_ui_kit::{UIColor, UIView};
+use ferris_ui::winit::event_loop::{ControlFlow, EventLoop, EventLoopProxy};
+use ferris_ui::{App, GUIEvent, Image, ImageType, Switch, Text, TextField, TextView, VStack, View};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -34,11 +34,9 @@ struct MyView {
 impl MyView {
     pub fn new(proxy: EventLoopProxy<GUIEvent>) -> Box<dyn View> {
         let mtm = MainThreadMarker::new().unwrap();
-        let label = Text::new(mtm)
-            //.with_background_color(unsafe { UIColor::redColor() })
-            .with_text("Current text: ");
+        let label = Text::new(mtm).with_text("Current text : ");
         unsafe {
-            label.setContentMode(objc2_ui_kit::UIViewContentMode::Top);
+            label.setContentMode(ferris_ui::objc2_ui_kit::UIViewContentMode::Top);
         }
 
         let switch_label_cloned = label.clone();
@@ -65,9 +63,8 @@ impl MyView {
                 let text = format!("Current text: {new_text}");
                 label_for_text_view.set_text(text);
             }))
-        .with_place_holder_text("PLACE HOLDER TEXT".into());
-            //.with_background_color(unsafe { UIColor::blueColor() })
-                ;
+            .with_place_holder_text("PLACE HOLDER TEXT".into());
+        //.with_background_color(unsafe { UIColor::blueColor() })
 
         let text_field = TextField::new(mtm, proxy.clone())
             .with_event_fn(Box::new(move |text_field| {
@@ -91,8 +88,7 @@ impl MyView {
                 Box::new(text_view),
             ],
         )
-            .with_background_color(unsafe {UIColor::whiteColor()});
-            ;
+        .with_background_color(unsafe { UIColor::whiteColor() });
 
         Box::new(Self { proxy, vstack })
     }

@@ -2,8 +2,12 @@ use crate::{GUIEvent, View};
 use objc2::rc::Retained;
 use objc2::runtime::ProtocolObject;
 use objc2::{DeclaredClass, MainThreadOnly, define_class, msg_send};
-use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol, NSAttributedString, NSString};
-use objc2_ui_kit::{UIResponder, UIScrollViewDelegate, UITextField, UITextViewDelegate, UIView, UITextFieldDelegate};
+use objc2_foundation::{
+    MainThreadMarker, NSObject, NSObjectProtocol, NSString,
+};
+use objc2_ui_kit::{
+    UIResponder, UIScrollViewDelegate, UITextField, UITextFieldDelegate, UIView,
+};
 use std::cell::RefCell;
 use winit::event_loop::EventLoopProxy;
 
@@ -37,7 +41,7 @@ define_class!(
             let text = sender.get_text();
             println!("DidBeginEditing: {text:?}");
             /*
-            */
+             */
         }
 
         #[unsafe(method(textFieldDidEndEditing:))]
@@ -50,15 +54,15 @@ define_class!(
         }
 
         /*
-        #[unsafe(method(textFieldDidChange:))]
-        fn text_field_did_change(&self, sender: &TextField) {
-            /*
-            let text = sender.text();
-            println!("textViewDidChange: {text}");
-            */
-            sender.text_changed();
-        }
-    */
+            #[unsafe(method(textFieldDidChange:))]
+            fn text_field_did_change(&self, sender: &TextField) {
+                /*
+                let text = sender.text();
+                println!("textViewDidChange: {text}");
+                */
+                sender.text_changed();
+            }
+        */
     }
 );
 
@@ -81,13 +85,16 @@ impl TextField {
         this
     }
 
-    pub fn get_text(&self) -> Option<String>{
+    pub fn get_text(&self) -> Option<String> {
         unsafe { self.text() }.map(|t| t.to_string())
     }
 
     fn text_changed(&self) {
         let text = self.get_text();
-        let _ = self.ivars().proxy.send_event(GUIEvent::Text(text.unwrap_or_default().clone()));
+        let _ = self
+            .ivars()
+            .proxy
+            .send_event(GUIEvent::Text(text.unwrap_or_default().clone()));
         if let Some(event_fn) = &*self.ivars().event_fn.borrow() {
             event_fn(self);
         }

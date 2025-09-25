@@ -1,4 +1,4 @@
-EMULATOR='iPhone 16 Pro'
+EMULATOR='iPhone 16e'
 
 build:
 	swift build -vvv  \
@@ -14,6 +14,9 @@ install: bundle
 
 run: install
 	xcrun simctl launch --console --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
+
+debug: install
+	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --wait-for-debugger --console --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
 
 screenshot: install
 	xcrun simctl launch \

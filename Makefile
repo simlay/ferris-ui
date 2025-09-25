@@ -1,10 +1,12 @@
-EMULATOR='iPhone 16'
+#EMULATOR='iPad Pro 13-inch (M4)'
+EMULATOR='iPhone 16e'
+#EMULATOR='A40DB8CD-347C-4DDF-9AD0-B16D2A57A41D'
 OTHER_EMULATOR='iPhone 16e'
 DEVICE_ID=aoeu
 TEAM_ID=aoeu
 
 build:
-	cargo build --target aarch64-apple-ios-sim --example simple
+	cargo build -vvv --target aarch64-apple-ios-sim --all --all-targets
 
 bundle: build
 	cp ./target/aarch64-apple-ios-sim/debug/examples/simple ./RustWrapper.app/
@@ -46,6 +48,7 @@ record: install
 	ps | grep 'simctl io $(EMULATOR)  recordVideo' | grep -v grep | awk '{print $$1}' | xargs kill -s SIGINT
 
 gh-summary:
+	@touch stdout.txt stderr.txt
 	echo "## APP STDOUT" > Summary.md
 	echo \`\`\` >> Summary.md
 	cat stdout.txt >> Summary.md
@@ -58,7 +61,7 @@ gh-summary:
 	echo "![Screenshot](${SCREENSHOT_URL})" >> Summary.md
 
 build-macabi:
-	cargo build --target aarch64-apple-ios-macabi -Zbuild-std --example simple
+	cargo build --target aarch64-apple-ios-macabi -Zbuild-std --all
 
 bundle-macabi: build-macabi
 	cp ./target/aarch64-apple-ios-macabi/debug/examples/simple ./RustWrapper.app/
@@ -70,7 +73,7 @@ watch-macabi:
 	cargo watch -s 'make run-macabi' -w ./src -w ./Cargo.toml -w ./examples/
 
 device-build:
-	cargo build --target aarch64-apple-ios --example simple
+	cargo build --target aarch64-apple-ios
 
 device-bundle: device-build
 	cp ./target/aarch64-apple-ios/debug/examples/simple ./RustWrapper.app/
@@ -95,8 +98,39 @@ xcrun-install:
 
 xcrun-run:
 	xcrun devicectl device  process launch --device $(DEVICE_ID) com.simlay.net.Dinghy
+
 sign-bundle:
 	make device-clear-entitlements
 	make device-add-entitlements
 	codesign -vvv -f -s "sebastian.imlay@gmail.com" --entitlements ./RustWrapper.app/entitlements.plist ./RustWrapper.app/
 	codesign -vvv -d  --entitlements - --xml ./RustWrapper.app/
+
+ui-tests-bundle-tools:
+	cp $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/Xcode/Agents/XCTRunner.app/XCTRunner                ./RustUITests-Runner.app/
+	cp -r $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/Frameworks                                       ./RustUITests-Runner.app/
+	cp -r $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestCore.framework           ./RustUITests-Runner.app/Frameworks/
+	cp -r $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTestSupport.framework        ./RustUITests-Runner.app/Frameworks/
+	cp -r $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCUnit.framework               ./RustUITests-Runner.app/Frameworks/
+	cp -r $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework ./RustUITests-Runner.app/Frameworks/
+
+ui-tests-bundle: ui-tests-bundle-tools install
+	cp ./target/aarch64-apple-ios-sim/debug/ui_tests  ./RustUITests-Runner.app/Plugins/DinghyUITests.xctest/
+
+ui-tests-install: ui-tests-bundle install
+	@xcrun simctl uninstall $(EMULATOR) com.simlay.net.RustUITests.xctrunner
+	@xcrun simctl install $(EMULATOR) RustUITests-Runner.app/
+
+ui-tests-xctest-configuration: ui-tests-install
+	cat ui_tests/ui_tests.xctestconfiguration.base | \
+		sed "s:UI_TEST_WRAPPER:$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner):g" | \
+		sed "s:RUST_WRAPPER_APP:$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy):g" \
+		> ui_tests/ui_tests.xctestconfiguration
+
+ui-tests-run: ui-tests-install ui-tests-xctest-configuration
+	@SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_tests/ui_tests.xctestconfiguration \
+		xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner 2>&1 | tee $(PWD)/stdout.txt
+	make ui-tests-cp-screenshot
+
+ui-tests-cp-screenshot:
+	cp "$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner data)/Documents/screenshot.png" ui_tests.png
+	sips -Z 1278 ui_tests.png

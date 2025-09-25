@@ -2,8 +2,10 @@ use crate::{GUIEvent, View};
 use objc2::rc::Retained;
 use objc2::runtime::ProtocolObject;
 use objc2::{DeclaredClass, MainThreadOnly, define_class, msg_send};
-use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol, NSAttributedString, NSString, NSRange};
-use objc2_ui_kit::{UIResponder, UIScrollViewDelegate, UITextView, UITextViewDelegate, UIView, UIColor};
+use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol, NSString};
+use objc2_ui_kit::{
+    UIColor, UIResponder, UIScrollViewDelegate, UITextView, UITextViewDelegate, UIView,
+};
 use std::cell::RefCell;
 use winit::event_loop::EventLoopProxy;
 
@@ -34,8 +36,7 @@ define_class!(
     unsafe impl UIScrollViewDelegate for TextFieldDelegate {}
     unsafe impl UITextViewDelegate for TextFieldDelegate {
         #[unsafe(method(textViewDidChangeSelection:))]
-        fn did_change_selection(&self, sender: &TextView) {
-        }
+        fn did_change_selection(&self, _sender: &TextView) {}
         #[unsafe(method(textViewDidBeginEditing:))]
         fn did_begin_editing(&self, sender: &TextView) {
             sender.began_editing();
@@ -84,7 +85,12 @@ impl TextView {
     }
 
     fn ended_editing(&self) {
-        let place_holder_text = self.ivars().place_holder_text.borrow().clone().unwrap_or_default();
+        let place_holder_text = self
+            .ivars()
+            .place_holder_text
+            .borrow()
+            .clone()
+            .unwrap_or_default();
         if !place_holder_text.is_empty() {
             unsafe {
                 self.setText(Some(&NSString::from_str(place_holder_text.as_str())));
