@@ -126,19 +126,9 @@ ui-tests-xctest-configuration: ui-tests-install
 		sed "s:RUST_WRAPPER_APP:$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy):g" \
 		> ui_tests/ui_tests.xctestconfiguration
 
-ui-tests-run-ci: ui-tests-install ui-tests-xctest-configuration
+ui-tests-run: ui-tests-install ui-tests-xctest-configuration
 	@SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_tests/ui_tests.xctestconfiguration \
-		SIMCTL_CHILD_RUST_BACKTRACE=full \
-		SIMCTL_CHILD_RUST_LOG=trace \
-		xcrun simctl launch \
-		--stdout=$(PWD)/stdout.txt \
-		--stderr=$(PWD)/stderr.txt \
-		--terminate-running-process \
-		$(EMULATOR) com.simlay.net.Dinghy
-
-ui-tests-run: ui-tests-install ui-test-xctest-configuration
-	@SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_tests/ui_tests.xctestconfiguration \
-		xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner
+		xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner 2>&1 | tee $(PWD)/stdout.txt
 	make ui-tests-cp-screenshot
 
 ui-tests-cp-screenshot:
