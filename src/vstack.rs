@@ -2,11 +2,8 @@ use crate::View;
 use objc2::rc::Retained;
 use objc2_foundation::MainThreadMarker;
 use objc2_ui_kit::{
-    UILayoutConstraintAxis,
-    UIStackView, UIStackViewDistribution, UIView,
-    UIColor, UIEdgeInsets,
+    UIColor, UIEdgeInsets, UILayoutConstraintAxis, UIStackView, UIStackViewDistribution, UIView,
 };
-
 
 type VStackChildren = Vec<Box<dyn View>>;
 pub struct VStack {
@@ -25,14 +22,12 @@ impl VStack {
             stack_view.setSpacing(10.);
             stack_view.setTranslatesAutoresizingMaskIntoConstraints(true);
             stack_view.setLayoutMarginsRelativeArrangement(true);
-            stack_view.setLayoutMargins(
-                UIEdgeInsets {
-                    top: 100.,
-                    left: 50.,
-                    bottom: 100.,
-                    right: 50.,
-                }
-            );
+            stack_view.setLayoutMargins(UIEdgeInsets {
+                top: 100.,
+                left: 50.,
+                bottom: 100.,
+                right: 50.,
+            });
         };
         let layer = stack_view.layer();
         layer.setBorderWidth(1.);

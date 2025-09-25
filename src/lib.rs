@@ -1,28 +1,25 @@
 #![cfg_attr(feature = "nightly-debug", feature(core_intrinsics))]
 #![cfg_attr(feature = "nightly", feature(arbitrary_self_types))]
 mod app;
+mod image;
 pub mod screenshot;
 mod switch;
 mod text;
+mod text_field;
 mod text_view;
 mod vstack;
-mod image;
-mod text_field;
 
-pub use winit;
 pub use objc2;
 pub use objc2_ui_kit;
+pub use winit;
 
 pub use app::App;
+pub use image::{Image, ImageType};
 pub use switch::Switch;
 pub use text::Text;
+pub use text_field::TextField;
 pub use text_view::TextView;
 pub use vstack::VStack;
-pub use image::{
-    Image,
-    ImageType,
-};
-pub use text_field::TextField;
 
 use objc2::rc::Retained;
 use objc2_ui_kit::{UIColor, UIView};

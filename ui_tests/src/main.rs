@@ -1,14 +1,11 @@
-
-use ferris_ui::objc2::{define_class, ClassType, MainThreadOnly};
+use ferris_ui::objc2::{ClassType, MainThreadOnly, define_class};
+use objc2_foundation::NSString;
+use objc2_foundation::{
+    NSSearchPathDirectory, NSSearchPathDomainMask, NSSearchPathForDirectoriesInDomains,
+};
 use objc2_xc_test::XCTestCase;
 use objc2_xc_ui_automation::{
     XCUIApplication, XCUIElementTypeQueryProvider, XCUIScreenshotProviding,
-};
-use objc2_foundation::NSString;
-use objc2_foundation::{
-    NSSearchPathDomainMask,
-    NSSearchPathDirectory,
-    NSSearchPathForDirectoriesInDomains,
 };
 
 define_class!(
@@ -67,7 +64,7 @@ define_class!(
         }
     }
 );
-fn main() { }
+fn main() {}
 
 /// Load and initialize the class such that XCTest can see it.
 #[ctor::ctor]

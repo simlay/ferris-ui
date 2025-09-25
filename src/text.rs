@@ -1,8 +1,5 @@
 use crate::View;
-use objc2::rc::{
-    Retained,
-    PartialInit,
-};
+use objc2::rc::{PartialInit, Retained};
 use objc2::{MainThreadMarker, MainThreadOnly, define_class, msg_send};
 use objc2_foundation::{NSObject, NSString};
 use objc2_ui_kit::{UILabel, UIView};
@@ -18,8 +15,8 @@ define_class!(
 
 impl Text {
     pub fn new(mtm: MainThreadMarker) -> Retained<Self> {
-        let this : PartialInit<Self>= mtm.alloc().set_ivars(());
-        let this : Retained<Self> = unsafe { msg_send![super(this), init] };
+        let this: PartialInit<Self> = mtm.alloc().set_ivars(());
+        let this: Retained<Self> = unsafe { msg_send![super(this), init] };
         this
     }
 

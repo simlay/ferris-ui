@@ -47,8 +47,12 @@ fn main() {
 
     // XCTest and XCUIAutomation live inside:
     // `/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks`
-    println!("cargo:rustc-link-search=framework={developer_dir}/Platforms/{sdk_name}.platform/Developer/Library/Frameworks");
-    println!("cargo:rustc-link-search=native={developer_dir}/Platforms/{sdk_name}.platform/Developer/usr/lib");
+    println!(
+        "cargo:rustc-link-search=framework={developer_dir}/Platforms/{sdk_name}.platform/Developer/Library/Frameworks"
+    );
+    println!(
+        "cargo:rustc-link-search=native={developer_dir}/Platforms/{sdk_name}.platform/Developer/usr/lib"
+    );
 
     // Configure the test binary as a bundle instead.
     println!("cargo:rustc-link-arg-bins=-bundle");
