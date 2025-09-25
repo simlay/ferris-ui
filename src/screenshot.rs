@@ -17,13 +17,12 @@ use objc2_ui_kit::{
 };
 use std::fs::write;
 pub fn save_image(image: Retained<UIImage>) {
-    let path = unsafe {
+    let path =
         NSSearchPathForDirectoriesInDomains(
             NSSearchPathDirectory::DocumentDirectory,
             NSSearchPathDomainMask::UserDomainMask,
             true,
-        )
-    };
+        );
     let data = unsafe { UIImagePNGRepresentation(&image) }
         .unwrap()
         .to_vec();
@@ -38,13 +37,12 @@ pub fn save_image(image: Retained<UIImage>) {
     }
 }
 pub fn path(ns_search_path: NSSearchPathDirectory) -> String {
-    let path = unsafe {
+    let path =
         NSSearchPathForDirectoriesInDomains(
             ns_search_path,
             NSSearchPathDomainMask::UserDomainMask,
             true,
-        )
-    };
+        );
     let out = path.firstObject();
     out.map(|i| i.to_string()).unwrap_or_default()
 }

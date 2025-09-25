@@ -4,7 +4,7 @@ use objc2_xc_test::XCTestCase;
 use objc2_xc_ui_automation::{
     XCUIApplication, XCUIElementTypeQueryProvider, XCUIScreenshotProviding,
 };
-use objc2_foundation::{NSString, ns_string};
+use objc2_foundation::NSString;
 use objc2_foundation::{
     NSSearchPathDomainMask,
     NSSearchPathDirectory,
@@ -40,13 +40,12 @@ define_class!(
             let screenshot = unsafe { app.windows().element().screenshot() };
             println!("TOOK A SCREENSHOT");
             println!("SAVING SCREENSHOT");
-            let path = unsafe {
+            let path =
                 NSSearchPathForDirectoriesInDomains(
                     NSSearchPathDirectory::DocumentDirectory,
                     NSSearchPathDomainMask::UserDomainMask,
                     true,
-                )
-            };
+                );
             if let Some(path) = path.firstObject() {
                 let path = path.to_string();
                 let path = std::path::Path::new(&path).join("screenshot.png");

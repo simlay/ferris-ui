@@ -2,18 +2,10 @@
 name = "ui_tests"
 edition = "2024"
 
-[[bin]]
-name = "ui_tests"
-path = "ui_tests.rs"
-
 [dependencies]
 env_logger = "0.11"
 ferris-ui = { path = "../" }
-objc2-xc-test = { version = "0.3.1", default-features = false, features = [
-#"std",
-] }
-objc2-xc-ui-automation = { version = "0.3.1", default-features = false, features = [
-#"std",
-] }
-ctor = { version = "0.5", default-features = false, features = ["proc_macro"] }
+objc2-xc-test = { version = "0.3.1", default-features = false }
+objc2-xc-ui-automation = { version = "0.3.1", default-features = false }
 objc2-foundation = "0.3.1"
+ctor = { version = "0.5", default-features = false, features = ["proc_macro"] }

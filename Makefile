@@ -133,3 +133,4 @@ ui-tests-run: ui-tests-install ui-tests-xctest-configuration
 
 ui-tests-cp-screenshot:
 	cp "$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner data)/Documents/screenshot.png" ui_tests.png
+	sips -Z 1278 ui_tests.png
