@@ -113,10 +113,10 @@ ui-tests-bundle-tools:
 	cp -r $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCUnit.framework               ./RustUITests-Runner.app/Frameworks/
 	cp -r $(shell xcode-select --print-path)/Platforms/IPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework ./RustUITests-Runner.app/Frameworks/
 
-ui-tests-bundle: ui-tests-bundle-tools install
+ui-tests-bundle: ui-tests-bundle-tools
 	cp ./target/aarch64-apple-ios-sim/debug/ui_tests  ./RustUITests-Runner.app/Plugins/DinghyUITests.xctest/
 
-ui-tests-install: ui-tests-bundle install
+ui-tests-install: ui-tests-bundle
 	@xcrun simctl uninstall $(EMULATOR) com.simlay.net.RustUITests.xctrunner
 	@xcrun simctl install $(EMULATOR) RustUITests-Runner.app/
 
@@ -126,8 +126,16 @@ ui-tests-xctest-configuration: ui-tests-install
 		sed "s:RUST_WRAPPER_APP:$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy):g" \
 		> ui_tests/ui_tests.xctestconfiguration
 
-ui-tests-run: ui-tests-install ui-tests-xctest-configuration
-	@SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_tests/ui_tests.xctestconfiguration \
+ui-tests-run: install ui-tests-install ui-tests-xctest-configuration
+	SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_tests/ui_tests.xctestconfiguration \
+		xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner 2>&1 | tee $(PWD)/stdout.txt
+	make ui-tests-cp-screenshot
+
+install-swift:
+	make -C ./swift-example/ install
+
+ui-tests-run-swift: install-swift ui-tests-install ui-tests-xctest-configuration
+	SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_tests/ui_tests.xctestconfiguration \
 		xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner 2>&1 | tee $(PWD)/stdout.txt
 	make ui-tests-cp-screenshot
 
