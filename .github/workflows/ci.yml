@@ -1,0 +1,88 @@
+name: CI
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          targets: aarch64-apple-ios-sim
+          toolchain: nightly
+      - name: build
+        run: cargo build --target aarch64-apple-ios-sim --all --all-targets
+
+  ui-tests-swift:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+      - name: start simulator
+        run: |
+          xcrun simctl boot 'iPhone 16e'
+          sleep 20
+      - name: Run ui test
+        run: |
+          make ui-tests-run-swift
+      - uses: actions/upload-artifact@v4
+        id: swift-screenshot
+        with:
+          name: swift-screenshot
+          path: ui_tests.png
+          compression-level: 0 # no compression
+
+      - uses: actions/upload-artifact@v4
+        id: ui-tests
+        with:
+          name: ui-tests-swift
+          path: ui_tests.png
+          compression-level: 0 # no compression
+      - uses: actions/upload-artifact@v4
+        id: swift-app-logs
+        with:
+          name: swift-app-logs
+          path: |
+            stdout.txt
+            stderr.txt
+          compression-level: 0 # no compression
+      - name: upload screenshots to imgbb
+        run: |
+          SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i ui_tests.png)" | jq -r '.data.display_url')
+          export SCREENSHOT_URL
+          make gh-summary
+          cat Summary.md >> "$GITHUB_STEP_SUMMARY"
+
+  ui-tests:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+      - name: start simulator
+        run: |
+          xcrun simctl boot 'iPhone 16e'
+          sleep 20
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          targets: aarch64-apple-ios-sim
+          toolchain: nightly
+
+      - name: Run ui test
+        run: |
+          make ui-tests-run
+
+      - uses: actions/upload-artifact@v4
+        id: ui-tests
+        with:
+          name: ui-tests
+          path: ui_tests.png
+          compression-level: 0 # no compression
+
+      - name: upload screenshots to imgbb
+        run: |
+          SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i ui_tests.png)" | jq -r '.data.display_url')
+          export SCREENSHOT_URL
+          make gh-summary
+          cat Summary.md >> "$GITHUB_STEP_SUMMARY"
