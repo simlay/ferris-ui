@@ -40,6 +40,11 @@ impl Text {
 }
 impl View for Text {
     fn ui_view(&self) -> Box<&UIView> {
+        /*
+        unsafe {
+            label.setContentMode(ferris_ui::objc2_ui_kit::UIViewContentMode::Top);
+        }
+        */
         Box::new(self.as_ref())
     }
 }

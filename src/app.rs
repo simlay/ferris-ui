@@ -46,20 +46,20 @@ impl ApplicationHandler<GUIEvent> for App {
             .unwrap();
 
         if let Ok(handle) = window.window_handle()
-            && let RawWindowHandle::UiKit(handle) = handle.as_raw() {
-                let ui_view = handle.ui_view.as_ptr();
-                let ui_view: Retained<UIView> =
-                    unsafe { Retained::retain(ui_view.cast()) }.unwrap();
-                let root_frame = ui_view.frame();
-                let root_view = (self.root_view_fn)(self.proxy.clone());
-                let root_ui_view = root_view.ui_view();
-                root_ui_view.setFrame(root_frame);
-                unsafe { ui_view.addSubview(root_ui_view.as_ref()) };
+            && let RawWindowHandle::UiKit(handle) = handle.as_raw()
+        {
+            let ui_view = handle.ui_view.as_ptr();
+            let ui_view: Retained<UIView> = unsafe { Retained::retain(ui_view.cast()) }.unwrap();
+            let root_frame = ui_view.frame();
+            let root_view = (self.root_view_fn)(self.proxy.clone());
+            let root_ui_view = root_view.ui_view();
+            root_ui_view.setFrame(root_frame);
+            unsafe { ui_view.addSubview(root_ui_view.as_ref()) };
 
-                //ui_view.setBackgroundColor(Some(unsafe { &UIColor::greenColor() }));
-                self.root_ui_view = Some(ui_view);
-                self.root_view = Some(root_view);
-            }
+            //ui_view.setBackgroundColor(Some(unsafe { &UIColor::greenColor() }));
+            self.root_ui_view = Some(ui_view);
+            self.root_view = Some(root_view);
+        }
 
         self.window = Some(window);
     }

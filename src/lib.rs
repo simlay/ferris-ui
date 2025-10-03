@@ -8,6 +8,7 @@ mod text;
 mod text_field;
 mod text_view;
 mod vstack;
+mod navigator;
 
 pub use objc2;
 pub use objc2_ui_kit;
@@ -42,6 +43,9 @@ pub trait View {
         Self: Sized,
     {
         self
+    }
+    fn kind(&self) -> String {
+        "Default".into()
     }
 }
 

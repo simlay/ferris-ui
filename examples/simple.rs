@@ -35,9 +35,6 @@ impl MyView {
     pub fn new(proxy: EventLoopProxy<GUIEvent>) -> Box<dyn View> {
         let mtm = MainThreadMarker::new().unwrap();
         let label = Text::new(mtm).with_text("Current text : ");
-        unsafe {
-            label.setContentMode(ferris_ui::objc2_ui_kit::UIViewContentMode::Top);
-        }
 
         let switch_label_cloned = label.clone();
 
@@ -52,7 +49,6 @@ impl MyView {
                 switch.setBackgroundColor(Some(new_color));
                 switch_label_cloned.set_text(format!("Switch is {}", is_on));
             }))
-            //.with_background_color(unsafe { UIColor::cyanColor() })
                 ;
 
         let label_for_text_view = label.clone();
@@ -64,7 +60,6 @@ impl MyView {
                 label_for_text_view.set_text(text);
             }))
             .with_place_holder_text("PLACE HOLDER TEXT".into());
-        //.with_background_color(unsafe { UIColor::blueColor() })
 
         let text_field = TextField::new(mtm, proxy.clone())
             .with_event_fn(Box::new(move |text_field| {
@@ -72,8 +67,6 @@ impl MyView {
                 let text = format!("Current text: {new_text}");
                 label_for_text_field.set_text(text);
             }))
-
-            //.with_background_color(unsafe { UIColor::blueColor() })
                 ;
 
         let image = Image::new(mtm, ImageType::SystemIcon("clock".into()));
@@ -85,7 +78,7 @@ impl MyView {
                 Box::new(image.clone()),
                 Box::new(switch.clone()),
                 Box::new(text_field),
-                Box::new(text_view),
+                //Box::new(text_view),
             ],
         )
         .with_background_color(unsafe { UIColor::whiteColor() });

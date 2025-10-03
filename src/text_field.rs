@@ -2,12 +2,8 @@ use crate::{GUIEvent, View};
 use objc2::rc::Retained;
 use objc2::runtime::ProtocolObject;
 use objc2::{DeclaredClass, MainThreadOnly, define_class, msg_send};
-use objc2_foundation::{
-    MainThreadMarker, NSObject, NSObjectProtocol, NSString,
-};
-use objc2_ui_kit::{
-    UIResponder, UIScrollViewDelegate, UITextField, UITextFieldDelegate, UIView,
-};
+use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol, NSString};
+use objc2_ui_kit::{UIResponder, UIScrollViewDelegate, UITextField, UITextFieldDelegate, UIView};
 use std::cell::RefCell;
 use winit::event_loop::EventLoopProxy;
 
@@ -47,21 +43,19 @@ define_class!(
         #[unsafe(method(textFieldDidEndEditing:))]
         fn text_field_did_end_editing(&self, sender: &TextField) {
             sender.text_changed();
+            let text = sender.get_text();
+            println!("DidEndEditing: {text:?}");
             /*
-            let text = sender.text();
-            println!("DidEndEditing: {text}");
             */
         }
 
         /*
-            #[unsafe(method(textFieldDidChange:))]
-            fn text_field_did_change(&self, sender: &TextField) {
-                /*
-                let text = sender.text();
-                println!("textViewDidChange: {text}");
-                */
-                sender.text_changed();
-            }
+        #[unsafe(method(textFieldDidChange:))]
+        fn text_field_did_change(&self, sender: &TextField) {
+            let text = sender.get_text();
+            println!("textViewDidChange: {text:?}");
+            sender.text_changed();
+        }
         */
     }
 );

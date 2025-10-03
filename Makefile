@@ -5,8 +5,13 @@ OTHER_EMULATOR='iPhone 16e'
 DEVICE_ID=aoeu
 TEAM_ID=aoeu
 
+.EXPORT_ALL_VARIABLES:
+SIMCTL_CHILD_RUST_BACKTRACE=full
+SIMCTL_CHILD_RUST_LOG=trace
+SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_tests/ui_tests.xctestconfiguration
+
 build:
-	cargo build -vvv --target aarch64-apple-ios-sim --all --all-targets
+	cargo build --target aarch64-apple-ios-sim --all --all-targets
 
 bundle: build
 	cp ./target/aarch64-apple-ios-sim/debug/examples/simple ./RustWrapper.app/
@@ -15,10 +20,14 @@ install: bundle
 	xcrun simctl install $(EMULATOR) ./RustWrapper.app/
 
 debug: install
-	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --wait-for-debugger --console --terminate-running-process $(EMULATOR) RustWrapper
+	./openDebug.scpt $(shell xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy | awk '{print $$2}')
+
+debug-wait: install
+	xcrun simctl launch --wait-for-debugger --console --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
 
 run: install
-	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --console --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
+	xcrun simctl launch --console --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
+
 
 CURR_EMULATOR:=$(shell cat ./target/emulator)
 run-no-wait: bundle
@@ -36,13 +45,13 @@ watch:
 	cargo watch -s 'make run' -w ./src -w ./Cargo.toml -w ./examples/
 
 screenshot: install
-	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
+	xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
 	sleep 2
 	xcrun simctl io $(EMULATOR) screenshot screenshot.png
 	sips -Z 1278 screenshot.png
 
 record: install
-	SIMCTL_CHILD_RUST_BACKTRACE=full SIMCTL_CHILD_RUST_LOG=trace xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy --record
+	xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy --record
 	xcrun simctl io $(EMULATOR) recordVideo -f record.mp4 &
 	sleep 2
 	ps | grep 'simctl io $(EMULATOR)  recordVideo' | grep -v grep | awk '{print $$1}' | xargs kill -s SIGINT
@@ -130,8 +139,7 @@ ui-tests-xctest-configuration: ui-tests-install
 		> ui_tests/ui_tests.xctestconfiguration
 
 ui-tests-run: install ui-tests-install ui-tests-xctest-configuration
-	SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_tests/ui_tests.xctestconfiguration \
-		xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner 2>&1 | tee $(PWD)/stdout.txt
+	xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner 2>&1 | tee $(PWD)/stdout.txt
 	make ui-tests-cp-screenshot
 
 install-swift:

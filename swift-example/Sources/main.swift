@@ -33,61 +33,9 @@ struct ContentView: View {
             TextField("input", text: $text)
             .border(.green)
             .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding()
-                                                            .border(.green)
-            /*
-            Button("Modal") {
-                self.isModal = true
-            }.sheet(isPresented: $isModal, content: {
-                    self.modal
-                    }).border(.green)
-            Image(systemName: "cloud.heavyrain.fill")
-            .foregroundColor(.red)
-            .font(.title)
-            */
+            //.padding()
+            .border(.green)
+            //TextEditor(text: $text)                          .border(.green)
         }.border(.red)
-        /*
-        VStack {
-            Text("Stepper \(quantity)")
-            Button(
-                action: {
-                    print("BUTTON PRESSED");
-                },
-                label: { Text("Click Me \(name)") }
-            )
-            Button(
-                action: {
-                }, label: {
-                    Image(systemName: "clock")
-                    Text("Click Me")
-                    Text("Hello World")
-                }
-            )
-            .foregroundColor(Color.white)
-            .padding()
-            .background(Color.blue)
-            .cornerRadius(5)
-
-            TextField("Name's placeholder", text: $name)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding()
-
-            Stepper(value: $quantity, in: 0...10, label: { Text("Quantity \(quantity)")})
-            Slider(
-                value: $progress,
-                in: 0...100,
-                step: 5,
-
-                onEditingChanged: { editing in
-                    isEditing = editing
-                }
-            )
-            Text("Slider \(progress)")
-                .foregroundColor(isEditing ? .red : .blue)
-        }
-        //.padding()
-        */
-        /*
-        */
     }
 }
