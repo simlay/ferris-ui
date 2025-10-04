@@ -1,7 +1,8 @@
 use ferris_ui::objc2::MainThreadMarker;
 use ferris_ui::objc2_ui_kit::{UIColor, UIView};
 use ferris_ui::winit::event_loop::{ControlFlow, EventLoop, EventLoopProxy};
-use ferris_ui::{App, GUIEvent, Image, ImageType, Switch, Text, TextField, TextView, VStack, View};
+//use ferris_ui::{App, GUIEvent, Image, ImageType, Switch, Text, TextField, TextView, VStack, View};
+use ferris_ui::{App, GUIEvent, Text, TextView, VStack, View};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -36,6 +37,7 @@ impl MyView {
         let mtm = MainThreadMarker::new().unwrap();
         let label = Text::new(mtm).with_text("Current text : ");
 
+        /*
         let switch_label_cloned = label.clone();
 
         let switch = Switch::new(mtm, proxy.clone())
@@ -50,6 +52,7 @@ impl MyView {
                 switch_label_cloned.set_text(format!("Switch is {}", is_on));
             }))
                 ;
+        */
 
         let label_for_text_view = label.clone();
         let label_for_text_field = label.clone();
@@ -61,6 +64,7 @@ impl MyView {
             }))
             .with_place_holder_text("PLACE HOLDER TEXT".into());
 
+        /*
         let text_field = TextField::new(mtm, proxy.clone())
             .with_event_fn(Box::new(move |text_field| {
                 let new_text = text_field.get_text().unwrap_or_default();
@@ -69,14 +73,17 @@ impl MyView {
             }));
 
         let image = Image::new(mtm, ImageType::SystemIcon("clock".into()));
+        */
 
         let vstack = VStack::new(
             mtm,
             vec![
                 Box::new(label.clone()),
+                /*
                 Box::new(image.clone()),
                 Box::new(switch.clone()),
                 Box::new(text_field),
+                */
                 Box::new(text_view),
             ],
         )

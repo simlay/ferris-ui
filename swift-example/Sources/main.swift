@@ -25,17 +25,9 @@ struct ContentView: View {
     }
     var body: some View {
         VStack {
-        //    Spacer()
-            Text("\(text) - switch is \(isShowing)")        .border(.green)
-            Image(systemName: "clock")                      .border(.green)
-            Toggle(isOn: $isShowing) {}                     .border(.green)
-            //.background(Color.purple)
-            TextField("input", text: $text)
-            .border(.green)
+            Text("\(text)")        .border(.green)
+            TextField("input", text: $text) .border(.green)
             .textFieldStyle(RoundedBorderTextFieldStyle())
-            //.padding()
-            .border(.green)
-            //TextEditor(text: $text)                          .border(.green)
         }.border(.red)
     }
 }
