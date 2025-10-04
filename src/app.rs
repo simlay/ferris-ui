@@ -1,6 +1,6 @@
 use crate::screenshot::{save_image, take_screenshot};
 use crate::{GUIEvent, View};
-use log::{debug, error};
+use log::debug;
 use objc2::rc::Retained;
 use objc2_ui_kit::UIView;
 use winit::application::ApplicationHandler;
@@ -88,7 +88,7 @@ impl ApplicationHandler<GUIEvent> for App {
                 // can render here instead.
                 self.window.as_ref().unwrap().request_redraw();
             }
-            e => {
+            _e => {
                 //log::trace!("{e:#?}");
             }
         }

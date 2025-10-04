@@ -36,6 +36,7 @@ jobs:
           toolchain: nightly
 
       - name: Run ui test
+        timeout-minutes: 10
         run: |
           make ${{matrix.make-cmd}}
 
