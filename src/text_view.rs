@@ -67,21 +67,21 @@ impl TextView {
         let this: Retained<TextView> = unsafe { msg_send![super(this), init] };
         {
             let delegate = this.ivars().delegate.borrow();
-            unsafe { this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone()))) };
+            unsafe {
+                this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone())));
+            }
         }
 
         this
     }
 
     pub fn get_text(&self) -> String {
-        unsafe { self.text() }.to_string()
+        self.text().to_string()
     }
 
     fn began_editing(&self) {
-        unsafe {
-            self.setText(None);
-            self.setTextColor(Some(&UIColor::blackColor()));
-        }
+        self.setText(None);
+        self.setTextColor(Some(&UIColor::blackColor()));
     }
 
     fn ended_editing(&self) {
@@ -92,10 +92,8 @@ impl TextView {
             .clone()
             .unwrap_or_default();
         if !place_holder_text.is_empty() {
-            unsafe {
-                self.setText(Some(&NSString::from_str(place_holder_text.as_str())));
-                self.setTextColor(Some(&UIColor::grayColor()));
-            }
+            self.setText(Some(&NSString::from_str(place_holder_text.as_str())));
+            self.setTextColor(Some(&UIColor::grayColor()));
         }
     }
 
@@ -116,7 +114,7 @@ impl TextView {
 }
 
 impl View for TextView {
-    fn ui_view(&self) -> Box<&UIView> {
+    fn raw_view(&self) -> Box<&UIView> {
         self.ended_editing();
         Box::new(self.as_ref())
     }

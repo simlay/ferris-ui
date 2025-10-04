@@ -26,17 +26,17 @@ use objc2::rc::Retained;
 use objc2_ui_kit::{UIColor, UIView};
 
 pub trait View {
-    fn event(&mut self, _event: GUIEvent) {}
-    fn ui_view(&self) -> Box<&UIView>;
+    fn raw_view(&self) -> Box<&UIView>;
     fn with_background_color(self, color: Retained<UIColor>) -> Self
     where
         Self: Sized,
     {
-        let ui_view = self.ui_view();
+        let ui_view = self.raw_view();
         ui_view.setBackgroundColor(Some(&color));
 
         self
     }
+
     #[cfg(feature = "nightly")]
     fn with_event_fn(self: Retained<Self>, _event_fn: Box<dyn Fn(&Self)>) -> Retained<Self>
     where
@@ -50,7 +50,7 @@ pub trait View {
 }
 
 impl<T: AsRef<UIView>> View for Retained<T> {
-    fn ui_view(&self) -> Box<&UIView> {
+    fn raw_view(&self) -> Box<&UIView> {
         Box::new(self.as_ref())
     }
 }

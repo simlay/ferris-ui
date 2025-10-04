@@ -72,15 +72,15 @@ impl TextField {
         let this: Retained<TextField> = unsafe { msg_send![super(this), init] };
         {
             let delegate = this.ivars().delegate.borrow();
-            unsafe { this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone()))) };
+            this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone())));
         }
-        unsafe { this.setPlaceholder(Some(&NSString::from_str("THIS IS SOME INPUT"))) };
+        this.setPlaceholder(Some(&NSString::from_str("THIS IS SOME INPUT")));
 
         this
     }
 
     pub fn get_text(&self) -> Option<String> {
-        unsafe { self.text() }.map(|t| t.to_string())
+        self.text().map(|t| t.to_string())
     }
 
     fn text_changed(&self) {
@@ -96,7 +96,7 @@ impl TextField {
 }
 
 impl View for TextField {
-    fn ui_view(&self) -> Box<&UIView> {
+    fn raw_view(&self) -> Box<&UIView> {
         Box::new(self.as_ref())
     }
     #[cfg(feature = "nightly")]

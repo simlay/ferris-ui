@@ -14,9 +14,9 @@ nightly-debug = []
 default = ["nightly"]
 
 [target.'cfg(target_os = "ios")'.dependencies]
-objc2 = "0.6.1"
+objc2 = "0.6"
 winit = { version = "0.30", features = ["rwh_06" ] }
-objc2-core-foundation = "0.3.0"
+objc2-core-foundation = "0.3"
 log = "0.4"
 
 [target.'cfg(target_os = "ios")'.dev-dependencies]
@@ -25,7 +25,7 @@ env_logger = "0.11"
 
 
 [target.'cfg(target_os = "ios")'.dependencies.objc2-ui-kit]
-version = "0.3.0"
+version = "0.3"
 features = [
 #"all",
     "UIApplication",
@@ -61,7 +61,7 @@ features = [
     "UIBarItem",
 ]
 [target.'cfg(target_os = "ios")'.dependencies.objc2-foundation]
-version = "0.3.0"
+version = "0.3"
 features = [
 #"dispatch",
     "NSArray",
@@ -74,10 +74,10 @@ features = [
     "NSSet",
 ]
 [target.'cfg(target_os = "ios")'.dependencies.objc2-quartz-core]
-version = "0.3.0"
+version = "0.3"
 
+# Let's leave these in if we have to patch it again.
 [patch.crates-io]
-
 #objc2-xc-test          = { path = "../objc2/framework-crates/objc2-xc-test" }
 #objc2-xc-ui-automation = { path = "../objc2/framework-crates/objc2-xc-ui-automation" }
 #objc2                  = { path = "../objc2/crates/objc2/"}
@@ -86,10 +86,10 @@ version = "0.3.0"
 #objc2-foundation       = { path = "../objc2/framework-crates/objc2-foundation" }
 #objc2-quartz-core      = { path = "../objc2/framework-crates/objc2-quartz-core" }
 
-objc2-xc-test          = { git = "https://github.com/madsmtm/objc2/" }
-objc2-xc-ui-automation = { git = "https://github.com/madsmtm/objc2/" }
-objc2                  = { git = "https://github.com/madsmtm/objc2/" }
-objc2-core-foundation  = { git = "https://github.com/madsmtm/objc2/" }
-objc2-ui-kit           = { git = "https://github.com/madsmtm/objc2/" }
-objc2-foundation       = { git = "https://github.com/madsmtm/objc2/" }
-objc2-quartz-core      = { git = "https://github.com/madsmtm/objc2/" }
+#objc2-xc-test          = { git = "https://github.com/madsmtm/objc2/" }
+#objc2-xc-ui-automation = { git = "https://github.com/madsmtm/objc2/" }
+#objc2                  = { git = "https://github.com/madsmtm/objc2/" }
+#objc2-core-foundation  = { git = "https://github.com/madsmtm/objc2/" }
+#objc2-ui-kit           = { git = "https://github.com/madsmtm/objc2/" }
+#objc2-foundation       = { git = "https://github.com/madsmtm/objc2/" }
+#objc2-quartz-core      = { git = "https://github.com/madsmtm/objc2/" }

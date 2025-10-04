@@ -53,12 +53,12 @@ impl Switch {
         this
     }
     pub fn is_on(&self) -> bool {
-        unsafe { self.isOn() }
+        self.isOn()
     }
 }
 
 impl View for Switch {
-    fn ui_view(&self) -> Box<&UIView> {
+    fn raw_view(&self) -> Box<&UIView> {
         Box::new(self.as_ref())
     }
     #[cfg(feature = "nightly")]

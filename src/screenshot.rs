@@ -22,7 +22,7 @@ pub fn save_image(image: Retained<UIImage>) {
         NSSearchPathDomainMask::UserDomainMask,
         true,
     );
-    let data = unsafe { UIImagePNGRepresentation(&image) }
+    let data = UIImagePNGRepresentation(&image)
         .unwrap()
         .to_vec();
     println!("DATA IS {:?}", data.len());
@@ -46,11 +46,11 @@ pub fn path(ns_search_path: NSSearchPathDirectory) -> String {
 }
 pub fn take_screenshot(size: CGSize) -> Option<Retained<UIImage>> {
     println!("Taking screenshot at size: {size:?}");
-    unsafe { UIGraphicsBeginImageContext(size) };
+    UIGraphicsBeginImageContext(size);
     let _renderer =
-        unsafe { UIGraphicsImageRenderer::initWithSize(UIGraphicsImageRenderer::alloc(), size) };
-    let image = unsafe { UIGraphicsGetImageFromCurrentImageContext() };
+        UIGraphicsImageRenderer::initWithSize(UIGraphicsImageRenderer::alloc(), size);
+    let image = UIGraphicsGetImageFromCurrentImageContext();
     //let path = NSSearchPathDirectory::PicturesDirectory;
-    unsafe { UIGraphicsEndImageContext() };
+    UIGraphicsEndImageContext();
     image
 }

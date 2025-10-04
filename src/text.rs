@@ -22,9 +22,7 @@ impl Text {
 
     pub fn set_text<T: Into<String>>(&self, new_text: T) {
         // UNANSWERED: Is this safe?
-        unsafe {
-            self.setText(Some(&NSString::from_str(&new_text.into())));
-        }
+        self.setText(Some(&NSString::from_str(&new_text.into())));
     }
 
     pub fn with_text<T: Into<String>>(self: Retained<Self>, new_text: T) -> Retained<Self> {
@@ -33,18 +31,11 @@ impl Text {
     }
 
     pub fn clear_text(&self) {
-        unsafe {
-            self.setText(None);
-        }
+        self.setText(None);
     }
 }
 impl View for Text {
-    fn ui_view(&self) -> Box<&UIView> {
-        /*
-        unsafe {
-            label.setContentMode(ferris_ui::objc2_ui_kit::UIViewContentMode::Top);
-        }
-        */
+    fn raw_view(&self) -> Box<&UIView> {
         Box::new(self.as_ref())
     }
 }

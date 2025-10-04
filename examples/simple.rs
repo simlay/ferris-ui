@@ -42,9 +42,9 @@ impl MyView {
             .with_event_fn(Box::new(move |switch| {
                 let is_on = switch.is_on();
                 let new_color = if is_on {
-                    unsafe { &UIColor::purpleColor() }
+                    &UIColor::purpleColor()
                 } else {
-                    unsafe { &UIColor::cyanColor() }
+                    &UIColor::cyanColor()
                 };
                 switch.setBackgroundColor(Some(new_color));
                 switch_label_cloned.set_text(format!("Switch is {}", is_on));
@@ -66,8 +66,7 @@ impl MyView {
                 let new_text = text_field.get_text().unwrap_or_default();
                 let text = format!("Current text: {new_text}");
                 label_for_text_field.set_text(text);
-            }))
-                ;
+            }));
 
         let image = Image::new(mtm, ImageType::SystemIcon("clock".into()));
 
@@ -78,16 +77,16 @@ impl MyView {
                 Box::new(image.clone()),
                 Box::new(switch.clone()),
                 Box::new(text_field),
-                //Box::new(text_view),
+                Box::new(text_view),
             ],
         )
-        .with_background_color(unsafe { UIColor::whiteColor() });
+        .with_background_color(UIColor::whiteColor());
 
         Box::new(Self { proxy, vstack })
     }
 }
 impl View for MyView {
-    fn ui_view(&self) -> Box<&UIView> {
-        Box::new(&self.vstack.ui_view())
+    fn raw_view(&self) -> Box<&UIView> {
+        Box::new(&self.vstack.raw_view())
     }
 }

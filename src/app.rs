@@ -33,7 +33,7 @@ impl App {
 }
 impl ApplicationHandler<GUIEvent> for App {
     fn user_event(&mut self, _event_loop: &ActiveEventLoop, event: GUIEvent) {
-        debug!("NEW EVENT: {event:?}");
+        //debug!("NEW EVENT: {event:?}");
         let view = self.root_ui_view.clone().unwrap();
         let image = take_screenshot(view.bounds().size);
         if let Some(image) = image {
@@ -52,11 +52,13 @@ impl ApplicationHandler<GUIEvent> for App {
             let ui_view: Retained<UIView> = unsafe { Retained::retain(ui_view.cast()) }.unwrap();
             let root_frame = ui_view.frame();
             let root_view = (self.root_view_fn)(self.proxy.clone());
-            let root_ui_view = root_view.ui_view();
+            let root_ui_view = root_view.raw_view();
             root_ui_view.setFrame(root_frame);
-            unsafe { ui_view.addSubview(root_ui_view.as_ref()) };
+            ui_view.addSubview(root_ui_view.as_ref());
 
-            //ui_view.setBackgroundColor(Some(unsafe { &UIColor::greenColor() }));
+            let bg_color = objc2_ui_kit::UIColor::systemBackgroundColor();
+            objc2_ui_kit::UIColor::labelColor();
+            root_ui_view.setBackgroundColor(Some(&bg_color));
             self.root_ui_view = Some(ui_view);
             self.root_view = Some(root_view);
         }
@@ -87,7 +89,7 @@ impl ApplicationHandler<GUIEvent> for App {
                 self.window.as_ref().unwrap().request_redraw();
             }
             e => {
-                error!("{e:#?}");
+                //log::trace!("{e:#?}");
             }
         }
     }

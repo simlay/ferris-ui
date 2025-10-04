@@ -20,9 +20,8 @@ pub enum ImageType {
 impl From<ImageType> for Option<Retained<UIImage>> {
     fn from(val: ImageType) -> Self {
         match val {
-            ImageType::SystemIcon(icon_name) => unsafe {
-                UIImage::systemImageNamed(&NSString::from_str(icon_name.as_str()))
-            },
+            ImageType::SystemIcon(icon_name) =>
+                UIImage::systemImageNamed(&NSString::from_str(icon_name.as_str())),
         }
     }
 }
@@ -43,7 +42,7 @@ impl Image {
                 println!("IMAGE FRAME: {:?}", this.frame());
                 println!("IMAGE BOUNDS: {:?}", this.bounds());
                 let bounds = CGRect {
-                    size: size,
+                    size,
                     ..Default::default()
                 };
                 this.setBounds(bounds);
@@ -55,7 +54,7 @@ impl Image {
     }
 }
 impl View for Image {
-    fn ui_view(&self) -> Box<&UIView> {
+    fn raw_view(&self) -> Box<&UIView> {
         Box::new(self.as_ref())
     }
     fn kind(&self) -> String {

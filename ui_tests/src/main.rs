@@ -29,12 +29,12 @@ define_class!(
         #[unsafe(method(testScreenshot))]
         fn test_screenshot(&self) {
             println!("GETTING APPLICATION");
-            let app = unsafe { XCUIApplication::new(self.mtm()) };
+            let app = XCUIApplication::new(self.mtm());
             println!("LAUNCHING APPLICATION");
-            unsafe { app.launch() };
+            app.launch();
             println!("TAKING A SCREENSHOT");
             // Save screenshot.
-            let screenshot = unsafe { app.windows().element().screenshot() };
+            let screenshot = app.windows().element().screenshot();
             println!("TOOK A SCREENSHOT");
             println!("SAVING SCREENSHOT");
             let path =
@@ -47,11 +47,10 @@ define_class!(
                 let path = path.to_string();
                 let path = std::path::Path::new(&path).join("screenshot.png");
                 println!("PATH IS {path:?}");
-                let res = unsafe {
+                let res =
                     screenshot
                         .PNGRepresentation()
-                        .writeToFile_atomically(&NSString::from_str(path.to_str().unwrap()), false)
-                };
+                        .writeToFile_atomically(&NSString::from_str(path.to_str().unwrap()), false);
                 assert!(res, "failed writing screenshot");
                 //let mut output = File::create(path).unwrap();
             }
@@ -60,7 +59,7 @@ define_class!(
 
             // TODO: For some reason, we have to terminate the application
             // manually when running outside Xcode?
-            unsafe { app.terminate() };
+            app.terminate();
         }
     }
 );
