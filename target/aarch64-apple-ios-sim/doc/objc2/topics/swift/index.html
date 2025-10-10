@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Interoperating with Swift"><title>objc2::topics::swift - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="objc2" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0-nightly (b925a865e 2025-10-09)" data-channel="nightly" data-search-js="search-8d3311b9.js" data-stringdex-js="stringdex-828709d0.js" data-settings-js="settings-c38705f0.js" ><script src="../../../static.files/storage-e2aeef58.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Module swift</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../objc2/index.html">objc2</a><span class="version">0.6.3</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module swift</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#interoperating-with-swift" title="Interoperating with Swift">Interoperating with Swift</a><ul><li><a href="#exposing-c-apis-with-_cdecl" title="Exposing C APIs with `@_cdecl`">Exposing C APIs with <code>@_cdecl</code></a></li><li><a href="#exposing-objective-c-apis-with-objc" title="Exposing Objective-C APIs with `@objc`">Exposing Objective-C APIs with <code>@objc</code></a></li><li><a href="#further-research" title="Further research">Further research</a></li></ul></li></ul></section><div id="rustdoc-modnav"><h2><a href="../index.html">In objc2::<wbr>topics</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../../index.html">objc2</a>::<wbr><a href="../index.html">topics</a></div><h1>Module <span>swift</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../src/objc2/topics/mod.rs.html#24">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="interoperating-with-swift"><a class="doc-anchor" href="#interoperating-with-swift">§</a>Interoperating with Swift</h2>
+<p>Automatically mapping Apple’s Swift-only frameworks is out of scope for the <code>objc2</code> project, see <a href="https://github.com/madsmtm/objc2/issues/524">#524</a> for discussion.</p>
+<p>That said, if you need to interface with Swift from Rust, there are a few ways to go about it.</p>
+<h3 id="exposing-c-apis-with-_cdecl"><a class="doc-anchor" href="#exposing-c-apis-with-_cdecl">§</a>Exposing C APIs with <code>@_cdecl</code></h3>
+<p>The simplest way is probably to sidestep <code>objc2</code> directly, and instead expose functionality as <code>@_cdecl("...")</code>.</p>
+<p>Something like the following:</p>
+<div class="example-wrap"><pre class="language-swift"><code>// foo.swift
+
+@_cdecl(&quot;foo&quot;)
+func foo() -&gt; Int32 {
+    return 42;
+}</code></pre></div>
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="comment">// build.rs
+
+</span><span class="kw">fn </span>main() {
+    <span class="comment">// Somehow invoke `swiftc` to compile the library.
+    // You probably want to use a helper library for this!
+    </span><span class="kw">let </span>status = std::process::Command(<span class="string">"swiftc"</span>)
+        .arg(<span class="string">"foo.swift"</span>)
+        .arg(<span class="string">"-emit-library"</span>)
+        .status()
+        .unwrap();
+    <span class="macro">assert!</span>(status.success());
+
+    <span class="comment">// And somehow tell Cargo to link the library.
+    </span><span class="macro">println!</span>(<span class="string">"cargo::rustc-link-lib=foo"</span>);
+}</code></pre></div>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="comment">// main.rs
+
+</span><span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="kw">fn </span>foo() -&gt; i32;
+}
+
+<span class="kw">fn </span>main() {
+    <span class="macro">println!</span>(<span class="string">"foo returned {}"</span>, <span class="kw">unsafe </span>{ foo() });
+}</code></pre></div><h3 id="exposing-objective-c-apis-with-objc"><a class="doc-anchor" href="#exposing-objective-c-apis-with-objc">§</a>Exposing Objective-C APIs with <code>@objc</code></h3>
+<p>Building on the above approach, you could instead expose an Objective-C API using <code>@objc</code>, and then map that to Rust using <code>objc2</code>. Something like the following:</p>
+<div class="example-wrap"><pre class="language-swift"><code>// foo.swift
+
+import Foundation
+
+@objc(Foo) class Foo: NSObject {
+    @objc var foo: Int32 = 42;
+
+    @objc func doStuff() {
+        print(&quot;foo \(foo)&quot;)
+    }
+}</code></pre></div>
+<p>You can view the Objective-C interface for this with <code>swiftc file.swift -emit-objc-header</code>.</p>
+<p>Mapping this to Rust would then look something like:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="comment">// main.rs
+
+</span><span class="kw">use </span>objc2::rc::{Allocated, Retained};
+<span class="kw">use </span>objc2::runtime::NSObject;
+<span class="kw">use </span>objc2::{extern_class, extern_methods, AnyThread};
+
+<span class="macro">extern_class!</span>(
+    <span class="attr">#[<span class="kw">unsafe</span>(<span class="kw">super</span>(NSObject))]
+    #[name = <span class="string">"Foo"</span>] </span><span class="comment">// Matching the name in @objc(Foo)
+    </span><span class="kw">pub struct </span>Foo;
+);
+
+<span class="attr">#[allow(non_snake_case)]
+</span><span class="kw">impl </span>Foo {
+    <span class="macro">extern_methods!</span>(
+        <span class="comment">// Generated by the Swift compiler.
+        </span><span class="attr">#[<span class="kw">unsafe</span>(method(init))]
+        </span><span class="kw">pub fn </span>init(this: Allocated&lt;<span class="self">Self</span>&gt;) -&gt; Retained&lt;<span class="self">Self</span>&gt;;
+
+        <span class="comment">// Property accessors.
+        </span><span class="attr">#[<span class="kw">unsafe</span>(method(foo))]
+        </span><span class="kw">pub fn </span>foo(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; i32;
+        <span class="attr">#[<span class="kw">unsafe</span>(method(setFoo:))]
+        </span><span class="kw">pub fn </span>setFoo(<span class="kw-2">&amp;</span><span class="self">self</span>, value: i32);
+
+        <span class="comment">// Method.
+        </span><span class="attr">#[<span class="kw">unsafe</span>(method(doStuff))]
+        </span><span class="kw">pub fn </span>doStuff(<span class="kw-2">&amp;</span><span class="self">self</span>);
+    );
+}
+
+<span class="kw">fn </span>main() {
+    <span class="kw">let </span>obj = Foo::init(Foo::alloc());
+    <span class="macro">assert_eq!</span>(obj.foo(), <span class="number">42</span>);
+    obj.setFoo(<span class="number">10</span>);
+    obj.doStuff();
+}</code></pre></div>
+<p>The plan for the future is to allow you to automatically map the Objective-C API that the Swift compiler generated using <code>bindgen</code>, see <a href="https://github.com/madsmtm/objc2/issues/729">#729</a>.</p>
+<h3 id="further-research"><a class="doc-anchor" href="#further-research">§</a>Further research</h3>
+<p>To my knowledge, there exist a few projects in the Rust ecosystem that help with some of this:</p>
+<ul>
+<li><a href="https://github.com/Brendonovich/swift-rs"><code>swift-rs</code></a></li>
+<li><a href="https://github.com/chinedufn/swift-bridge"><code>swift-bridge</code></a></li>
+<li><a href="https://github.com/nvzqz/swift-bindgen"><code>swift-bindgen</code></a></li>
+<li><a href="https://github.com/mozilla/uniffi-rs">UniFFI</a></li>
+</ul>
+</div></details></section></div></main></body></html>

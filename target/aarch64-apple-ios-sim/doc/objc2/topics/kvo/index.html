@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Key-Value Observing"><title>objc2::topics::kvo - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="objc2" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0-nightly (b925a865e 2025-10-09)" data-channel="nightly" data-search-js="search-8d3311b9.js" data-stringdex-js="stringdex-828709d0.js" data-settings-js="settings-c38705f0.js" ><script src="../../../static.files/storage-e2aeef58.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Module kvo</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../objc2/index.html">objc2</a><span class="version">0.6.3</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module kvo</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#key-value-observing" title="Key-Value Observing">Key-Value Observing</a><ul><li><a href="#example" title="Example">Example</a></li></ul></li></ul></section><div id="rustdoc-modnav"><h2><a href="../index.html">In objc2::<wbr>topics</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../../index.html">objc2</a>::<wbr><a href="../index.html">topics</a></div><h1>Module <span>kvo</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../src/objc2/topics/mod.rs.html#14">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="key-value-observing"><a class="doc-anchor" href="#key-value-observing">§</a>Key-Value Observing</h2>
+<p>Key-Value Observing (KVO) is a mechanism that allows an object to be notified of changes to properties of another object.</p>
+<p>This is exposed via the <code>NSKeyValueCoding</code> and <code>NSKeyValueObserving</code> categories / informal protocols on <code>NSObject</code>.</p>
+<p>See Apple’s documentation on <a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/KeyValueCoding/index.html">Key-Value Coding</a>, <a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/KeyValueObserving/KeyValueObserving.html">Key-Value Observing</a> and <a href="https://developer.apple.com/documentation/swift/using-key-value-observing-in-swift">Swift’s documentation on KVO</a> for more information.</p>
+<h3 id="example"><a class="doc-anchor" href="#example">§</a>Example</h3>
+<p>Create a helper class to help with observing key-value changes.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>core::ffi::c_void;
+<span class="kw">use </span>core::ptr;
+
+<span class="kw">use </span>objc2::rc::Retained;
+<span class="kw">use </span>objc2::runtime::AnyObject;
+<span class="kw">use </span>objc2::{define_class, msg_send, AnyThread, ClassType, DefinedClass};
+<span class="kw">use </span>objc2_foundation::{
+    ns_string, NSCopying, NSDictionary, NSKeyValueChangeKey, NSKeyValueObservingOptions, NSObject,
+    NSObjectNSKeyValueObserverRegistration, NSObjectProtocol, NSString,
+};
+
+<span class="kw">struct </span>Ivars {
+    object: Retained&lt;NSObject&gt;,
+    key_path: Retained&lt;NSString&gt;,
+    handler: Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>NSDictionary&lt;NSKeyValueChangeKey, AnyObject&gt;) + <span class="lifetime">'static</span>&gt;,
+}
+
+<span class="macro">define_class!</span>(
+    <span class="comment">// SAFETY:
+    // - The superclass NSObject does not have any subclassing requirements.
+    // - MyObserver implements `Drop` and ensures that:
+    //   - It does not call an overridden method.
+    //   - It does not `retain` itself.
+    </span><span class="attr">#[<span class="kw">unsafe</span>(<span class="kw">super</span>(NSObject))]
+    #[ivars = Ivars]
+    </span><span class="kw">struct </span>MyObserver;
+
+    <span class="kw">impl </span>MyObserver {
+        <span class="attr">#[<span class="kw">unsafe</span>(method(observeValueForKeyPath:ofObject:change:context:))]
+        </span><span class="kw">fn </span>observe_value(
+            <span class="kw-2">&amp;</span><span class="self">self</span>,
+            _key_path: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>NSString&gt;,
+            _object: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>AnyObject&gt;,
+            change: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>NSDictionary&lt;NSKeyValueChangeKey, AnyObject&gt;&gt;,
+            _context: <span class="kw-2">*mut </span>c_void,
+        ) {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(change) = change {
+                (<span class="self">self</span>.ivars().handler)(change);
+            } <span class="kw">else </span>{
+                (<span class="self">self</span>.ivars().handler)(<span class="kw-2">&amp;</span>NSDictionary::new());
+            }
+        }
+    }
+
+    <span class="kw">unsafe impl </span>NSObjectProtocol <span class="kw">for </span>MyObserver {}
+);
+
+<span class="kw">impl </span>MyObserver {
+    <span class="kw">fn </span>new(
+        object: Retained&lt;NSObject&gt;,
+        key_path: <span class="kw-2">&amp;</span>NSString,
+        options: NSKeyValueObservingOptions,
+        <span class="comment">// TODO: Thread safety? This probably depends on whether the observed
+        // object is later moved to another thread.
+        </span>handler: <span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>NSDictionary&lt;NSKeyValueChangeKey, AnyObject&gt;) + <span class="lifetime">'static </span>+ Send + Sync,
+    ) -&gt; Retained&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">let </span>observer = <span class="self">Self</span>::alloc().set_ivars(Ivars {
+            object,
+            key_path: key_path.copy(),
+            handler: Box::new(handler),
+        });
+        <span class="kw">let </span>observer: Retained&lt;<span class="self">Self</span>&gt; = <span class="kw">unsafe </span>{ <span class="macro">msg_send!</span>[<span class="kw">super</span>(observer), init] };
+
+        <span class="comment">// SAFETY: We make sure to un-register the observer before it's deallocated.
+        //
+        // Passing `NULL` as the `context` parameter here is fine, as the observer does not
+        // have any subclasses, and the superclass (NSObject) is not observing anything.
+        </span><span class="kw">unsafe </span>{
+            observer
+                .ivars()
+                .object
+                .addObserver_forKeyPath_options_context(
+                    <span class="kw-2">&amp;</span>observer,
+                    key_path,
+                    options,
+                    ptr::null_mut(),
+                );
+        }
+
+        observer
+    }
+}
+
+<span class="kw">impl </span>Drop <span class="kw">for </span>MyObserver {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">unsafe </span>{
+            <span class="self">self</span>.ivars()
+                .object
+                .removeObserver_forKeyPath(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.ivars().key_path);
+        }
+    }
+}
+
+<span class="kw">fn </span>main() {
+    <span class="kw">let </span>obj;
+
+    <span class="kw">let </span>_observer = MyObserver::new(
+        obj,
+        <span class="macro">ns_string!</span>(<span class="string">"myKeyPath"</span>),
+        NSKeyValueObservingOptions::New | NSKeyValueObservingOptions::Old,
+        |change| {
+            <span class="macro">println!</span>(<span class="string">"object changed: {:?}"</span>, change);
+        },
+    );
+
+    <span class="comment">// Do something that triggers the observer
+</span>}</code></pre></div></div></details></section></div></main></body></html>

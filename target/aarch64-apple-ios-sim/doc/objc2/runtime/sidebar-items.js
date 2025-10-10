@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["AnyClass","AnyObject","AnyProtocol","Bool","ClassBuilder","Ivar","Method","NSObject","NSZone","ProtocolBuilder","ProtocolObject","Sel","VerificationError"],"trait":["ImplementedBy","MessageReceiver","MethodImplementation","NSObjectProtocol"],"type":["Class","Imp","Object","Protocol"]};
