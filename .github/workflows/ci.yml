@@ -40,14 +40,14 @@ jobs:
         run: |
           make ${{matrix.make-cmd}}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         id: ui-tests
         with:
           name: ui-tests-${{matrix.os}}-${{matrix.make-cmd}}
           path: ui_tests.png
           compression-level: 0 # no compression
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: ui-test-app-logs-${{matrix.os}}-${{matrix.make-cmd}}
           path: |
