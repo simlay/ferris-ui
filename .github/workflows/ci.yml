@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@nightly
         with:
           targets: aarch64-apple-ios-sim
@@ -24,7 +24,7 @@ jobs:
         os: [ macos-15, macos-26 ]
         make-cmd: [ui-tests-run-swift, ui-tests-run]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: start simulator
         run: |
           xcrun simctl boot 'iPhone 16e'
