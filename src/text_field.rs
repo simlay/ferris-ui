@@ -11,6 +11,7 @@ pub struct TextFieldState {
     delegate: RefCell<Retained<TextFieldDelegate>>,
     proxy: EventLoopProxy<GUIEvent>,
     event_fn: RefCell<Option<Box<dyn Fn(&TextField)>>>,
+    place_holder_text: RefCell<Option<String>>,
 }
 
 define_class!(
@@ -68,19 +69,26 @@ impl TextField {
             delegate: RefCell::new(delegate),
             proxy,
             event_fn: RefCell::new(None),
+            place_holder_text: RefCell::new(None),
         });
         let this: Retained<TextField> = unsafe { msg_send![super(this), init] };
         {
             let delegate = this.ivars().delegate.borrow();
             this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone())));
         }
-        this.setPlaceholder(Some(&NSString::from_str("THIS IS SOME INPUT")));
+
 
         this
     }
 
     pub fn get_text(&self) -> Option<String> {
         self.text().map(|t| t.to_string())
+    }
+
+    pub fn with_place_holder_text(self: Retained<Self>, place_holder: String) -> Retained<Self> {
+        *self.ivars().place_holder_text.borrow_mut() = Some(place_holder);
+        self.setPlaceholder(Some(&NSString::from_str("THIS IS SOME INPUT")));
+        self
     }
 
     fn text_changed(&self) {
@@ -99,9 +107,11 @@ impl View for TextField {
     fn raw_view(&self) -> Box<&UIView> {
         Box::new(self.as_ref())
     }
+    /*
     #[cfg(feature = "nightly")]
     fn with_event_fn(self: Retained<Self>, event_fn: Box<dyn Fn(&Self)>) -> Retained<Self> {
         *self.ivars().event_fn.borrow_mut() = Some(event_fn);
         self
     }
+    */
 }

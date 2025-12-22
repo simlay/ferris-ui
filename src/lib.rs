@@ -1,35 +1,61 @@
-#![cfg_attr(feature = "nightly-debug", feature(core_intrinsics))]
-#![cfg_attr(feature = "nightly", feature(arbitrary_self_types))]
+#![feature(core_intrinsics)]
+#![feature(arbitrary_self_types)]
 mod app;
-//mod image;
 pub mod screenshot;
-//mod switch;
 mod text;
-//mod text_field;
+mod text_field;
 mod text_view;
 mod vstack;
 mod navigator;
 
-pub use objc2;
-pub use objc2_ui_kit;
+#[cfg(test)]
+mod test;
+#[cfg(test)]
+pub use test::{TestResult};
+
 pub use winit;
+cfg_if::cfg_if! {
+    if #[cfg(target_os = "ios")] {
+        pub type EnvMarker  = objc2::MainThreadMarker;
+        pub type NativeView = objc2_ui_kit::UIView;
+        pub type NativeBox<T> = objc2::rc::Retained<T>;
+        pub use objc2;
+        pub use objc2_ui_kit;
+    } else if #[cfg(target_os = "android")] {
+        pub type EnvMarker  = jni::JNIEnv;
+        pub type NativeView = jni::objects::JValue;
+        pub type NativeBox<T> = Box<T>;
+    }
+}
+
 
 pub use app::App;
 /*
+mod image;
+mod switch;
 pub use image::{Image, ImageType};
 pub use switch::Switch;
-pub use text_field::TextField;
 */
+pub use text_field::TextField;
 
 pub use text::Text;
-pub use text_view::TextView;
+//pub use text_view::UITextView;
+pub use text_view::TextEditor;
 pub use vstack::VStack;
 
-use objc2::rc::Retained;
-use objc2_ui_kit::{UIColor, UIView};
-
 pub trait View {
-    fn raw_view(&self) -> Box<&UIView>;
+    fn raw_view(&self) -> Box<&crate::NativeView>;
+    fn kind(&self) -> String {
+        "Default".into()
+    }
+
+    /*
+    fn with_event_fn(self: crate::NativeBox<Self>, _event_fn: Box<dyn Fn(&Self)>) -> crate::NativeBox<Self>
+    where
+        Self: Sized,
+    {
+        self
+    }
     fn with_background_color(self, color: Retained<UIColor>) -> Self
     where
         Self: Sized,
@@ -39,21 +65,11 @@ pub trait View {
 
         self
     }
-
-    #[cfg(feature = "nightly")]
-    fn with_event_fn(self: Retained<Self>, _event_fn: Box<dyn Fn(&Self)>) -> Retained<Self>
-    where
-        Self: Sized,
-    {
-        self
-    }
-    fn kind(&self) -> String {
-        "Default".into()
-    }
+    */
 }
 
-impl<T: AsRef<UIView>> View for Retained<T> {
-    fn raw_view(&self) -> Box<&UIView> {
+impl<T: AsRef<crate::NativeView>> View for crate::NativeBox<T> {
+    fn raw_view(&self) -> Box<&crate::NativeView> {
         Box::new(self.as_ref())
     }
 }

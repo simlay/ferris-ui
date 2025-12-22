@@ -1,9 +1,10 @@
-#EMULATOR='iPad Pro 13-inch (M4)'
 EMULATOR='iPhone 16e'
-#EMULATOR='A40DB8CD-347C-4DDF-9AD0-B16D2A57A41D'
 OTHER_EMULATOR='iPhone 16e'
 DEVICE_ID=aoeu
 TEAM_ID=aoeu
+
+DINGHY_CONTAINER_CMD=shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy
+XCTEST_CONTAINER_CMD=shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner
 
 .EXPORT_ALL_VARIABLES:
 SIMCTL_CHILD_RUST_BACKTRACE=full
@@ -26,8 +27,7 @@ debug-wait: install
 	xcrun simctl launch --wait-for-debugger --console --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
 
 run: install
-	xcrun simctl launch --console --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
-
+	SIMCTL_CHILD_LLVM_PROFILE_FILE="$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy data)/Documents/dinghy.profraw" xcrun simctl launch --console --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
 
 CURR_EMULATOR:=$(shell cat ./target/emulator)
 run-no-wait: bundle
@@ -139,8 +139,33 @@ ui-tests-xctest-configuration: ui-tests-install
 		> ui_tests/ui_tests.xctestconfiguration
 
 ui-tests-run: install ui-tests-install ui-tests-xctest-configuration
-	xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner 2>&1 | tee $(PWD)/stdout.txt
-	make ui-tests-cp-screenshot
+	SIMCTL_CHILD_DINGHY_LLVM_PROFILE_FILE="$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy data)/Documents/dinghy.profraw" SIMCTL_CHILD_LLVM_PROFILE_FILE="$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner data)/Documents/xctrunner.profraw" xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner 2>&1 | tee $(PWD)/stdout.txt
+	#make ui-tests-cp-screenshot
+
+ui-tests-cp-screenshot:
+	cp "$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner data)/Documents/screenshot.png" ui_tests.png
+	sips -Z 1278 ui_tests.png
+
+COV_REPORT=xcrun llvm-cov report -Xdemangler=rustfilt --use-color --ignore-filename-regex='/.cargo/registry' --ignore-filename-regex='/.rustup' -instr-profile
+COV_EXPORT=xcrun llvm-cov export -Xdemangler=rustfilt --ignore-filename-regex='/.cargo/registry' --ignore-filename-regex='/.rustup' --ignore-filename-regex='/.rustup' --format lcov -instr-profile
+
+
+ui-tests-cov: ui-tests-run
+	mkdir -p target/cov
+	cp "$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner data)/Documents/xctrunner.profraw" ./target/cov/xctrunner.profraw
+	cp "$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy data)/Documents/dinghy.profraw" ./target/cov/dinghy.profraw
+	du -hs ./target/cov/*.profraw
+	xcrun llvm-profdata merge -sparse ./target/cov/xctrunner.profraw -o ./target/cov/xctrunner.profdata
+	xcrun llvm-profdata merge -sparse    ./target/cov/dinghy.profraw -o ./target/cov/dinghy.profdata
+	$(COV_REPORT) ./target/cov/xctrunner.profdata ./target/aarch64-apple-ios-sim/debug/ui_tests
+	$(COV_REPORT) ./target/cov/dinghy.profdata    ./target/aarch64-apple-ios-sim/debug/examples/simple
+	$(COV_EXPORT) ./target/cov/xctrunner.profdata ./target/aarch64-apple-ios-sim/debug/ui_tests        > ./target/cov/xctrunner-lcov.info
+	$(COV_EXPORT) ./target/cov/dinghy.profdata    ./target/aarch64-apple-ios-sim/debug/examples/simple > ./target/cov/dinghy-lcov.info
+	genhtml ./target/cov/dinghy-lcov.info ./target/cov/xctrunner-lcov.info -o ./target/cov/
+	# This could be for merging test coverage from `cargo test`
+	#cp "$(shell xcrun simctl get_app_container $(EMULATOR) Dinghy data)/Documents/tests.profraw" ./target/cov/tests.profraw
+	#xcrun llvm-profdata merge -sparse    ./target/cov/tests.profraw  -o ./target/cov/tests.profdata
+	#$(COV_REPORT) ./target/cov/tests.profdata    ./target/dinghy/ferris_ui-51928494b02468a5/ferris-ui/Dinghy.app/Dinghy
 
 install-swift:
 	make -C ./swift-example/ install
@@ -150,6 +175,3 @@ ui-tests-run-swift: install-swift ui-tests-install ui-tests-xctest-configuration
 		xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner 2>&1 | tee $(PWD)/stdout.txt
 	make ui-tests-cp-screenshot
 
-ui-tests-cp-screenshot:
-	cp "$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner data)/Documents/screenshot.png" ui_tests.png
-	sips -Z 1278 ui_tests.png

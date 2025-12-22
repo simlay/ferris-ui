@@ -1,14 +1,11 @@
-use ferris_ui::objc2::MainThreadMarker;
-use ferris_ui::objc2_ui_kit::{UIColor, UIView};
+use ferris_ui::{
+    NativeView,
+    EnvMarker,
+};
 use ferris_ui::winit::event_loop::{ControlFlow, EventLoop, EventLoopProxy};
-//use ferris_ui::{App, GUIEvent, Image, ImageType, Switch, Text, TextField, TextView, VStack, View};
-use ferris_ui::{App, GUIEvent, Text, TextView, VStack, View};
+use ferris_ui::{App, GUIEvent, Text, TextEditor, VStack, View};
 
 fn main() {
-    let args: Vec<String> = std::env::args().collect();
-    if args.get(1) == Some(&"--record".to_string()) {
-        println!("ARGS: {:?}", args);
-    }
     env_logger::init();
     let event_loop: EventLoop<GUIEvent> = EventLoop::with_user_event().build().unwrap();
     //let event_loop = EventLoop::new().unwrap();
@@ -34,8 +31,9 @@ struct MyView {
 
 impl MyView {
     pub fn new(proxy: EventLoopProxy<GUIEvent>) -> Box<dyn View> {
-        let mtm = MainThreadMarker::new().unwrap();
-        let label = Text::new(mtm).with_text("Current text : ");
+        let mtm = EnvMarker::new().expect("Failed to get main thread marker");
+        //let label = UIText::new(mtm).with_text("Current text : ");
+        let label : Text = Text::new("foobar", mtm);
 
         /*
         let switch_label_cloned = label.clone();
@@ -55,22 +53,30 @@ impl MyView {
         */
 
         let label_for_text_view = label.clone();
-        let label_for_text_field = label.clone();
-        let text_view = TextView::new(mtm, proxy.clone())
+        let text_view = TextEditor::new(mtm/*, proxy.clone()*/)
             .with_event_fn(Box::new(move |text_field| {
                 let new_text = text_field.get_text();
-                let text = format!("Current text: {new_text}");
+                if new_text == "exit" {
+                    std::process::exit(0);
+                }
+                let text = format!("{new_text}");
                 label_for_text_view.set_text(text);
             }))
-            .with_place_holder_text("PLACE HOLDER TEXT".into());
+            /*
+            .with_place_holder_text("PLACE HOLDER TEXT".into())
+            */
+                ;
 
         /*
+        let label_for_text_field = label.clone();
         let text_field = TextField::new(mtm, proxy.clone())
             .with_event_fn(Box::new(move |text_field| {
                 let new_text = text_field.get_text().unwrap_or_default();
                 let text = format!("Current text: {new_text}");
                 label_for_text_field.set_text(text);
-            }));
+            }))
+            .with_place_holder_text("PLACE HOLDER TEXT".into())
+                ;
 
         let image = Image::new(mtm, ImageType::SystemIcon("clock".into()));
         */
@@ -82,18 +88,19 @@ impl MyView {
                 /*
                 Box::new(image.clone()),
                 Box::new(switch.clone()),
-                Box::new(text_field),
                 */
+                //Box::new(text_field),
                 Box::new(text_view),
             ],
         )
-        .with_background_color(UIColor::whiteColor());
+            ;
+        //.with_background_color(UIColor::whiteColor());
 
         Box::new(Self { proxy, vstack })
     }
 }
 impl View for MyView {
-    fn raw_view(&self) -> Box<&UIView> {
+    fn raw_view(&self) -> Box<&NativeView> {
         Box::new(&self.vstack.raw_view())
     }
 }

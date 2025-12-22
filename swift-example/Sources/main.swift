@@ -26,8 +26,11 @@ struct ContentView: View {
     var body: some View {
         VStack {
             Text("\(text)")        .border(.green)
-            TextField("input", text: $text) .border(.green)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            //TextField("input", text: $text) .border(.green)
+            //.textFieldStyle(RoundedBorderTextFieldStyle())
+            //.padding()
+            //.border(.green)
+            TextEditor(text: $text)                          .border(.green)
         }.border(.red)
     }
 }

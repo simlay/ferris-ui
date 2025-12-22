@@ -13,71 +13,30 @@ nightly = []
 nightly-debug = []
 default = ["nightly"]
 
+[dependencies]
+cfg-if = "1.0"
+
 [target.'cfg(target_os = "ios")'.dependencies]
+winit = { version = "0.30.12", features = ["rwh_06" ] }
 objc2 = "0.6"
-winit = { version = "0.30", features = ["rwh_06" ] }
 objc2-core-foundation = "0.3"
 log = "0.4"
+objc2-quartz-core = "0.3"
+objc2-foundation = "0.3"
+objc2-ui-kit = "0.3"
+
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.21"
+winit = { version = "0.30.12", features = ["rwh_06", "android-native-activity"] }
 
 [target.'cfg(target_os = "ios")'.dev-dependencies]
 oslog = "0.2"
 env_logger = "0.11"
 
 
-[target.'cfg(target_os = "ios")'.dependencies.objc2-ui-kit]
-version = "0.3"
-features = [
-#"all",
-    "UIApplication",
-    "UIDevice",
-    "UIEvent",
-    "UIGeometry",
-    "UIGestureRecognizer",
-    "UIOrientation",
-    "UIPanGestureRecognizer",
-    "UIPinchGestureRecognizer",
-    "UIResponder",
-    "UIRotationGestureRecognizer",
-    "UIScreen",
-    "UIScreenMode",
-    "UITapGestureRecognizer",
-    "UITouch",
-    "UITraitCollection",
-    "UIView",
-    "UIViewController",
-    "UIWindow",
-    "UITextView",
-    "UIScrollView",
-    "UISwitch",
-
-    "UIControl",
-    "UILabel",
-
-    "UIColor",
-    "UIStackView",
-    "UITabBar",
-    "UIToolbar",
-    "UIBarButtonItem",
-    "UIBarItem",
-]
-[target.'cfg(target_os = "ios")'.dependencies.objc2-foundation]
-version = "0.3"
-features = [
-#"dispatch",
-    "NSArray",
-    "NSEnumerator",
-    "NSGeometry",
-    "NSObjCRuntime",
-    "NSString",
-    "NSProcessInfo",
-    "NSThread",
-    "NSSet",
-]
-[target.'cfg(target_os = "ios")'.dependencies.objc2-quartz-core]
-version = "0.3"
-
 # Let's leave these in if we have to patch it again.
 [patch.crates-io]
+#jni = { path = "../jni-rs/crates/jni/" }
 #objc2-xc-test          = { path = "../objc2/framework-crates/objc2-xc-test" }
 #objc2-xc-ui-automation = { path = "../objc2/framework-crates/objc2-xc-ui-automation" }
 #objc2                  = { path = "../objc2/crates/objc2/"}

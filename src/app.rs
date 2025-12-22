@@ -1,17 +1,17 @@
-use crate::screenshot::{save_image, take_screenshot};
+//use crate::screenshot::{save_image, take_screenshot};
 use crate::{GUIEvent, View};
 use log::debug;
-use objc2::rc::Retained;
-use objc2_ui_kit::UIView;
+
 use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
 use winit::event_loop::{ActiveEventLoop, EventLoopProxy};
 use winit::raw_window_handle::{HasWindowHandle, RawWindowHandle};
 use winit::window::{Window, WindowId};
 
+
 pub struct App {
     window: Option<Window>,
-    root_ui_view: Option<Retained<UIView>>,
+    root_ui_view: Option<crate::NativeBox<crate::NativeView>>,
     root_view_fn: Box<dyn Fn(EventLoopProxy<GUIEvent>) -> Box<dyn View>>,
     root_view: Option<Box<dyn View>>,
     proxy: EventLoopProxy<GUIEvent>,
@@ -34,33 +34,44 @@ impl App {
 impl ApplicationHandler<GUIEvent> for App {
     fn user_event(&mut self, _event_loop: &ActiveEventLoop, event: GUIEvent) {
         //debug!("NEW EVENT: {event:?}");
+        /*
         let view = self.root_ui_view.clone().unwrap();
         let image = take_screenshot(view.bounds().size);
         if let Some(image) = image {
-            save_image(image);
+        save_image(image);
         }
+        */
     }
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         let window = event_loop
             .create_window(Window::default_attributes())
             .unwrap();
 
-        if let Ok(handle) = window.window_handle()
-            && let RawWindowHandle::UiKit(handle) = handle.as_raw()
-        {
-            let ui_view = handle.ui_view.as_ptr();
-            let ui_view: Retained<UIView> = unsafe { Retained::retain(ui_view.cast()) }.unwrap();
-            let root_frame = ui_view.frame();
-            let root_view = (self.root_view_fn)(self.proxy.clone());
-            let root_ui_view = root_view.raw_view();
-            root_ui_view.setFrame(root_frame);
-            ui_view.addSubview(root_ui_view.as_ref());
+        match window.window_handle().map(|handle| handle.as_raw())  {
+            Ok(RawWindowHandle::UiKit(handle)) => {
+                use objc2::rc::Retained;
+                use objc2_ui_kit::UIView;
+                let ui_view = handle.ui_view.as_ptr();
+                let ui_view: Retained<UIView> = unsafe { Retained::retain(ui_view.cast()) }.unwrap();
+                let root_frame = ui_view.frame();
+                let root_view = (self.root_view_fn)(self.proxy.clone());
+                let root_ui_view = root_view.raw_view();
+                root_ui_view.setFrame(root_frame);
+                ui_view.addSubview(root_ui_view.as_ref());
 
-            let bg_color = objc2_ui_kit::UIColor::systemBackgroundColor();
-            objc2_ui_kit::UIColor::labelColor();
-            root_ui_view.setBackgroundColor(Some(&bg_color));
-            self.root_ui_view = Some(ui_view);
-            self.root_view = Some(root_view);
+                let bg_color = objc2_ui_kit::UIColor::systemBackgroundColor();
+                objc2_ui_kit::UIColor::labelColor();
+                root_ui_view.setBackgroundColor(Some(&bg_color));
+                self.root_ui_view = Some(ui_view);
+                self.root_view = Some(root_view);
+            }
+            Ok(RawWindowHandle::AndroidNdk(handle)) => {
+                todo!();
+            }
+            Err(e) => log::error!("Failed to get window handler: {e}"),
+            Ok(other) => {
+                panic!("This window style isn't supported: {other:?}");
+            }
         }
 
         self.window = Some(window);
