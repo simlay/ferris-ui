@@ -3,13 +3,22 @@ OTHER_EMULATOR='iPhone 16e'
 DEVICE_ID=aoeu
 TEAM_ID=aoeu
 
-DINGHY_CONTAINER_CMD=shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy
-XCTEST_CONTAINER_CMD=shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner
+GET_CONTAINER=xcrun simctl get_app_container $(EMULATOR)
+DINGHY_CONTAINER_CMD=$(GET_CONTAINER) com.simlay.net.Dinghy data
+DINGHY_CONTAINER=$(shell $(GET_CONTAINER) com.simlay.net.Dinghy data)
 
-.EXPORT_ALL_VARIABLES:
-SIMCTL_CHILD_RUST_BACKTRACE=full
-SIMCTL_CHILD_RUST_LOG=trace
-SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_tests/ui_tests.xctestconfiguration
+XCTEST_CONTAINER_CMD=$(GET_CONTAINER) com.simlay.net.RustUITests.xctrunner data
+XCTEST_CONTAINER=$(shell $(XCTEST_CONTAINER_CMD))
+LAUNCH=xcrun simctl launch --console --terminate-running-process $(EMULATOR)
+
+#LLVM_COV=xcrun llvm-cov
+#LLVM_PROFDATA=xcrun llvm-profdata
+LLVM_COV=/Users/simlay/.rustup/toolchains/nightly-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-cov
+LLVM_PROFDATA=/Users/simlay/.rustup/toolchains/nightly-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-profdata
+
+COV_REPORT=$(LLVM_COV) report -Xdemangler=rustfilt --use-color --ignore-filename-regex='/.cargo/registry' --ignore-filename-regex='/.rustup' -instr-profile
+COV_EXPORT=$(LLVM_COV) export -Xdemangler=rustfilt --ignore-filename-regex='/.cargo/registry' --ignore-filename-regex='/.rustup' --ignore-filename-regex='/.rustup' --format lcov -instr-profile
+
 
 build:
 	cargo build --target aarch64-apple-ios-sim --all --all-targets
@@ -27,7 +36,7 @@ debug-wait: install
 	xcrun simctl launch --wait-for-debugger --console --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
 
 run: install
-	SIMCTL_CHILD_LLVM_PROFILE_FILE="$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy data)/Documents/dinghy.profraw" xcrun simctl launch --console --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy
+	SIMCTL_CHILD_LLVM_PROFILE_FILE="$(DINGHY_CONTAINER)/Documents/dinghy.profraw" $(LAUNCH) com.simlay.net.Dinghy
 
 CURR_EMULATOR:=$(shell cat ./target/emulator)
 run-no-wait: bundle
@@ -129,7 +138,7 @@ ui-tests-bundle: ui-tests-bundle-tools
 	cp ./target/aarch64-apple-ios-sim/debug/ui_tests  ./RustUITests-Runner.app/Plugins/DinghyUITests.xctest/
 
 ui-tests-install: ui-tests-bundle
-	@xcrun simctl uninstall $(EMULATOR) com.simlay.net.RustUITests.xctrunner
+	#@xcrun simctl uninstall $(EMULATOR) com.simlay.net.RustUITests.xctrunner
 	@xcrun simctl install $(EMULATOR) RustUITests-Runner.app/
 
 ui-tests-xctest-configuration: ui-tests-install
@@ -139,24 +148,20 @@ ui-tests-xctest-configuration: ui-tests-install
 		> ui_tests/ui_tests.xctestconfiguration
 
 ui-tests-run: install ui-tests-install ui-tests-xctest-configuration
-	SIMCTL_CHILD_DINGHY_LLVM_PROFILE_FILE="$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy data)/Documents/dinghy.profraw" SIMCTL_CHILD_LLVM_PROFILE_FILE="$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner data)/Documents/xctrunner.profraw" xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner 2>&1 | tee $(PWD)/stdout.txt
-	#make ui-tests-cp-screenshot
+	SIMCTL_CHILD_DINGHY_LLVM_PROFILE_FILE="$(DINGHY_CONTAINER)/Documents/dinghy.profraw" SIMCTL_CHILD_LLVM_PROFILE_FILE="$(XCTEST_CONTAINER)/Documents/xctrunner.profraw" $(LAUNCH) com.simlay.net.RustUITests.xctrunner 2>&1 | tee $(PWD)/stdout.txt
+	make ui-tests-cp-screenshot
 
 ui-tests-cp-screenshot:
-	cp "$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner data)/Documents/screenshot.png" ui_tests.png
+	cp "$(XCTEST_CONTAINER)/Documents/screenshot.png" ui_tests.png
 	sips -Z 1278 ui_tests.png
-
-COV_REPORT=xcrun llvm-cov report -Xdemangler=rustfilt --use-color --ignore-filename-regex='/.cargo/registry' --ignore-filename-regex='/.rustup' -instr-profile
-COV_EXPORT=xcrun llvm-cov export -Xdemangler=rustfilt --ignore-filename-regex='/.cargo/registry' --ignore-filename-regex='/.rustup' --ignore-filename-regex='/.rustup' --format lcov -instr-profile
-
 
 ui-tests-cov: ui-tests-run
 	mkdir -p target/cov
-	cp "$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.RustUITests.xctrunner data)/Documents/xctrunner.profraw" ./target/cov/xctrunner.profraw
-	cp "$(shell xcrun simctl get_app_container $(EMULATOR) com.simlay.net.Dinghy data)/Documents/dinghy.profraw" ./target/cov/dinghy.profraw
+	cp "$(XCTEST_CONTAINER)/Documents/xctrunner.profraw" ./target/cov/xctrunner.profraw
+	cp "$(DINGHY_CONTAINER)/Documents/dinghy.profraw" ./target/cov/dinghy.profraw
 	du -hs ./target/cov/*.profraw
-	xcrun llvm-profdata merge -sparse ./target/cov/xctrunner.profraw -o ./target/cov/xctrunner.profdata
-	xcrun llvm-profdata merge -sparse    ./target/cov/dinghy.profraw -o ./target/cov/dinghy.profdata
+	$(LLVM_PROFDATA)  merge -sparse ./target/cov/xctrunner.profraw -o ./target/cov/xctrunner.profdata
+	$(LLVM_PROFDATA)  merge -sparse    ./target/cov/dinghy.profraw -o ./target/cov/dinghy.profdata
 	$(COV_REPORT) ./target/cov/xctrunner.profdata ./target/aarch64-apple-ios-sim/debug/ui_tests
 	$(COV_REPORT) ./target/cov/dinghy.profdata    ./target/aarch64-apple-ios-sim/debug/examples/simple
 	$(COV_EXPORT) ./target/cov/xctrunner.profdata ./target/aarch64-apple-ios-sim/debug/ui_tests        > ./target/cov/xctrunner-lcov.info
@@ -175,3 +180,8 @@ ui-tests-run-swift: install-swift ui-tests-install ui-tests-xctest-configuration
 		xcrun simctl launch --console $(EMULATOR) com.simlay.net.RustUITests.xctrunner 2>&1 | tee $(PWD)/stdout.txt
 	make ui-tests-cp-screenshot
 
+.EXPORT_ALL_VARIABLES:
+SIMCTL_CHILD_RUST_BACKTRACE=full
+SIMCTL_CHILD_RUST_LOG=trace
+SIMCTL_CHILD_XCTestConfigurationFilePath=$(PWD)/ui_tests/ui_tests.xctestconfiguration
+SIMCTL_CHILD_LLVM_PROFILE_VERBOSE_ERRORS=1

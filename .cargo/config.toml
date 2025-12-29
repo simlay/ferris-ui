@@ -1,3 +1,9 @@
 [build]
 target = 'aarch64-apple-ios-sim'
-rustflags = ["-C", "instrument-coverage"]
+rustflags = [
+    "-C", "instrument-coverage",
+#"-C", "link-arg=-Wl,-segprot,__LLVM_COV,rwx,rwx",
+#"-C", "link-arg=-Wl,-no_compact_unwind"
+#"-C", "link-arg=-Wl,-segprot,__LLVM_COV,rwx,rwx",
+    #"-C", "link-arg=-Wl,-segalign,0x4000"
+]
