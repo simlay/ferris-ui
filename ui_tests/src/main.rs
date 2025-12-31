@@ -61,17 +61,13 @@ fn take_screenshot(app: &XCUIApplication, device: &XCUIDevice) {
     }
     //println!("APPLICATION LAUNCH ENV: {:?}", app.launchEnvironment());
     app.launch();
+    device.setOrientation(ferris_ui::objc2_ui_kit::UIDeviceOrientation::Portrait);
 
-
-    //save_screenshot(&app.screenshot(), "streenshot".into());
-    let root_node = app.windows().element();
-    let foo = root_node.screenshot();
-    println!("ROOT NODE: {}", root_node.debugDescription());
-    let text_view = root_node.textViews().elementBoundByIndex(1);
+    save_screenshot(&app.screenshot(), "screenshot".into());
+    let text_view = app.textViews().element();
     text_view.tap();
     text_view.typeText(&NSString::from_str("THIS IS SOME TEXT"));
 
-    device.setOrientation(ferris_ui::objc2_ui_kit::UIDeviceOrientation::LandscapeRight);
     let siri = device.siriService();
     siri.activateWithVoiceRecognitionText(&NSString::from_str("What is the capital of germany?"));
 
@@ -80,13 +76,9 @@ fn take_screenshot(app: &XCUIApplication, device: &XCUIDevice) {
     save_screenshot(&app.screenshot(), "screenshot".into());
     device.pressButton(objc2_xc_ui_automation::XCUIDeviceButton::Home);
     press_home(&device);
-
-    // TODO: For some reason, we have to terminate the application
-    // manually when running outside Xcode?
-    //app.terminate();
 }
+
 fn press_home(device: &XCUIDevice) {
-    println!("PRESSED HOME BUTTON");
     unsafe {
         let _: () = ferris_ui::objc2::msg_send![device, pressButton: 1_isize];
     };
