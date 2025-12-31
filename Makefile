@@ -16,8 +16,10 @@ LAUNCH=xcrun simctl launch --console --terminate-running-process $(EMULATOR)
 LLVM_COV=/Users/simlay/.rustup/toolchains/nightly-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-cov
 LLVM_PROFDATA=/Users/simlay/.rustup/toolchains/nightly-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-profdata
 
-COV_REPORT=$(LLVM_COV) report -Xdemangler=rustfilt --use-color --ignore-filename-regex='/.cargo/registry' --ignore-filename-regex='/.rustup' -instr-profile
-COV_EXPORT=$(LLVM_COV) export -Xdemangler=rustfilt --ignore-filename-regex='/.cargo/registry' --ignore-filename-regex='/.rustup' --ignore-filename-regex='/.rustup' --format lcov -instr-profile
+COV_IGNORE_LIST=--ignore-filename-regex='/.cargo/registry' --ignore-filename-regex='/.rustup' --ignore-filename-regex='/objc2'
+
+COV_REPORT=$(LLVM_COV) report -Xdemangler=rustfilt --use-color   $(COV_IGNORE_LIST) -instr-profile
+COV_EXPORT=$(LLVM_COV) export -Xdemangler=rustfilt --format lcov $(COV_IGNORE_LIST) -instr-profile
 
 
 build:
@@ -59,11 +61,17 @@ screenshot: install
 	xcrun simctl io $(EMULATOR) screenshot screenshot.png
 	sips -Z 1278 screenshot.png
 
-record: install
+record-and-stop: install
 	xcrun simctl launch --stdout=$(PWD)/stdout.txt --stderr=$(PWD)/stderr.txt --terminate-running-process $(EMULATOR) com.simlay.net.Dinghy --record
 	xcrun simctl io $(EMULATOR) recordVideo -f record.mp4 &
 	sleep 2
 	ps | grep 'simctl io $(EMULATOR)  recordVideo' | grep -v grep | awk '{print $$1}' | xargs kill -s SIGINT
+
+record:
+	xcrun simctl io $(EMULATOR) recordVideo -f record.mp4
+
+compress-recording:
+	ffmpeg -i record.mp4 -c:v libx264 -crf 30 record-compressed.mp4
 
 gh-summary:
 	@touch stdout.txt stderr.txt

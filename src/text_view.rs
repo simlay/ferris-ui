@@ -19,8 +19,7 @@ impl TextEditor {
         }
     }
     pub fn with_event_fn(self: Self, event_fn: Box<dyn Fn(&native::UITextView)>) -> Self {
-        use objc2::DefinedClass;
-        *self.inner.ivars().event_fn.borrow_mut() = Some(event_fn);
+        *self.inner.event_fn().borrow_mut() = Some(event_fn);
         self
     }
 }
@@ -30,7 +29,7 @@ mod native {
     use super::*;
     use objc2::rc::Retained;
     use objc2::runtime::ProtocolObject;
-    use objc2::{define_class, msg_send, DeclaredClass, MainThreadOnly};
+    use objc2::{define_class, msg_send, DeclaredClass, MainThreadOnly, Ivars};
     use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol, NSString};
     use objc2_ui_kit::{UIColor, UIResponder, UIScrollViewDelegate, UITextViewDelegate, UIView};
     use std::cell::RefCell;
@@ -46,8 +45,12 @@ mod native {
         #[unsafe(super(objc2_ui_kit::UITextView, UIView, UIResponder, NSObject))]
         #[thread_kind = MainThreadOnly]
         #[name = "FerrisUITextView"]
-        #[ivars = TextViewState]
-        pub struct UITextView;
+        //#[ivars = TextViewState]
+        pub struct UITextView {
+            delegate: RefCell<Retained<TextFieldDelegate>>,
+            pub event_fn: RefCell<Option<Box<dyn Fn(&UITextView)>>>,
+            place_holder_text: RefCell<Option<String>>,
+        }
 
         impl UITextView { }
     );
@@ -84,7 +87,7 @@ mod native {
         pub fn new(mtm: MainThreadMarker/*, proxy: EventLoopProxy<GUIEvent>*/) -> Retained<Self> {
             let delegate: Retained<TextFieldDelegate> =
                 unsafe { objc2::msg_send![TextFieldDelegate::alloc(mtm), init] };
-            let this = Self::alloc(mtm).set_ivars(TextViewState {
+            let this = Self::alloc(mtm).set_ivars(Ivars::<Self> {
                 delegate: RefCell::new(delegate),
                 //proxy,
                 event_fn: RefCell::new(None),
@@ -92,7 +95,7 @@ mod native {
             });
             let this: Retained<UITextView> = unsafe { msg_send![super(this), init] };
             {
-                let delegate = this.ivars().delegate.borrow();
+                let delegate = this.delegate().borrow();
                 unsafe {
                     this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone())));
                 }
@@ -112,8 +115,7 @@ mod native {
 
         pub fn ended_editing(&self) {
             let place_holder_text = self
-                .ivars()
-                .place_holder_text
+                .place_holder_text()
                 .borrow()
                 .clone()
                 .unwrap_or_default();
@@ -124,11 +126,11 @@ mod native {
         }
 
         fn text_changed(&self) {
-            let text = self.get_text();
+            //let text = self.get_text();
 
             //let _ = self.ivars().proxy.send_event(GUIEvent::Text(text.clone()));
 
-            if let Some(event_fn) = &*self.ivars().event_fn.borrow() {
+            if let Some(event_fn) = &*self.event_fn().borrow() {
                 event_fn(self);
             }
         }
@@ -137,7 +139,7 @@ mod native {
             self: Retained<Self>,
             place_holder: String,
         ) -> Retained<Self> {
-            *self.ivars().place_holder_text.borrow_mut() = Some(place_holder);
+            *self.place_holder_text().borrow_mut() = Some(place_holder);
             self
         }
     }

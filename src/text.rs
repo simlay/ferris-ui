@@ -25,7 +25,7 @@ impl Text {
 
 mod native {
     use objc2::rc::{PartialInit, Retained};
-    use objc2::{MainThreadMarker, MainThreadOnly, define_class, msg_send};
+    use objc2::{MainThreadMarker, MainThreadOnly, define_class, msg_send, Ivars};
     use objc2_foundation::NSObject;
     use objc2_ui_kit::{UILabel, UIView};
 
@@ -40,7 +40,7 @@ mod native {
 
     impl UIText {
         pub fn new(mtm: MainThreadMarker) -> Retained<Self> {
-            let this: PartialInit<Self> = mtm.alloc().set_ivars(());
+            let this: PartialInit<Self> = mtm.alloc().set_ivars(Ivars::<Self> { });
             let this: Retained<Self> = unsafe { msg_send![super(this), init] };
             this
         }

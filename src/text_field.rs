@@ -1,25 +1,23 @@
 use crate::{GUIEvent, View};
 use objc2::rc::Retained;
 use objc2::runtime::ProtocolObject;
-use objc2::{DeclaredClass, MainThreadOnly, define_class, msg_send};
+use objc2::{MainThreadOnly, define_class, msg_send, Ivars};
 use objc2_foundation::{MainThreadMarker, NSObject, NSObjectProtocol, NSString};
 use objc2_ui_kit::{UIResponder, UIScrollViewDelegate, UITextField, UITextFieldDelegate, UIView};
 use std::cell::RefCell;
 use winit::event_loop::EventLoopProxy;
 
-pub struct TextFieldState {
-    delegate: RefCell<Retained<TextFieldDelegate>>,
-    proxy: EventLoopProxy<GUIEvent>,
-    event_fn: RefCell<Option<Box<dyn Fn(&TextField)>>>,
-    place_holder_text: RefCell<Option<String>>,
-}
 
 define_class!(
     #[unsafe(super(UITextField, UIView, UIResponder, NSObject))]
     #[thread_kind = MainThreadOnly]
     #[name = "FerrisUITextField"]
-    #[ivars = TextFieldState]
-    pub struct TextField;
+    pub struct TextField {
+        delegate: RefCell<Retained<TextFieldDelegate>>,
+        proxy: EventLoopProxy<GUIEvent>,
+        event_fn: RefCell<Option<Box<dyn Fn(&TextField)>>>,
+        place_holder_text: RefCell<Option<String>>,
+    }
 
     impl TextField { }
 );
@@ -65,7 +63,7 @@ impl TextField {
     pub fn new(mtm: MainThreadMarker, proxy: EventLoopProxy<GUIEvent>) -> Retained<Self> {
         let delegate: Retained<TextFieldDelegate> =
             unsafe { objc2::msg_send![TextFieldDelegate::alloc(mtm), init] };
-        let this = Self::alloc(mtm).set_ivars(TextFieldState {
+        let this = Self::alloc(mtm).set_ivars(Ivars::<Self> {
             delegate: RefCell::new(delegate),
             proxy,
             event_fn: RefCell::new(None),
@@ -73,7 +71,7 @@ impl TextField {
         });
         let this: Retained<TextField> = unsafe { msg_send![super(this), init] };
         {
-            let delegate = this.ivars().delegate.borrow();
+            let delegate = this.delegate().borrow();
             this.setDelegate(Some(ProtocolObject::from_ref(&*delegate.clone())));
         }
 
@@ -86,7 +84,7 @@ impl TextField {
     }
 
     pub fn with_place_holder_text(self: Retained<Self>, place_holder: String) -> Retained<Self> {
-        *self.ivars().place_holder_text.borrow_mut() = Some(place_holder);
+        *self.place_holder_text().borrow_mut() = Some(place_holder);
         self.setPlaceholder(Some(&NSString::from_str("THIS IS SOME INPUT")));
         self
     }
@@ -94,10 +92,9 @@ impl TextField {
     fn text_changed(&self) {
         let text = self.get_text();
         let _ = self
-            .ivars()
-            .proxy
+            .proxy()
             .send_event(GUIEvent::Text(text.unwrap_or_default().clone()));
-        if let Some(event_fn) = &*self.ivars().event_fn.borrow() {
+        if let Some(event_fn) = &*self.event_fn().borrow() {
             event_fn(self);
         }
     }

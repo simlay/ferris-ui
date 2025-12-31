@@ -5,8 +5,10 @@ use objc2_foundation::{
 };
 use objc2_xc_test::XCTestCase;
 use objc2_xc_ui_automation::{
-    XCUIApplication, XCUIApplicationState, XCUIDevice, XCUIElementTypeQueryProvider,
+    XCUIApplication, XCUIApplicationState, XCUIDevice, XCUIElement, XCUIElementTypeQueryProvider,
     XCUIScreenshot, XCUIScreenshotProviding,
+    XCUIElementSnapshot,
+    XCUICoordinate,
 };
 
 define_class!(
@@ -40,7 +42,6 @@ define_class!(
 fn main() {}
 
 fn take_screenshot(app: &XCUIApplication, device: &XCUIDevice) {
-    let system = device.system();
 
     //println!("LAUNCHING APPLICATION");
     use objc2_foundation::{NSDictionary, ns_string};
@@ -61,32 +62,37 @@ fn take_screenshot(app: &XCUIApplication, device: &XCUIDevice) {
     //println!("APPLICATION LAUNCH ENV: {:?}", app.launchEnvironment());
     app.launch();
 
-    let window = app.windows();
-    let root_node = window.element();
-    save_screenshot(&root_node.screenshot());
-    //println!("LAYOUT: {layout}");
-    //println!("LAYOUT: {}", root_node.debugDescription());
-    let all_text_fields = root_node.textViews();
-    let text_view = all_text_fields.elementBoundByIndex(1);
-    println!("TEXT VIEW: {}", text_view.debugDescription());
 
+    //save_screenshot(&app.screenshot(), "streenshot".into());
+    let root_node = app.windows().element();
+    let foo = root_node.screenshot();
+    println!("ROOT NODE: {}", root_node.debugDescription());
+    let text_view = root_node.textViews().elementBoundByIndex(1);
     text_view.tap();
     text_view.typeText(&NSString::from_str("THIS IS SOME TEXT"));
-    println!("PUT TEXT IN");
-    unsafe {
-        let _: () = ferris_ui::objc2::msg_send![device, pressButton: 1_isize];
-    };
-    println!("PRESSED HOME BUTTON");
-    //std::thread::sleep_ms(2_000);
+
+    device.setOrientation(ferris_ui::objc2_ui_kit::UIDeviceOrientation::LandscapeRight);
+    let siri = device.siriService();
+    siri.activateWithVoiceRecognitionText(&NSString::from_str("What is the capital of germany?"));
+
+    std::thread::sleep_ms(1000);
+
+    save_screenshot(&app.screenshot(), "screenshot".into());
+    device.pressButton(objc2_xc_ui_automation::XCUIDeviceButton::Home);
+    press_home(&device);
 
     // TODO: For some reason, we have to terminate the application
     // manually when running outside Xcode?
     //app.terminate();
 }
+fn press_home(device: &XCUIDevice) {
+    println!("PRESSED HOME BUTTON");
+    unsafe {
+        let _: () = ferris_ui::objc2::msg_send![device, pressButton: 1_isize];
+    };
+}
 
-fn save_screenshot(screenshot: &XCUIScreenshot) {
-    //println!("TOOK A SCREENSHOT");
-    //println!("SAVING SCREENSHOT");
+fn save_screenshot(screenshot: &XCUIScreenshot, basename: String) {
     let path = NSSearchPathForDirectoriesInDomains(
         NSSearchPathDirectory::DocumentDirectory,
         NSSearchPathDomainMask::UserDomainMask,
@@ -94,7 +100,7 @@ fn save_screenshot(screenshot: &XCUIScreenshot) {
     );
     if let Some(path) = path.firstObject() {
         let path = path.to_string();
-        let path = std::path::Path::new(&path).join("screenshot.png");
+        let path = std::path::Path::new(&path).join(format!("{basename}.png"));
         println!("PATH IS {path:?}");
         let res = screenshot
             .PNGRepresentation()
@@ -108,28 +114,4 @@ fn save_screenshot(screenshot: &XCUIScreenshot) {
 #[ctor::ctor]
 unsafe fn setup() {
     let _ = TestCase::class();
-}
-#[repr(transparent)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub struct XCUIDeviceButton(pub objc2_foundation::NSInteger);
-impl XCUIDeviceButton {
-    #[doc(alias = "XCUIDeviceButtonHome")]
-    pub const Home: Self = Self(1);
-    #[doc(alias = "XCUIDeviceButtonVolumeUp")]
-    pub const VolumeUp: Self = Self(2);
-    #[doc(alias = "XCUIDeviceButtonVolumeDown")]
-    pub const VolumeDown: Self = Self(3);
-    #[doc(alias = "XCUIDeviceButtonAction")]
-    pub const Action: Self = Self(4);
-    #[doc(alias = "XCUIDeviceButtonCamera")]
-    pub const Camera: Self = Self(5);
-}
-use ferris_ui::objc2::{Encode, Encoding, RefEncode};
-
-unsafe impl Encode for XCUIDeviceButton {
-    const ENCODING: Encoding = objc2_foundation::NSInteger::ENCODING;
-}
-
-unsafe impl RefEncode for XCUIDeviceButton {
-    const ENCODING_REF: Encoding = Encoding::Pointer(&Self::ENCODING);
 }

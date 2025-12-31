@@ -4,33 +4,10 @@ use ferris_ui::{
 };
 use ferris_ui::winit::event_loop::{ControlFlow, EventLoop, EventLoopProxy};
 use ferris_ui::{App, GUIEvent, Text, TextEditor, VStack, View};
-fn create_observer(
-    center: &objc2_foundation::NSNotificationCenter,
-    name: &objc2_foundation::NSNotificationName,
-    handler: impl Fn(&objc2_foundation::NSNotification) + 'static,
-) -> objc2::rc::Retained<objc2::runtime::ProtocolObject<dyn objc2_foundation::NSObjectProtocol>> {
-    let block = block2::RcBlock::new(move |notification: std::ptr::NonNull<objc2_foundation::NSNotification>| {
-        handler(unsafe { notification.as_ref() });
-    });
-
-    unsafe { center.addObserverForName_object_queue_usingBlock(Some(name), None, None, &block) }
-}
 
 fn main() {
-    if std::env::var("LLVM_PROFILE_FILE").is_ok() {
-        let _will_terminate_observer = create_observer(
-            &objc2_foundation::NSNotificationCenter::defaultCenter(),
-            unsafe { objc2_ui_kit::UIApplicationDidEnterBackgroundNotification },
-            move |_notification| {
-                println!("APP IS CLOSING");
-                unsafe extern "C" {
-                    safe fn __llvm_profile_write_file() -> std::ffi::c_int;
-                }
-                let res = __llvm_profile_write_file();
-                assert_eq!(res, 0);
-            },
-        );
-    }
+    #[cfg(debug_assertions)]
+    set_llvm_profile_write();
     env_logger::init();
     let event_loop: EventLoop<GUIEvent> = EventLoop::with_user_event().build().unwrap();
     //let event_loop = EventLoop::new().unwrap();
@@ -127,5 +104,32 @@ impl MyView {
 impl View for MyView {
     fn raw_view(&self) -> Box<&NativeView> {
         Box::new(&self.vstack.raw_view())
+    }
+}
+fn create_observer(
+    center: &objc2_foundation::NSNotificationCenter,
+    name: &objc2_foundation::NSNotificationName,
+    handler: impl Fn(&objc2_foundation::NSNotification) + 'static,
+) -> objc2::rc::Retained<objc2::runtime::ProtocolObject<dyn objc2_foundation::NSObjectProtocol>> {
+    let block = block2::RcBlock::new(move |notification: std::ptr::NonNull<objc2_foundation::NSNotification>| {
+        handler(unsafe { notification.as_ref() });
+    });
+
+    unsafe { center.addObserverForName_object_queue_usingBlock(Some(name), None, None, &block) }
+}
+
+fn set_llvm_profile_write() {
+    if std::env::var("LLVM_PROFILE_FILE").is_ok() {
+        let _will_terminate_observer = create_observer(
+            &objc2_foundation::NSNotificationCenter::defaultCenter(),
+            unsafe { objc2_ui_kit::UIApplicationDidEnterBackgroundNotification },
+            move |_notification| {
+                unsafe extern "C" {
+                    safe fn __llvm_profile_write_file() -> std::ffi::c_int;
+                }
+                let res = __llvm_profile_write_file();
+                assert_eq!(res, 0);
+            },
+        );
     }
 }
