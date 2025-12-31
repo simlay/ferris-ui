@@ -1,0 +1,67 @@
+name: CI
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          targets: aarch64-apple-ios-sim
+          toolchain: nightly
+      - name: build
+        run: cargo build --target aarch64-apple-ios-sim --all --all-targets
+
+  ui-tests:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ macos-15, macos-26 ]
+        make-cmd: [ui-tests-run-swift, ui-tests-run]
+    steps:
+      - uses: actions/checkout@v6
+      - name: start simulator
+        run: |
+          xcrun simctl boot 'iPhone 16e'
+          sleep 10
+      - uses: dtolnay/rust-toolchain@nightly
+        if: ${{ matrix.make-cmd == 'ui-tests-run' }}
+        with:
+          targets: aarch64-apple-ios-sim
+          toolchain: nightly
+
+      - name: Run ui test
+        timeout-minutes: 20
+        run: |
+          make ${{matrix.make-cmd}}
+
+      - uses: actions/upload-artifact@v6
+        id: ui-tests
+        with:
+          name: ui-tests-${{matrix.os}}-${{matrix.make-cmd}}
+          path: ui_tests.png
+          compression-level: 0 # no compression
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: ui-test-app-logs-${{matrix.os}}-${{matrix.make-cmd}}
+          path: |
+            stdout.txt
+            stderr.txt
+          compression-level: 0 # no compression
+
+      - name: upload screenshots to imgbb
+        run: |
+          SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i ui_tests.png)" | jq -r '.data.display_url')
+          export SCREENSHOT_URL
+          make gh-summary
+          cat Summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Stop simulator
+        run: |
+          xcrun simctl shutdown 'iPhone 16e'
