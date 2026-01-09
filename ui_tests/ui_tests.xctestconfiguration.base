@@ -225,7 +225,7 @@
 				<integer>4</integer>
 			</dict>
 		</dict>
-        <string>file://UI_TEST_WRAPPER/PlugIns/DinghyUITests.xctest</string>
+		<string>file://UI_TEST_WRAPPER_CONTAINER/PlugIns/DinghyUITests.xctest</string>
 		<dict>
 			<key>$classes</key>
 			<array>
@@ -374,8 +374,8 @@
 			<key>$classname</key>
 			<string>NSUUID</string>
 		</dict>
-		<string>RUST_WRAPPER_APP</string>
-		<string>com.simlay.net.Dinghy</string>
+		<string>WRAPPER_APP_CONTAINER</string>
+		<string>WRAPPER_APP_ID</string>
 		<string>ui_tests</string>
 		<dict>
 			<key>$class</key>

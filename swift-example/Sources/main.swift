@@ -30,7 +30,8 @@ struct ContentView: View {
             //.textFieldStyle(RoundedBorderTextFieldStyle())
             //.padding()
             //.border(.green)
-            TextEditor(text: $text)                          .border(.green)
+            TextEditor(text: $text).border(.green)
+            //Text("\(text)")        .border(.green)
         }.border(.red)
     }
 }

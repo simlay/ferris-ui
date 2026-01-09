@@ -5,10 +5,8 @@ use objc2_foundation::{
 };
 use objc2_xc_test::XCTestCase;
 use objc2_xc_ui_automation::{
-    XCUIApplication, XCUIApplicationState, XCUIDevice, XCUIElement, XCUIElementTypeQueryProvider,
-    XCUIScreenshot, XCUIScreenshotProviding,
-    XCUIElementSnapshot,
-    XCUICoordinate,
+    XCUIApplication, XCUIApplicationState, XCUICoordinate, XCUIDevice, XCUIElement,
+    XCUIElementSnapshot, XCUIElementTypeQueryProvider, XCUIScreenshot, XCUIScreenshotProviding,
 };
 
 define_class!(
@@ -42,7 +40,6 @@ define_class!(
 fn main() {}
 
 fn take_screenshot(app: &XCUIApplication, device: &XCUIDevice) {
-
     //println!("LAUNCHING APPLICATION");
     use objc2_foundation::{NSDictionary, ns_string};
 
@@ -64,7 +61,8 @@ fn take_screenshot(app: &XCUIApplication, device: &XCUIDevice) {
     device.setOrientation(ferris_ui::objc2_ui_kit::UIDeviceOrientation::Portrait);
 
     save_screenshot(&app.screenshot(), "screenshot".into());
-    let text_view = app.textViews().element();
+    println!("{}", app.debugDescription());
+    let text_view = app.textViews().elementAtIndex(1);
     text_view.tap();
     text_view.typeText(&NSString::from_str("THIS IS SOME TEXT"));
 
@@ -74,14 +72,8 @@ fn take_screenshot(app: &XCUIApplication, device: &XCUIDevice) {
     std::thread::sleep_ms(1000);
 
     save_screenshot(&app.screenshot(), "screenshot".into());
-    device.pressButton(objc2_xc_ui_automation::XCUIDeviceButton::Home);
-    press_home(&device);
-}
-
-fn press_home(device: &XCUIDevice) {
-    unsafe {
-        let _: () = ferris_ui::objc2::msg_send![device, pressButton: 1_isize];
-    };
+    //device.pressButton(objc2_xc_ui_automation::XCUIDeviceButton::Home);
+    //device.pressButton(objc2_xc_ui_automation::XCUIDeviceButton::Home);
 }
 
 fn save_screenshot(screenshot: &XCUIScreenshot, basename: String) {

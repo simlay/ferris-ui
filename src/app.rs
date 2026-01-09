@@ -60,7 +60,6 @@ impl ApplicationHandler<GUIEvent> for App {
                 ui_view.addSubview(root_ui_view.as_ref());
 
                 let bg_color = objc2_ui_kit::UIColor::systemBackgroundColor();
-                objc2_ui_kit::UIColor::labelColor();
                 root_ui_view.setBackgroundColor(Some(&bg_color));
                 self.root_ui_view = Some(ui_view);
                 self.root_view = Some(root_view);

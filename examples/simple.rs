@@ -28,7 +28,8 @@ fn main() {
 
 struct MyView {
     proxy: EventLoopProxy<GUIEvent>,
-    vstack: VStack,
+    inner: Box<dyn View>,
+    //vstack: VStack,
 }
 
 impl MyView {
@@ -83,6 +84,7 @@ impl MyView {
         let image = Image::new(mtm, ImageType::SystemIcon("clock".into()));
         */
 
+        /*
         let vstack = VStack::new(
             mtm,
             vec![
@@ -96,14 +98,16 @@ impl MyView {
             ],
         )
             ;
+            */
         //.with_background_color(UIColor::whiteColor());
+        Box::new(Self { proxy, inner: Box::new(text_view)})
 
-        Box::new(Self { proxy, vstack })
+        //Box::new(Self { proxy, inner: Box::new(vstack)})
     }
 }
 impl View for MyView {
     fn raw_view(&self) -> Box<&NativeView> {
-        Box::new(&self.vstack.raw_view())
+        Box::new(&self.inner.raw_view())
     }
 }
 fn create_observer(
