@@ -1,0 +1,57 @@
+[workspace]
+members = [
+    "ui_tests",
+]
+resolver = "2"
+
+[package]
+name = "ferris-ui"
+version = "0.1.0"
+edition = "2024"
+[features]
+nightly = []
+nightly-debug = []
+default = ["nightly"]
+
+[dependencies]
+cfg-if = "1.0"
+
+[target.'cfg(target_os = "ios")'.dependencies]
+winit = { version = "0.30.12", features = ["rwh_06" ] }
+objc2 = "0.6"
+objc2-core-foundation = "0.3"
+log = "0.4"
+objc2-quartz-core = "0.3"
+objc2-foundation = "0.3"
+objc2-ui-kit = "0.3"
+
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.21"
+winit = { version = "0.30.12", features = ["rwh_06", "android-native-activity"] }
+
+[target.'cfg(target_os = "ios")'.dev-dependencies]
+oslog = "0.2"
+env_logger = "0.11"
+block2 = "0.6"
+
+
+# Let's leave these in if we have to patch it again.
+[patch.crates-io]
+#jni = { path = "../jni-rs/crates/jni/" }
+#objc2-xc-test          = { path = "../objc2/framework-crates/objc2-xc-test" }
+#objc2-xc-ui-automation = { path = "../objc2/framework-crates/objc2-xc-ui-automation" }
+#objc2                  = { path = "../objc2/crates/objc2/"}
+#objc2-core-foundation  = { path = "../objc2/framework-crates/objc2-core-foundation" }
+#objc2-ui-kit           = { path = "../objc2/framework-crates/objc2-ui-kit" }
+#objc2-foundation       = { path = "../objc2/framework-crates/objc2-foundation" }
+#objc2-quartz-core      = { path = "../objc2/framework-crates/objc2-quartz-core" }
+#block2                 = { path = "../objc2/crates/block2/" }
+
+objc2-xc-test          = { git = "https://github.com/simlay/objc2/", branch = "add-add-index-impl-on-XCUIElementQuery" }
+objc2-xc-ui-automation = { git = "https://github.com/simlay/objc2/", branch = "add-add-index-impl-on-XCUIElementQuery" }
+objc2                  = { git = "https://github.com/simlay/objc2/", branch = "add-add-index-impl-on-XCUIElementQuery" }
+objc2-core-foundation  = { git = "https://github.com/simlay/objc2/", branch = "add-add-index-impl-on-XCUIElementQuery" }
+objc2-ui-kit           = { git = "https://github.com/simlay/objc2/", branch = "add-add-index-impl-on-XCUIElementQuery" }
+objc2-foundation       = { git = "https://github.com/simlay/objc2/", branch = "add-add-index-impl-on-XCUIElementQuery" }
+objc2-quartz-core      = { git = "https://github.com/simlay/objc2/", branch = "add-add-index-impl-on-XCUIElementQuery" }
+block2                 = { git = "https://github.com/simlay/objc2/", branch = "add-add-index-impl-on-XCUIElementQuery" }

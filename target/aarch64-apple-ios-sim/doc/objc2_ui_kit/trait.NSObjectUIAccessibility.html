@@ -1,0 +1,974 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Category “UIAccessibility” on `NSObject`."><title>NSObjectUIAccessibility in objc2_ui_kit - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-2eb46af5.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="objc2_ui_kit" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.0-nightly (fecb335cb 2026-01-07)" data-channel="nightly" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../static.files/storage-e2aeef58.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-ffcac47a.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">NSObjectUIAccessibility</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../objc2_ui_kit/index.html">objc2_<wbr>ui_<wbr>kit</a><span class="version">0.3.2</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">NSObjectUI<wbr>Accessibility</a></h2><h3><a href="#provided-methods">Provided Methods</a></h3><ul class="block"><li><a href="#method.accessibilityActivateBlock" title="accessibilityActivateBlock">accessibilityActivateBlock</a></li><li><a href="#method.accessibilityActivationPoint" title="accessibilityActivationPoint">accessibilityActivationPoint</a></li><li><a href="#method.accessibilityActivationPointBlock" title="accessibilityActivationPointBlock">accessibilityActivationPointBlock</a></li><li><a href="#method.accessibilityAttributedHint" title="accessibilityAttributedHint">accessibilityAttributedHint</a></li><li><a href="#method.accessibilityAttributedHintBlock" title="accessibilityAttributedHintBlock">accessibilityAttributedHintBlock</a></li><li><a href="#method.accessibilityAttributedLabel" title="accessibilityAttributedLabel">accessibilityAttributedLabel</a></li><li><a href="#method.accessibilityAttributedLabelBlock" title="accessibilityAttributedLabelBlock">accessibilityAttributedLabelBlock</a></li><li><a href="#method.accessibilityAttributedUserInputLabels" title="accessibilityAttributedUserInputLabels">accessibilityAttributedUserInputLabels</a></li><li><a href="#method.accessibilityAttributedUserInputLabelsBlock" title="accessibilityAttributedUserInputLabelsBlock">accessibilityAttributedUserInputLabelsBlock</a></li><li><a href="#method.accessibilityAttributedValue" title="accessibilityAttributedValue">accessibilityAttributedValue</a></li><li><a href="#method.accessibilityAttributedValueBlock" title="accessibilityAttributedValueBlock">accessibilityAttributedValueBlock</a></li><li><a href="#method.accessibilityContainerTypeBlock" title="accessibilityContainerTypeBlock">accessibilityContainerTypeBlock</a></li><li><a href="#method.accessibilityCustomActionsBlock" title="accessibilityCustomActionsBlock">accessibilityCustomActionsBlock</a></li><li><a href="#method.accessibilityDecrementBlock" title="accessibilityDecrementBlock">accessibilityDecrementBlock</a></li><li><a href="#method.accessibilityDirectTouchOptions" title="accessibilityDirectTouchOptions">accessibilityDirectTouchOptions</a></li><li><a href="#method.accessibilityElementsBlock" title="accessibilityElementsBlock">accessibilityElementsBlock</a></li><li><a href="#method.accessibilityElementsHidden" title="accessibilityElementsHidden">accessibilityElementsHidden</a></li><li><a href="#method.accessibilityElementsHiddenBlock" title="accessibilityElementsHiddenBlock">accessibilityElementsHiddenBlock</a></li><li><a href="#method.accessibilityExpandedStatus" title="accessibilityExpandedStatus">accessibilityExpandedStatus</a></li><li><a href="#method.accessibilityExpandedStatusBlock" title="accessibilityExpandedStatusBlock">accessibilityExpandedStatusBlock</a></li><li><a href="#method.accessibilityFrame" title="accessibilityFrame">accessibilityFrame</a></li><li><a href="#method.accessibilityFrameBlock" title="accessibilityFrameBlock">accessibilityFrameBlock</a></li><li><a href="#method.accessibilityHeaderElements" title="accessibilityHeaderElements">accessibilityHeaderElements</a></li><li><a href="#method.accessibilityHeaderElementsBlock" title="accessibilityHeaderElementsBlock">accessibilityHeaderElementsBlock</a></li><li><a href="#method.accessibilityHint" title="accessibilityHint">accessibilityHint</a></li><li><a href="#method.accessibilityHintBlock" title="accessibilityHintBlock">accessibilityHintBlock</a></li><li><a href="#method.accessibilityIdentifierBlock" title="accessibilityIdentifierBlock">accessibilityIdentifierBlock</a></li><li><a href="#method.accessibilityIncrementBlock" title="accessibilityIncrementBlock">accessibilityIncrementBlock</a></li><li><a href="#method.accessibilityLabel" title="accessibilityLabel">accessibilityLabel</a></li><li><a href="#method.accessibilityLabelBlock" title="accessibilityLabelBlock">accessibilityLabelBlock</a></li><li><a href="#method.accessibilityLanguage" title="accessibilityLanguage">accessibilityLanguage</a></li><li><a href="#method.accessibilityLanguageBlock" title="accessibilityLanguageBlock">accessibilityLanguageBlock</a></li><li><a href="#method.accessibilityMagicTapBlock" title="accessibilityMagicTapBlock">accessibilityMagicTapBlock</a></li><li><a href="#method.accessibilityNavigationStyle" title="accessibilityNavigationStyle">accessibilityNavigationStyle</a></li><li><a href="#method.accessibilityNavigationStyleBlock" title="accessibilityNavigationStyleBlock">accessibilityNavigationStyleBlock</a></li><li><a href="#method.accessibilityPath" title="accessibilityPath">accessibilityPath</a></li><li><a href="#method.accessibilityPathBlock" title="accessibilityPathBlock">accessibilityPathBlock</a></li><li><a href="#method.accessibilityPerformEscapeBlock" title="accessibilityPerformEscapeBlock">accessibilityPerformEscapeBlock</a></li><li><a href="#method.accessibilityRespondsToUserInteraction" title="accessibilityRespondsToUserInteraction">accessibilityRespondsToUserInteraction</a></li><li><a href="#method.accessibilityRespondsToUserInteractionBlock" title="accessibilityRespondsToUserInteractionBlock">accessibilityRespondsToUserInteractionBlock</a></li><li><a href="#method.accessibilityShouldGroupAccessibilityChildrenBlock" title="accessibilityShouldGroupAccessibilityChildrenBlock">accessibilityShouldGroupAccessibilityChildrenBlock</a></li><li><a href="#method.accessibilityTextualContext" title="accessibilityTextualContext">accessibilityTextualContext</a></li><li><a href="#method.accessibilityTextualContextBlock" title="accessibilityTextualContextBlock">accessibilityTextualContextBlock</a></li><li><a href="#method.accessibilityTraits" title="accessibilityTraits">accessibilityTraits</a></li><li><a href="#method.accessibilityTraitsBlock" title="accessibilityTraitsBlock">accessibilityTraitsBlock</a></li><li><a href="#method.accessibilityUserInputLabels" title="accessibilityUserInputLabels">accessibilityUserInputLabels</a></li><li><a href="#method.accessibilityUserInputLabelsBlock" title="accessibilityUserInputLabelsBlock">accessibilityUserInputLabelsBlock</a></li><li><a href="#method.accessibilityValue" title="accessibilityValue">accessibilityValue</a></li><li><a href="#method.accessibilityValueBlock" title="accessibilityValueBlock">accessibilityValueBlock</a></li><li><a href="#method.accessibilityViewIsModal" title="accessibilityViewIsModal">accessibilityViewIsModal</a></li><li><a href="#method.accessibilityViewIsModalBlock" title="accessibilityViewIsModalBlock">accessibilityViewIsModalBlock</a></li><li><a href="#method.automationElementsBlock" title="automationElementsBlock">automationElementsBlock</a></li><li><a href="#method.isAccessibilityElement" title="isAccessibilityElement">isAccessibilityElement</a></li><li><a href="#method.isAccessibilityElementBlock" title="isAccessibilityElementBlock">isAccessibilityElementBlock</a></li><li><a href="#method.setAccessibilityActivateBlock" title="setAccessibilityActivateBlock">setAccessibilityActivateBlock</a></li><li><a href="#method.setAccessibilityActivationPoint" title="setAccessibilityActivationPoint">setAccessibilityActivationPoint</a></li><li><a href="#method.setAccessibilityActivationPointBlock" title="setAccessibilityActivationPointBlock">setAccessibilityActivationPointBlock</a></li><li><a href="#method.setAccessibilityAttributedHint" title="setAccessibilityAttributedHint">setAccessibilityAttributedHint</a></li><li><a href="#method.setAccessibilityAttributedHintBlock" title="setAccessibilityAttributedHintBlock">setAccessibilityAttributedHintBlock</a></li><li><a href="#method.setAccessibilityAttributedLabel" title="setAccessibilityAttributedLabel">setAccessibilityAttributedLabel</a></li><li><a href="#method.setAccessibilityAttributedLabelBlock" title="setAccessibilityAttributedLabelBlock">setAccessibilityAttributedLabelBlock</a></li><li><a href="#method.setAccessibilityAttributedUserInputLabels" title="setAccessibilityAttributedUserInputLabels">setAccessibilityAttributedUserInputLabels</a></li><li><a href="#method.setAccessibilityAttributedUserInputLabelsBlock" title="setAccessibilityAttributedUserInputLabelsBlock">setAccessibilityAttributedUserInputLabelsBlock</a></li><li><a href="#method.setAccessibilityAttributedValue" title="setAccessibilityAttributedValue">setAccessibilityAttributedValue</a></li><li><a href="#method.setAccessibilityAttributedValueBlock" title="setAccessibilityAttributedValueBlock">setAccessibilityAttributedValueBlock</a></li><li><a href="#method.setAccessibilityContainerTypeBlock" title="setAccessibilityContainerTypeBlock">setAccessibilityContainerTypeBlock</a></li><li><a href="#method.setAccessibilityCustomActionsBlock" title="setAccessibilityCustomActionsBlock">setAccessibilityCustomActionsBlock</a></li><li><a href="#method.setAccessibilityDecrementBlock" title="setAccessibilityDecrementBlock">setAccessibilityDecrementBlock</a></li><li><a href="#method.setAccessibilityDirectTouchOptions" title="setAccessibilityDirectTouchOptions">setAccessibilityDirectTouchOptions</a></li><li><a href="#method.setAccessibilityElementsBlock" title="setAccessibilityElementsBlock">setAccessibilityElementsBlock</a></li><li><a href="#method.setAccessibilityElementsHidden" title="setAccessibilityElementsHidden">setAccessibilityElementsHidden</a></li><li><a href="#method.setAccessibilityElementsHiddenBlock" title="setAccessibilityElementsHiddenBlock">setAccessibilityElementsHiddenBlock</a></li><li><a href="#method.setAccessibilityExpandedStatus" title="setAccessibilityExpandedStatus">setAccessibilityExpandedStatus</a></li><li><a href="#method.setAccessibilityExpandedStatusBlock" title="setAccessibilityExpandedStatusBlock">setAccessibilityExpandedStatusBlock</a></li><li><a href="#method.setAccessibilityFrame" title="setAccessibilityFrame">setAccessibilityFrame</a></li><li><a href="#method.setAccessibilityFrameBlock" title="setAccessibilityFrameBlock">setAccessibilityFrameBlock</a></li><li><a href="#method.setAccessibilityHeaderElements" title="setAccessibilityHeaderElements">setAccessibilityHeaderElements</a></li><li><a href="#method.setAccessibilityHeaderElementsBlock" title="setAccessibilityHeaderElementsBlock">setAccessibilityHeaderElementsBlock</a></li><li><a href="#method.setAccessibilityHint" title="setAccessibilityHint">setAccessibilityHint</a></li><li><a href="#method.setAccessibilityHintBlock" title="setAccessibilityHintBlock">setAccessibilityHintBlock</a></li><li><a href="#method.setAccessibilityIdentifierBlock" title="setAccessibilityIdentifierBlock">setAccessibilityIdentifierBlock</a></li><li><a href="#method.setAccessibilityIncrementBlock" title="setAccessibilityIncrementBlock">setAccessibilityIncrementBlock</a></li><li><a href="#method.setAccessibilityLabel" title="setAccessibilityLabel">setAccessibilityLabel</a></li><li><a href="#method.setAccessibilityLabelBlock" title="setAccessibilityLabelBlock">setAccessibilityLabelBlock</a></li><li><a href="#method.setAccessibilityLanguage" title="setAccessibilityLanguage">setAccessibilityLanguage</a></li><li><a href="#method.setAccessibilityLanguageBlock" title="setAccessibilityLanguageBlock">setAccessibilityLanguageBlock</a></li><li><a href="#method.setAccessibilityMagicTapBlock" title="setAccessibilityMagicTapBlock">setAccessibilityMagicTapBlock</a></li><li><a href="#method.setAccessibilityNavigationStyle" title="setAccessibilityNavigationStyle">setAccessibilityNavigationStyle</a></li><li><a href="#method.setAccessibilityNavigationStyleBlock" title="setAccessibilityNavigationStyleBlock">setAccessibilityNavigationStyleBlock</a></li><li><a href="#method.setAccessibilityPath" title="setAccessibilityPath">setAccessibilityPath</a></li><li><a href="#method.setAccessibilityPathBlock" title="setAccessibilityPathBlock">setAccessibilityPathBlock</a></li><li><a href="#method.setAccessibilityPerformEscapeBlock" title="setAccessibilityPerformEscapeBlock">setAccessibilityPerformEscapeBlock</a></li><li><a href="#method.setAccessibilityRespondsToUserInteraction" title="setAccessibilityRespondsToUserInteraction">setAccessibilityRespondsToUserInteraction</a></li><li><a href="#method.setAccessibilityRespondsToUserInteractionBlock" title="setAccessibilityRespondsToUserInteractionBlock">setAccessibilityRespondsToUserInteractionBlock</a></li><li><a href="#method.setAccessibilityShouldGroupAccessibilityChildrenBlock" title="setAccessibilityShouldGroupAccessibilityChildrenBlock">setAccessibilityShouldGroupAccessibilityChildrenBlock</a></li><li><a href="#method.setAccessibilityTextualContext" title="setAccessibilityTextualContext">setAccessibilityTextualContext</a></li><li><a href="#method.setAccessibilityTextualContextBlock" title="setAccessibilityTextualContextBlock">setAccessibilityTextualContextBlock</a></li><li><a href="#method.setAccessibilityTraits" title="setAccessibilityTraits">setAccessibilityTraits</a></li><li><a href="#method.setAccessibilityTraitsBlock" title="setAccessibilityTraitsBlock">setAccessibilityTraitsBlock</a></li><li><a href="#method.setAccessibilityUserInputLabels" title="setAccessibilityUserInputLabels">setAccessibilityUserInputLabels</a></li><li><a href="#method.setAccessibilityUserInputLabelsBlock" title="setAccessibilityUserInputLabelsBlock">setAccessibilityUserInputLabelsBlock</a></li><li><a href="#method.setAccessibilityValue" title="setAccessibilityValue">setAccessibilityValue</a></li><li><a href="#method.setAccessibilityValueBlock" title="setAccessibilityValueBlock">setAccessibilityValueBlock</a></li><li><a href="#method.setAccessibilityViewIsModal" title="setAccessibilityViewIsModal">setAccessibilityViewIsModal</a></li><li><a href="#method.setAccessibilityViewIsModalBlock" title="setAccessibilityViewIsModalBlock">setAccessibilityViewIsModalBlock</a></li><li><a href="#method.setAutomationElementsBlock" title="setAutomationElementsBlock">setAutomationElementsBlock</a></li><li><a href="#method.setIsAccessibilityElement" title="setIsAccessibilityElement">setIsAccessibilityElement</a></li><li><a href="#method.setIsAccessibilityElementBlock" title="setIsAccessibilityElementBlock">setIsAccessibilityElementBlock</a></li><li><a href="#method.setShouldGroupAccessibilityChildren" title="setShouldGroupAccessibilityChildren">setShouldGroupAccessibilityChildren</a></li><li><a href="#method.shouldGroupAccessibilityChildren" title="shouldGroupAccessibilityChildren">shouldGroupAccessibilityChildren</a></li></ul><h3><a href="#foreign-impls">Implementations on Foreign Types</a></h3><ul class="block"><li><a href="#impl-NSObjectUIAccessibility-for-NSObject" title="NSObject">NSObject</a></li></ul><h3><a href="#dyn-compatibility">Dyn Compatibility</a></h3><h3><a href="#implementors">Implementors</a></h3></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="index.html">In crate objc2_<wbr>ui_<wbr>kit</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">objc2_ui_kit</a></div><h1>Trait <span class="trait">NSObjectUI<wbr>Accessibility</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#129-1199">Source</a> </span></div><pre class="rust item-decl"><code>pub unsafe trait NSObjectUIAccessibility:
+    <a class="trait" href="../objc2/top_level_traits/trait.ClassType.html" title="trait objc2::top_level_traits::ClassType">ClassType</a>
+    + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>
+    + Sealed {
+<details class="toggle type-contents-toggle"><summary class="hideme"><span>Show 110 methods</span></summary>    // Provided methods
+    fn <a href="#method.isAccessibilityElement" class="fn">isAccessibilityElement</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setIsAccessibilityElement" class="fn">setIsAccessibilityElement</a>(
+        &amp;self,
+        is_accessibility_element: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityLabel" class="fn">accessibilityLabel</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityLabel" class="fn">setAccessibilityLabel</a>(
+        &amp;self,
+        accessibility_label: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityAttributedLabel" class="fn">accessibilityAttributedLabel</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityAttributedLabel" class="fn">setAccessibilityAttributedLabel</a>(
+        &amp;self,
+        accessibility_attributed_label: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityHint" class="fn">accessibilityHint</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityHint" class="fn">setAccessibilityHint</a>(
+        &amp;self,
+        accessibility_hint: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityAttributedHint" class="fn">accessibilityAttributedHint</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityAttributedHint" class="fn">setAccessibilityAttributedHint</a>(
+        &amp;self,
+        accessibility_attributed_hint: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityValue" class="fn">accessibilityValue</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityValue" class="fn">setAccessibilityValue</a>(
+        &amp;self,
+        accessibility_value: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityAttributedValue" class="fn">accessibilityAttributedValue</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityAttributedValue" class="fn">setAccessibilityAttributedValue</a>(
+        &amp;self,
+        accessibility_attributed_value: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityTraits" class="fn">accessibilityTraits</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.UIAccessibilityTraits.html" title="type objc2_ui_kit::UIAccessibilityTraits">UIAccessibilityTraits</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityTraits" class="fn">setAccessibilityTraits</a>(
+        &amp;self,
+        accessibility_traits: <a class="type" href="type.UIAccessibilityTraits.html" title="type objc2_ui_kit::UIAccessibilityTraits">UIAccessibilityTraits</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityFrame" class="fn">accessibilityFrame</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="struct" href="../objc2_core_foundation/geometry/struct.CGRect.html" title="struct objc2_core_foundation::geometry::CGRect">CGRect</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityFrame" class="fn">setAccessibilityFrame</a>(
+        &amp;self,
+        accessibility_frame: <a class="struct" href="../objc2_core_foundation/geometry/struct.CGRect.html" title="struct objc2_core_foundation::geometry::CGRect">CGRect</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityPath" class="fn">accessibilityPath</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="struct.UIBezierPath.html" title="struct objc2_ui_kit::UIBezierPath">UIBezierPath</a>&gt;&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityPath" class="fn">setAccessibilityPath</a>(
+        &amp;self,
+        accessibility_path: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.UIBezierPath.html" title="struct objc2_ui_kit::UIBezierPath">UIBezierPath</a>&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityActivationPoint" class="fn">accessibilityActivationPoint</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="struct" href="../objc2_core_foundation/geometry/struct.CGPoint.html" title="struct objc2_core_foundation::geometry::CGPoint">CGPoint</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityActivationPoint" class="fn">setAccessibilityActivationPoint</a>(
+        &amp;self,
+        accessibility_activation_point: <a class="struct" href="../objc2_core_foundation/geometry/struct.CGPoint.html" title="struct objc2_core_foundation::geometry::CGPoint">CGPoint</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityLanguage" class="fn">accessibilityLanguage</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityLanguage" class="fn">setAccessibilityLanguage</a>(
+        &amp;self,
+        accessibility_language: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityElementsHidden" class="fn">accessibilityElementsHidden</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityElementsHidden" class="fn">setAccessibilityElementsHidden</a>(
+        &amp;self,
+        accessibility_elements_hidden: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityViewIsModal" class="fn">accessibilityViewIsModal</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityViewIsModal" class="fn">setAccessibilityViewIsModal</a>(
+        &amp;self,
+        accessibility_view_is_modal: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.shouldGroupAccessibilityChildren" class="fn">shouldGroupAccessibilityChildren</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setShouldGroupAccessibilityChildren" class="fn">setShouldGroupAccessibilityChildren</a>(
+        &amp;self,
+        should_group_accessibility_children: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityNavigationStyle" class="fn">accessibilityNavigationStyle</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="struct" href="struct.UIAccessibilityNavigationStyle.html" title="struct objc2_ui_kit::UIAccessibilityNavigationStyle">UIAccessibilityNavigationStyle</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityNavigationStyle" class="fn">setAccessibilityNavigationStyle</a>(
+        &amp;self,
+        accessibility_navigation_style: <a class="struct" href="struct.UIAccessibilityNavigationStyle.html" title="struct objc2_ui_kit::UIAccessibilityNavigationStyle">UIAccessibilityNavigationStyle</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityRespondsToUserInteraction" class="fn">accessibilityRespondsToUserInteraction</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityRespondsToUserInteraction" class="fn">setAccessibilityRespondsToUserInteraction</a>(
+        &amp;self,
+        accessibility_responds_to_user_interaction: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityUserInputLabels" class="fn">accessibilityUserInputLabels</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSArray/struct.NSArray.html" title="struct objc2_foundation::generated::__NSArray::NSArray">NSArray</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;&gt;&gt; { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityUserInputLabels" class="fn">setAccessibilityUserInputLabels</a>(
+        &amp;self,
+        accessibility_user_input_labels: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSArray/struct.NSArray.html" title="struct objc2_foundation::generated::__NSArray::NSArray">NSArray</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityAttributedUserInputLabels" class="fn">accessibilityAttributedUserInputLabels</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSArray/struct.NSArray.html" title="struct objc2_foundation::generated::__NSArray::NSArray">NSArray</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityAttributedUserInputLabels" class="fn">setAccessibilityAttributedUserInputLabels</a>(
+        &amp;self,
+        accessibility_attributed_user_input_labels: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSArray/struct.NSArray.html" title="struct objc2_foundation::generated::__NSArray::NSArray">NSArray</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityHeaderElements" class="fn">accessibilityHeaderElements</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSArray/struct.NSArray.html" title="struct objc2_foundation::generated::__NSArray::NSArray">NSArray</a>&gt;&gt; { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityHeaderElements" class="fn">setAccessibilityHeaderElements</a>(
+        &amp;self,
+        accessibility_header_elements: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSArray/struct.NSArray.html" title="struct objc2_foundation::generated::__NSArray::NSArray">NSArray</a>&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityTextualContext" class="fn">accessibilityTextualContext</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="type" href="type.UIAccessibilityTextualContext.html" title="type objc2_ui_kit::UIAccessibilityTextualContext">UIAccessibilityTextualContext</a>&gt;&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityTextualContext" class="fn">setAccessibilityTextualContext</a>(
+        &amp;self,
+        accessibility_textual_context: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="type" href="type.UIAccessibilityTextualContext.html" title="type objc2_ui_kit::UIAccessibilityTextualContext">UIAccessibilityTextualContext</a>&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityDirectTouchOptions" class="fn">accessibilityDirectTouchOptions</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="struct" href="struct.UIAccessibilityDirectTouchOptions.html" title="struct objc2_ui_kit::UIAccessibilityDirectTouchOptions">UIAccessibilityDirectTouchOptions</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityDirectTouchOptions" class="fn">setAccessibilityDirectTouchOptions</a>(
+        &amp;self,
+        accessibility_direct_touch_options: <a class="struct" href="struct.UIAccessibilityDirectTouchOptions.html" title="struct objc2_ui_kit::UIAccessibilityDirectTouchOptions">UIAccessibilityDirectTouchOptions</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityExpandedStatus" class="fn">accessibilityExpandedStatus</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="struct" href="struct.UIAccessibilityExpandedStatus.html" title="struct objc2_ui_kit::UIAccessibilityExpandedStatus">UIAccessibilityExpandedStatus</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityExpandedStatus" class="fn">setAccessibilityExpandedStatus</a>(
+        &amp;self,
+        accessibility_expanded_status: <a class="struct" href="struct.UIAccessibilityExpandedStatus.html" title="struct objc2_ui_kit::UIAccessibilityExpandedStatus">UIAccessibilityExpandedStatus</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.isAccessibilityElementBlock" class="fn">isAccessibilityElementBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setIsAccessibilityElementBlock" class="fn">setIsAccessibilityElementBlock</a>(
+        &amp;self,
+        is_accessibility_element_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityLabelBlock" class="fn">accessibilityLabelBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityLabelBlock" class="fn">setAccessibilityLabelBlock</a>(
+        &amp;self,
+        accessibility_label_block: <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityValueBlock" class="fn">accessibilityValueBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityValueBlock" class="fn">setAccessibilityValueBlock</a>(
+        &amp;self,
+        accessibility_value_block: <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityHintBlock" class="fn">accessibilityHintBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityHintBlock" class="fn">setAccessibilityHintBlock</a>(
+        &amp;self,
+        accessibility_hint_block: <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityTraitsBlock" class="fn">accessibilityTraitsBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXTraitsReturnBlock.html" title="type objc2_ui_kit::AXTraitsReturnBlock">AXTraitsReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityTraitsBlock" class="fn">setAccessibilityTraitsBlock</a>(
+        &amp;self,
+        accessibility_traits_block: <a class="type" href="type.AXTraitsReturnBlock.html" title="type objc2_ui_kit::AXTraitsReturnBlock">AXTraitsReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityIdentifierBlock" class="fn">accessibilityIdentifierBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityIdentifierBlock" class="fn">setAccessibilityIdentifierBlock</a>(
+        &amp;self,
+        accessibility_identifier_block: <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityHeaderElementsBlock" class="fn">accessibilityHeaderElementsBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXArrayReturnBlock.html" title="type objc2_ui_kit::AXArrayReturnBlock">AXArrayReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityHeaderElementsBlock" class="fn">setAccessibilityHeaderElementsBlock</a>(
+        &amp;self,
+        accessibility_header_elements_block: <a class="type" href="type.AXArrayReturnBlock.html" title="type objc2_ui_kit::AXArrayReturnBlock">AXArrayReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityAttributedLabelBlock" class="fn">accessibilityAttributedLabelBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXAttributedStringReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringReturnBlock">AXAttributedStringReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityAttributedLabelBlock" class="fn">setAccessibilityAttributedLabelBlock</a>(
+        &amp;self,
+        accessibility_attributed_label_block: <a class="type" href="type.AXAttributedStringReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringReturnBlock">AXAttributedStringReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityAttributedHintBlock" class="fn">accessibilityAttributedHintBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXAttributedStringReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringReturnBlock">AXAttributedStringReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityAttributedHintBlock" class="fn">setAccessibilityAttributedHintBlock</a>(
+        &amp;self,
+        accessibility_attributed_hint_block: <a class="type" href="type.AXAttributedStringReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringReturnBlock">AXAttributedStringReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityLanguageBlock" class="fn">accessibilityLanguageBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityLanguageBlock" class="fn">setAccessibilityLanguageBlock</a>(
+        &amp;self,
+        accessibility_language_block: <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityTextualContextBlock" class="fn">accessibilityTextualContextBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXTextualContextReturnBlock.html" title="type objc2_ui_kit::AXTextualContextReturnBlock">AXTextualContextReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityTextualContextBlock" class="fn">setAccessibilityTextualContextBlock</a>(
+        &amp;self,
+        accessibility_textual_context_block: <a class="type" href="type.AXTextualContextReturnBlock.html" title="type objc2_ui_kit::AXTextualContextReturnBlock">AXTextualContextReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityUserInputLabelsBlock" class="fn">accessibilityUserInputLabelsBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXStringArrayReturnBlock.html" title="type objc2_ui_kit::AXStringArrayReturnBlock">AXStringArrayReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityUserInputLabelsBlock" class="fn">setAccessibilityUserInputLabelsBlock</a>(
+        &amp;self,
+        accessibility_user_input_labels_block: <a class="type" href="type.AXStringArrayReturnBlock.html" title="type objc2_ui_kit::AXStringArrayReturnBlock">AXStringArrayReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityAttributedUserInputLabelsBlock" class="fn">accessibilityAttributedUserInputLabelsBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXAttributedStringArrayReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringArrayReturnBlock">AXAttributedStringArrayReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityAttributedUserInputLabelsBlock" class="fn">setAccessibilityAttributedUserInputLabelsBlock</a>(
+        &amp;self,
+        accessibility_attributed_user_input_labels_block: <a class="type" href="type.AXAttributedStringArrayReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringArrayReturnBlock">AXAttributedStringArrayReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityAttributedValueBlock" class="fn">accessibilityAttributedValueBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXAttributedStringReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringReturnBlock">AXAttributedStringReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityAttributedValueBlock" class="fn">setAccessibilityAttributedValueBlock</a>(
+        &amp;self,
+        accessibility_attributed_value_block: <a class="type" href="type.AXAttributedStringReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringReturnBlock">AXAttributedStringReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityElementsHiddenBlock" class="fn">accessibilityElementsHiddenBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityElementsHiddenBlock" class="fn">setAccessibilityElementsHiddenBlock</a>(
+        &amp;self,
+        accessibility_elements_hidden_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityRespondsToUserInteractionBlock" class="fn">accessibilityRespondsToUserInteractionBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityRespondsToUserInteractionBlock" class="fn">setAccessibilityRespondsToUserInteractionBlock</a>(
+        &amp;self,
+        accessibility_responds_to_user_interaction_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityViewIsModalBlock" class="fn">accessibilityViewIsModalBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityViewIsModalBlock" class="fn">setAccessibilityViewIsModalBlock</a>(
+        &amp;self,
+        accessibility_view_is_modal_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityShouldGroupAccessibilityChildrenBlock" class="fn">accessibilityShouldGroupAccessibilityChildrenBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityShouldGroupAccessibilityChildrenBlock" class="fn">setAccessibilityShouldGroupAccessibilityChildrenBlock</a>(
+        &amp;self,
+        accessibility_should_group_accessibility_children_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityExpandedStatusBlock" class="fn">accessibilityExpandedStatusBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="type" href="../block2/type.DynBlock.html" title="type block2::DynBlock">DynBlock</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.Fn.html" title="trait core::ops::function::Fn">Fn</a>() -&gt; <a class="struct" href="struct.UIAccessibilityExpandedStatus.html" title="struct objc2_ui_kit::UIAccessibilityExpandedStatus">UIAccessibilityExpandedStatus</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.setAccessibilityExpandedStatusBlock" class="fn">setAccessibilityExpandedStatusBlock</a>(
+        &amp;self,
+        accessibility_expanded_status_block: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="type" href="../block2/type.DynBlock.html" title="type block2::DynBlock">DynBlock</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.Fn.html" title="trait core::ops::function::Fn">Fn</a>() -&gt; <a class="struct" href="struct.UIAccessibilityExpandedStatus.html" title="struct objc2_ui_kit::UIAccessibilityExpandedStatus">UIAccessibilityExpandedStatus</a>&gt;&gt;,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityElementsBlock" class="fn">accessibilityElementsBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXArrayReturnBlock.html" title="type objc2_ui_kit::AXArrayReturnBlock">AXArrayReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityElementsBlock" class="fn">setAccessibilityElementsBlock</a>(
+        &amp;self,
+        accessibility_elements_block: <a class="type" href="type.AXArrayReturnBlock.html" title="type objc2_ui_kit::AXArrayReturnBlock">AXArrayReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.automationElementsBlock" class="fn">automationElementsBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXArrayReturnBlock.html" title="type objc2_ui_kit::AXArrayReturnBlock">AXArrayReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAutomationElementsBlock" class="fn">setAutomationElementsBlock</a>(
+        &amp;self,
+        automation_elements_block: <a class="type" href="type.AXArrayReturnBlock.html" title="type objc2_ui_kit::AXArrayReturnBlock">AXArrayReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityContainerTypeBlock" class="fn">accessibilityContainerTypeBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXContainerTypeReturnBlock.html" title="type objc2_ui_kit::AXContainerTypeReturnBlock">AXContainerTypeReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityContainerTypeBlock" class="fn">setAccessibilityContainerTypeBlock</a>(
+        &amp;self,
+        accessibility_container_type_block: <a class="type" href="type.AXContainerTypeReturnBlock.html" title="type objc2_ui_kit::AXContainerTypeReturnBlock">AXContainerTypeReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityActivationPointBlock" class="fn">accessibilityActivationPointBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXPointReturnBlock.html" title="type objc2_ui_kit::AXPointReturnBlock">AXPointReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityActivationPointBlock" class="fn">setAccessibilityActivationPointBlock</a>(
+        &amp;self,
+        accessibility_activation_point_block: <a class="type" href="type.AXPointReturnBlock.html" title="type objc2_ui_kit::AXPointReturnBlock">AXPointReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityFrameBlock" class="fn">accessibilityFrameBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXRectReturnBlock.html" title="type objc2_ui_kit::AXRectReturnBlock">AXRectReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityFrameBlock" class="fn">setAccessibilityFrameBlock</a>(
+        &amp;self,
+        accessibility_frame_block: <a class="type" href="type.AXRectReturnBlock.html" title="type objc2_ui_kit::AXRectReturnBlock">AXRectReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityNavigationStyleBlock" class="fn">accessibilityNavigationStyleBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXNavigationStyleReturnBlock.html" title="type objc2_ui_kit::AXNavigationStyleReturnBlock">AXNavigationStyleReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityNavigationStyleBlock" class="fn">setAccessibilityNavigationStyleBlock</a>(
+        &amp;self,
+        accessibility_navigation_style_block: <a class="type" href="type.AXNavigationStyleReturnBlock.html" title="type objc2_ui_kit::AXNavigationStyleReturnBlock">AXNavigationStyleReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityPathBlock" class="fn">accessibilityPathBlock</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="type" href="type.AXPathReturnBlock.html" title="type objc2_ui_kit::AXPathReturnBlock">AXPathReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityPathBlock" class="fn">setAccessibilityPathBlock</a>(
+        &amp;self,
+        accessibility_path_block: <a class="type" href="type.AXPathReturnBlock.html" title="type objc2_ui_kit::AXPathReturnBlock">AXPathReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityActivateBlock" class="fn">accessibilityActivateBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityActivateBlock" class="fn">setAccessibilityActivateBlock</a>(
+        &amp;self,
+        accessibility_activate_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityIncrementBlock" class="fn">accessibilityIncrementBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXVoidReturnBlock.html" title="type objc2_ui_kit::AXVoidReturnBlock">AXVoidReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityIncrementBlock" class="fn">setAccessibilityIncrementBlock</a>(
+        &amp;self,
+        accessibility_increment_block: <a class="type" href="type.AXVoidReturnBlock.html" title="type objc2_ui_kit::AXVoidReturnBlock">AXVoidReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityDecrementBlock" class="fn">accessibilityDecrementBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXVoidReturnBlock.html" title="type objc2_ui_kit::AXVoidReturnBlock">AXVoidReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityDecrementBlock" class="fn">setAccessibilityDecrementBlock</a>(
+        &amp;self,
+        accessibility_decrement_block: <a class="type" href="type.AXVoidReturnBlock.html" title="type objc2_ui_kit::AXVoidReturnBlock">AXVoidReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityPerformEscapeBlock" class="fn">accessibilityPerformEscapeBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityPerformEscapeBlock" class="fn">setAccessibilityPerformEscapeBlock</a>(
+        &amp;self,
+        accessibility_perform_escape_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityMagicTapBlock" class="fn">accessibilityMagicTapBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityMagicTapBlock" class="fn">setAccessibilityMagicTapBlock</a>(
+        &amp;self,
+        accessibility_magic_tap_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.accessibilityCustomActionsBlock" class="fn">accessibilityCustomActionsBlock</a>(
+        &amp;self,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) -&gt; <a class="type" href="type.AXCustomActionsReturnBlock.html" title="type objc2_ui_kit::AXCustomActionsReturnBlock">AXCustomActionsReturnBlock</a> { ... }
+<span class="item-spacer"></span>    unsafe fn <a href="#method.setAccessibilityCustomActionsBlock" class="fn">setAccessibilityCustomActionsBlock</a>(
+        &amp;self,
+        accessibility_custom_actions_block: <a class="type" href="type.AXCustomActionsReturnBlock.html" title="type objc2_ui_kit::AXCustomActionsReturnBlock">AXCustomActionsReturnBlock</a>,
+        mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+    ) { ... }
+</details>}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Category “UIAccessibility” on <a href="../objc2/runtime/nsobject/struct.NSObject.html" title="struct objc2::runtime::nsobject::NSObject"><code>NSObject</code></a>.</p>
+</div></details><h2 id="provided-methods" class="section-header">Provided Methods<a href="#provided-methods" class="anchor">§</a></h2><div class="methods"><section id="method.isAccessibilityElement" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.isAccessibilityElement" class="fn">isAccessibilityElement</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setIsAccessibilityElement" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setIsAccessibilityElement" class="fn">setIsAccessibilityElement</a>(
+    &amp;self,
+    is_accessibility_element: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.isAccessibilityElement"><code>isAccessibilityElement</code></a>.</p>
+</div></details><section id="method.accessibilityLabel" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityLabel" class="fn">accessibilityLabel</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityLabel" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityLabel" class="fn">setAccessibilityLabel</a>(
+    &amp;self,
+    accessibility_label: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityLabel"><code>accessibilityLabel</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+</div></details><section id="method.accessibilityAttributedLabel" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityAttributedLabel" class="fn">accessibilityAttributedLabel</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityAttributedLabel" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityAttributedLabel" class="fn">setAccessibilityAttributedLabel</a>(
+    &amp;self,
+    accessibility_attributed_label: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityAttributedLabel"><code>accessibilityAttributedLabel</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+</div></details><section id="method.accessibilityHint" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityHint" class="fn">accessibilityHint</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityHint" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityHint" class="fn">setAccessibilityHint</a>(
+    &amp;self,
+    accessibility_hint: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityHint"><code>accessibilityHint</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+</div></details><section id="method.accessibilityAttributedHint" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityAttributedHint" class="fn">accessibilityAttributedHint</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityAttributedHint" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityAttributedHint" class="fn">setAccessibilityAttributedHint</a>(
+    &amp;self,
+    accessibility_attributed_hint: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityAttributedHint"><code>accessibilityAttributedHint</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+</div></details><section id="method.accessibilityValue" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityValue" class="fn">accessibilityValue</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityValue" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityValue" class="fn">setAccessibilityValue</a>(
+    &amp;self,
+    accessibility_value: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityValue"><code>accessibilityValue</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+</div></details><section id="method.accessibilityAttributedValue" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityAttributedValue" class="fn">accessibilityAttributedValue</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityAttributedValue" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityAttributedValue" class="fn">setAccessibilityAttributedValue</a>(
+    &amp;self,
+    accessibility_attributed_value: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityAttributedValue"><code>accessibilityAttributedValue</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+</div></details><section id="method.accessibilityTraits" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityTraits" class="fn">accessibilityTraits</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="type" href="type.UIAccessibilityTraits.html" title="type objc2_ui_kit::UIAccessibilityTraits">UIAccessibilityTraits</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityTraits" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityTraits" class="fn">setAccessibilityTraits</a>(
+    &amp;self,
+    accessibility_traits: <a class="type" href="type.UIAccessibilityTraits.html" title="type objc2_ui_kit::UIAccessibilityTraits">UIAccessibilityTraits</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityTraits"><code>accessibilityTraits</code></a>.</p>
+</div></details><section id="method.accessibilityFrame" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityFrame" class="fn">accessibilityFrame</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="struct" href="../objc2_core_foundation/geometry/struct.CGRect.html" title="struct objc2_core_foundation::geometry::CGRect">CGRect</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityFrame" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityFrame" class="fn">setAccessibilityFrame</a>(
+    &amp;self,
+    accessibility_frame: <a class="struct" href="../objc2_core_foundation/geometry/struct.CGRect.html" title="struct objc2_core_foundation::geometry::CGRect">CGRect</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityFrame"><code>accessibilityFrame</code></a>.</p>
+</div></details><section id="method.accessibilityPath" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityPath" class="fn">accessibilityPath</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="struct.UIBezierPath.html" title="struct objc2_ui_kit::UIBezierPath">UIBezierPath</a>&gt;&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityPath" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityPath" class="fn">setAccessibilityPath</a>(
+    &amp;self,
+    accessibility_path: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.UIBezierPath.html" title="struct objc2_ui_kit::UIBezierPath">UIBezierPath</a>&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityPath"><code>accessibilityPath</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+</div></details><section id="method.accessibilityActivationPoint" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityActivationPoint" class="fn">accessibilityActivationPoint</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="struct" href="../objc2_core_foundation/geometry/struct.CGPoint.html" title="struct objc2_core_foundation::geometry::CGPoint">CGPoint</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityActivationPoint" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityActivationPoint" class="fn">setAccessibilityActivationPoint</a>(
+    &amp;self,
+    accessibility_activation_point: <a class="struct" href="../objc2_core_foundation/geometry/struct.CGPoint.html" title="struct objc2_core_foundation::geometry::CGPoint">CGPoint</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityActivationPoint"><code>accessibilityActivationPoint</code></a>.</p>
+</div></details><section id="method.accessibilityLanguage" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityLanguage" class="fn">accessibilityLanguage</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityLanguage" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityLanguage" class="fn">setAccessibilityLanguage</a>(
+    &amp;self,
+    accessibility_language: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityLanguage"><code>accessibilityLanguage</code></a>.</p>
+</div></details><section id="method.accessibilityElementsHidden" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityElementsHidden" class="fn">accessibilityElementsHidden</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityElementsHidden" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityElementsHidden" class="fn">setAccessibilityElementsHidden</a>(
+    &amp;self,
+    accessibility_elements_hidden: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityElementsHidden"><code>accessibilityElementsHidden</code></a>.</p>
+</div></details><section id="method.accessibilityViewIsModal" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityViewIsModal" class="fn">accessibilityViewIsModal</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityViewIsModal" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityViewIsModal" class="fn">setAccessibilityViewIsModal</a>(
+    &amp;self,
+    accessibility_view_is_modal: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityViewIsModal"><code>accessibilityViewIsModal</code></a>.</p>
+</div></details><section id="method.shouldGroupAccessibilityChildren" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.shouldGroupAccessibilityChildren" class="fn">shouldGroupAccessibilityChildren</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setShouldGroupAccessibilityChildren" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setShouldGroupAccessibilityChildren" class="fn">setShouldGroupAccessibilityChildren</a>(
+    &amp;self,
+    should_group_accessibility_children: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.shouldGroupAccessibilityChildren"><code>shouldGroupAccessibilityChildren</code></a>.</p>
+</div></details><section id="method.accessibilityNavigationStyle" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityNavigationStyle" class="fn">accessibilityNavigationStyle</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="struct" href="struct.UIAccessibilityNavigationStyle.html" title="struct objc2_ui_kit::UIAccessibilityNavigationStyle">UIAccessibilityNavigationStyle</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityNavigationStyle" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityNavigationStyle" class="fn">setAccessibilityNavigationStyle</a>(
+    &amp;self,
+    accessibility_navigation_style: <a class="struct" href="struct.UIAccessibilityNavigationStyle.html" title="struct objc2_ui_kit::UIAccessibilityNavigationStyle">UIAccessibilityNavigationStyle</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityNavigationStyle"><code>accessibilityNavigationStyle</code></a>.</p>
+</div></details><section id="method.accessibilityRespondsToUserInteraction" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityRespondsToUserInteraction" class="fn">accessibilityRespondsToUserInteraction</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityRespondsToUserInteraction" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityRespondsToUserInteraction" class="fn">setAccessibilityRespondsToUserInteraction</a>(
+    &amp;self,
+    accessibility_responds_to_user_interaction: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityRespondsToUserInteraction"><code>accessibilityRespondsToUserInteraction</code></a>.</p>
+</div></details><section id="method.accessibilityUserInputLabels" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityUserInputLabels" class="fn">accessibilityUserInputLabels</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSArray/struct.NSArray.html" title="struct objc2_foundation::generated::__NSArray::NSArray">NSArray</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;&gt;&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityUserInputLabels" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityUserInputLabels" class="fn">setAccessibilityUserInputLabels</a>(
+    &amp;self,
+    accessibility_user_input_labels: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSArray/struct.NSArray.html" title="struct objc2_foundation::generated::__NSArray::NSArray">NSArray</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSString/struct.NSString.html" title="struct objc2_foundation::generated::__NSString::NSString">NSString</a>&gt;&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityUserInputLabels"><code>accessibilityUserInputLabels</code></a>.</p>
+<h5 id="safety"><a class="doc-anchor" href="#safety">§</a>Safety</h5>
+<p><code>accessibility_user_input_labels</code> might not allow <code>None</code>.</p>
+</div></details><section id="method.accessibilityAttributedUserInputLabels" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityAttributedUserInputLabels" class="fn">accessibilityAttributedUserInputLabels</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSArray/struct.NSArray.html" title="struct objc2_foundation::generated::__NSArray::NSArray">NSArray</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityAttributedUserInputLabels" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityAttributedUserInputLabels" class="fn">setAccessibilityAttributedUserInputLabels</a>(
+    &amp;self,
+    accessibility_attributed_user_input_labels: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSArray/struct.NSArray.html" title="struct objc2_foundation::generated::__NSArray::NSArray">NSArray</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSAttributedString/struct.NSAttributedString.html" title="struct objc2_foundation::generated::__NSAttributedString::NSAttributedString">NSAttributedString</a>&gt;&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityAttributedUserInputLabels"><code>accessibilityAttributedUserInputLabels</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+</div></details><section id="method.accessibilityHeaderElements" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityHeaderElements" class="fn">accessibilityHeaderElements</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="../objc2_foundation/generated/__NSArray/struct.NSArray.html" title="struct objc2_foundation::generated::__NSArray::NSArray">NSArray</a>&gt;&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityHeaderElements" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityHeaderElements" class="fn">setAccessibilityHeaderElements</a>(
+    &amp;self,
+    accessibility_header_elements: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="../objc2_foundation/generated/__NSArray/struct.NSArray.html" title="struct objc2_foundation::generated::__NSArray::NSArray">NSArray</a>&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityHeaderElements"><code>accessibilityHeaderElements</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-1"><a class="doc-anchor" href="#safety-1">§</a>Safety</h5>
+<p><code>accessibility_header_elements</code> generic should be of the correct type.</p>
+</div></details><section id="method.accessibilityTextualContext" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityTextualContext" class="fn">accessibilityTextualContext</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="type" href="type.UIAccessibilityTextualContext.html" title="type objc2_ui_kit::UIAccessibilityTextualContext">UIAccessibilityTextualContext</a>&gt;&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityTextualContext" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityTextualContext" class="fn">setAccessibilityTextualContext</a>(
+    &amp;self,
+    accessibility_textual_context: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="type" href="type.UIAccessibilityTextualContext.html" title="type objc2_ui_kit::UIAccessibilityTextualContext">UIAccessibilityTextualContext</a>&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityTextualContext"><code>accessibilityTextualContext</code></a>.</p>
+</div></details><section id="method.accessibilityDirectTouchOptions" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityDirectTouchOptions" class="fn">accessibilityDirectTouchOptions</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="struct" href="struct.UIAccessibilityDirectTouchOptions.html" title="struct objc2_ui_kit::UIAccessibilityDirectTouchOptions">UIAccessibilityDirectTouchOptions</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityDirectTouchOptions" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityDirectTouchOptions" class="fn">setAccessibilityDirectTouchOptions</a>(
+    &amp;self,
+    accessibility_direct_touch_options: <a class="struct" href="struct.UIAccessibilityDirectTouchOptions.html" title="struct objc2_ui_kit::UIAccessibilityDirectTouchOptions">UIAccessibilityDirectTouchOptions</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityDirectTouchOptions"><code>accessibilityDirectTouchOptions</code></a>.</p>
+</div></details><section id="method.accessibilityExpandedStatus" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityExpandedStatus" class="fn">accessibilityExpandedStatus</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="struct" href="struct.UIAccessibilityExpandedStatus.html" title="struct objc2_ui_kit::UIAccessibilityExpandedStatus">UIAccessibilityExpandedStatus</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityExpandedStatus" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityExpandedStatus" class="fn">setAccessibilityExpandedStatus</a>(
+    &amp;self,
+    accessibility_expanded_status: <a class="struct" href="struct.UIAccessibilityExpandedStatus.html" title="struct objc2_ui_kit::UIAccessibilityExpandedStatus">UIAccessibilityExpandedStatus</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityExpandedStatus"><code>accessibilityExpandedStatus</code></a>.</p>
+</div></details><section id="method.isAccessibilityElementBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.isAccessibilityElementBlock" class="fn">isAccessibilityElementBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setIsAccessibilityElementBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setIsAccessibilityElementBlock" class="fn">setIsAccessibilityElementBlock</a>(
+    &amp;self,
+    is_accessibility_element_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.isAccessibilityElementBlock"><code>isAccessibilityElementBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-2"><a class="doc-anchor" href="#safety-2">§</a>Safety</h5>
+<p><code>is_accessibility_element_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityLabelBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityLabelBlock" class="fn">accessibilityLabelBlock</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityLabelBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityLabelBlock" class="fn">setAccessibilityLabelBlock</a>(
+    &amp;self,
+    accessibility_label_block: <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityLabelBlock"><code>accessibilityLabelBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-3"><a class="doc-anchor" href="#safety-3">§</a>Safety</h5>
+<p><code>accessibility_label_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityValueBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityValueBlock" class="fn">accessibilityValueBlock</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityValueBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityValueBlock" class="fn">setAccessibilityValueBlock</a>(
+    &amp;self,
+    accessibility_value_block: <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityValueBlock"><code>accessibilityValueBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-4"><a class="doc-anchor" href="#safety-4">§</a>Safety</h5>
+<p><code>accessibility_value_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityHintBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityHintBlock" class="fn">accessibilityHintBlock</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityHintBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityHintBlock" class="fn">setAccessibilityHintBlock</a>(
+    &amp;self,
+    accessibility_hint_block: <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityHintBlock"><code>accessibilityHintBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-5"><a class="doc-anchor" href="#safety-5">§</a>Safety</h5>
+<p><code>accessibility_hint_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityTraitsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityTraitsBlock" class="fn">accessibilityTraitsBlock</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="type" href="type.AXTraitsReturnBlock.html" title="type objc2_ui_kit::AXTraitsReturnBlock">AXTraitsReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityTraitsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityTraitsBlock" class="fn">setAccessibilityTraitsBlock</a>(
+    &amp;self,
+    accessibility_traits_block: <a class="type" href="type.AXTraitsReturnBlock.html" title="type objc2_ui_kit::AXTraitsReturnBlock">AXTraitsReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityTraitsBlock"><code>accessibilityTraitsBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-6"><a class="doc-anchor" href="#safety-6">§</a>Safety</h5>
+<p><code>accessibility_traits_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityIdentifierBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityIdentifierBlock" class="fn">accessibilityIdentifierBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityIdentifierBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityIdentifierBlock" class="fn">setAccessibilityIdentifierBlock</a>(
+    &amp;self,
+    accessibility_identifier_block: <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityIdentifierBlock"><code>accessibilityIdentifierBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-7"><a class="doc-anchor" href="#safety-7">§</a>Safety</h5>
+<p><code>accessibility_identifier_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityHeaderElementsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityHeaderElementsBlock" class="fn">accessibilityHeaderElementsBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXArrayReturnBlock.html" title="type objc2_ui_kit::AXArrayReturnBlock">AXArrayReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityHeaderElementsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityHeaderElementsBlock" class="fn">setAccessibilityHeaderElementsBlock</a>(
+    &amp;self,
+    accessibility_header_elements_block: <a class="type" href="type.AXArrayReturnBlock.html" title="type objc2_ui_kit::AXArrayReturnBlock">AXArrayReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityHeaderElementsBlock"><code>accessibilityHeaderElementsBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-8"><a class="doc-anchor" href="#safety-8">§</a>Safety</h5>
+<p><code>accessibility_header_elements_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityAttributedLabelBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityAttributedLabelBlock" class="fn">accessibilityAttributedLabelBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXAttributedStringReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringReturnBlock">AXAttributedStringReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityAttributedLabelBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityAttributedLabelBlock" class="fn">setAccessibilityAttributedLabelBlock</a>(
+    &amp;self,
+    accessibility_attributed_label_block: <a class="type" href="type.AXAttributedStringReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringReturnBlock">AXAttributedStringReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityAttributedLabelBlock"><code>accessibilityAttributedLabelBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-9"><a class="doc-anchor" href="#safety-9">§</a>Safety</h5>
+<p><code>accessibility_attributed_label_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityAttributedHintBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityAttributedHintBlock" class="fn">accessibilityAttributedHintBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXAttributedStringReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringReturnBlock">AXAttributedStringReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityAttributedHintBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityAttributedHintBlock" class="fn">setAccessibilityAttributedHintBlock</a>(
+    &amp;self,
+    accessibility_attributed_hint_block: <a class="type" href="type.AXAttributedStringReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringReturnBlock">AXAttributedStringReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityAttributedHintBlock"><code>accessibilityAttributedHintBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-10"><a class="doc-anchor" href="#safety-10">§</a>Safety</h5>
+<p><code>accessibility_attributed_hint_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityLanguageBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityLanguageBlock" class="fn">accessibilityLanguageBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityLanguageBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityLanguageBlock" class="fn">setAccessibilityLanguageBlock</a>(
+    &amp;self,
+    accessibility_language_block: <a class="type" href="type.AXStringReturnBlock.html" title="type objc2_ui_kit::AXStringReturnBlock">AXStringReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityLanguageBlock"><code>accessibilityLanguageBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-11"><a class="doc-anchor" href="#safety-11">§</a>Safety</h5>
+<p><code>accessibility_language_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityTextualContextBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityTextualContextBlock" class="fn">accessibilityTextualContextBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXTextualContextReturnBlock.html" title="type objc2_ui_kit::AXTextualContextReturnBlock">AXTextualContextReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityTextualContextBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityTextualContextBlock" class="fn">setAccessibilityTextualContextBlock</a>(
+    &amp;self,
+    accessibility_textual_context_block: <a class="type" href="type.AXTextualContextReturnBlock.html" title="type objc2_ui_kit::AXTextualContextReturnBlock">AXTextualContextReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityTextualContextBlock"><code>accessibilityTextualContextBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-12"><a class="doc-anchor" href="#safety-12">§</a>Safety</h5>
+<p><code>accessibility_textual_context_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityUserInputLabelsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityUserInputLabelsBlock" class="fn">accessibilityUserInputLabelsBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXStringArrayReturnBlock.html" title="type objc2_ui_kit::AXStringArrayReturnBlock">AXStringArrayReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityUserInputLabelsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityUserInputLabelsBlock" class="fn">setAccessibilityUserInputLabelsBlock</a>(
+    &amp;self,
+    accessibility_user_input_labels_block: <a class="type" href="type.AXStringArrayReturnBlock.html" title="type objc2_ui_kit::AXStringArrayReturnBlock">AXStringArrayReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityUserInputLabelsBlock"><code>accessibilityUserInputLabelsBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-13"><a class="doc-anchor" href="#safety-13">§</a>Safety</h5>
+<p><code>accessibility_user_input_labels_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityAttributedUserInputLabelsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityAttributedUserInputLabelsBlock" class="fn">accessibilityAttributedUserInputLabelsBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXAttributedStringArrayReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringArrayReturnBlock">AXAttributedStringArrayReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityAttributedUserInputLabelsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityAttributedUserInputLabelsBlock" class="fn">setAccessibilityAttributedUserInputLabelsBlock</a>(
+    &amp;self,
+    accessibility_attributed_user_input_labels_block: <a class="type" href="type.AXAttributedStringArrayReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringArrayReturnBlock">AXAttributedStringArrayReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityAttributedUserInputLabelsBlock"><code>accessibilityAttributedUserInputLabelsBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-14"><a class="doc-anchor" href="#safety-14">§</a>Safety</h5>
+<p><code>accessibility_attributed_user_input_labels_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityAttributedValueBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityAttributedValueBlock" class="fn">accessibilityAttributedValueBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXAttributedStringReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringReturnBlock">AXAttributedStringReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityAttributedValueBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityAttributedValueBlock" class="fn">setAccessibilityAttributedValueBlock</a>(
+    &amp;self,
+    accessibility_attributed_value_block: <a class="type" href="type.AXAttributedStringReturnBlock.html" title="type objc2_ui_kit::AXAttributedStringReturnBlock">AXAttributedStringReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityAttributedValueBlock"><code>accessibilityAttributedValueBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-15"><a class="doc-anchor" href="#safety-15">§</a>Safety</h5>
+<p><code>accessibility_attributed_value_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityElementsHiddenBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityElementsHiddenBlock" class="fn">accessibilityElementsHiddenBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityElementsHiddenBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityElementsHiddenBlock" class="fn">setAccessibilityElementsHiddenBlock</a>(
+    &amp;self,
+    accessibility_elements_hidden_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityElementsHiddenBlock"><code>accessibilityElementsHiddenBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-16"><a class="doc-anchor" href="#safety-16">§</a>Safety</h5>
+<p><code>accessibility_elements_hidden_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityRespondsToUserInteractionBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityRespondsToUserInteractionBlock" class="fn">accessibilityRespondsToUserInteractionBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityRespondsToUserInteractionBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityRespondsToUserInteractionBlock" class="fn">setAccessibilityRespondsToUserInteractionBlock</a>(
+    &amp;self,
+    accessibility_responds_to_user_interaction_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityRespondsToUserInteractionBlock"><code>accessibilityRespondsToUserInteractionBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-17"><a class="doc-anchor" href="#safety-17">§</a>Safety</h5>
+<p><code>accessibility_responds_to_user_interaction_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityViewIsModalBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityViewIsModalBlock" class="fn">accessibilityViewIsModalBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityViewIsModalBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityViewIsModalBlock" class="fn">setAccessibilityViewIsModalBlock</a>(
+    &amp;self,
+    accessibility_view_is_modal_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityViewIsModalBlock"><code>accessibilityViewIsModalBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-18"><a class="doc-anchor" href="#safety-18">§</a>Safety</h5>
+<p><code>accessibility_view_is_modal_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityShouldGroupAccessibilityChildrenBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityShouldGroupAccessibilityChildrenBlock" class="fn">accessibilityShouldGroupAccessibilityChildrenBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityShouldGroupAccessibilityChildrenBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityShouldGroupAccessibilityChildrenBlock" class="fn">setAccessibilityShouldGroupAccessibilityChildrenBlock</a>(
+    &amp;self,
+    accessibility_should_group_accessibility_children_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityShouldGroupAccessibilityChildrenBlock"><code>accessibilityShouldGroupAccessibilityChildrenBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-19"><a class="doc-anchor" href="#safety-19">§</a>Safety</h5>
+<p><code>accessibility_should_group_accessibility_children_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityExpandedStatusBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityExpandedStatusBlock" class="fn">accessibilityExpandedStatusBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="type" href="../block2/type.DynBlock.html" title="type block2::DynBlock">DynBlock</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.Fn.html" title="trait core::ops::function::Fn">Fn</a>() -&gt; <a class="struct" href="struct.UIAccessibilityExpandedStatus.html" title="struct objc2_ui_kit::UIAccessibilityExpandedStatus">UIAccessibilityExpandedStatus</a>&gt;</h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityExpandedStatusBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.setAccessibilityExpandedStatusBlock" class="fn">setAccessibilityExpandedStatusBlock</a>(
+    &amp;self,
+    accessibility_expanded_status_block: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="type" href="../block2/type.DynBlock.html" title="type block2::DynBlock">DynBlock</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.Fn.html" title="trait core::ops::function::Fn">Fn</a>() -&gt; <a class="struct" href="struct.UIAccessibilityExpandedStatus.html" title="struct objc2_ui_kit::UIAccessibilityExpandedStatus">UIAccessibilityExpandedStatus</a>&gt;&gt;,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityExpandedStatusBlock"><code>accessibilityExpandedStatusBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+</div></details><section id="method.accessibilityElementsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityElementsBlock" class="fn">accessibilityElementsBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXArrayReturnBlock.html" title="type objc2_ui_kit::AXArrayReturnBlock">AXArrayReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityElementsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityElementsBlock" class="fn">setAccessibilityElementsBlock</a>(
+    &amp;self,
+    accessibility_elements_block: <a class="type" href="type.AXArrayReturnBlock.html" title="type objc2_ui_kit::AXArrayReturnBlock">AXArrayReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityElementsBlock"><code>accessibilityElementsBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-20"><a class="doc-anchor" href="#safety-20">§</a>Safety</h5>
+<p><code>accessibility_elements_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.automationElementsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.automationElementsBlock" class="fn">automationElementsBlock</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="type" href="type.AXArrayReturnBlock.html" title="type objc2_ui_kit::AXArrayReturnBlock">AXArrayReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAutomationElementsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAutomationElementsBlock" class="fn">setAutomationElementsBlock</a>(
+    &amp;self,
+    automation_elements_block: <a class="type" href="type.AXArrayReturnBlock.html" title="type objc2_ui_kit::AXArrayReturnBlock">AXArrayReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.automationElementsBlock"><code>automationElementsBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-21"><a class="doc-anchor" href="#safety-21">§</a>Safety</h5>
+<p><code>automation_elements_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityContainerTypeBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityContainerTypeBlock" class="fn">accessibilityContainerTypeBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXContainerTypeReturnBlock.html" title="type objc2_ui_kit::AXContainerTypeReturnBlock">AXContainerTypeReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityContainerTypeBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityContainerTypeBlock" class="fn">setAccessibilityContainerTypeBlock</a>(
+    &amp;self,
+    accessibility_container_type_block: <a class="type" href="type.AXContainerTypeReturnBlock.html" title="type objc2_ui_kit::AXContainerTypeReturnBlock">AXContainerTypeReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityContainerTypeBlock"><code>accessibilityContainerTypeBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-22"><a class="doc-anchor" href="#safety-22">§</a>Safety</h5>
+<p><code>accessibility_container_type_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityActivationPointBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityActivationPointBlock" class="fn">accessibilityActivationPointBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXPointReturnBlock.html" title="type objc2_ui_kit::AXPointReturnBlock">AXPointReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityActivationPointBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityActivationPointBlock" class="fn">setAccessibilityActivationPointBlock</a>(
+    &amp;self,
+    accessibility_activation_point_block: <a class="type" href="type.AXPointReturnBlock.html" title="type objc2_ui_kit::AXPointReturnBlock">AXPointReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityActivationPointBlock"><code>accessibilityActivationPointBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-23"><a class="doc-anchor" href="#safety-23">§</a>Safety</h5>
+<p><code>accessibility_activation_point_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityFrameBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityFrameBlock" class="fn">accessibilityFrameBlock</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="type" href="type.AXRectReturnBlock.html" title="type objc2_ui_kit::AXRectReturnBlock">AXRectReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityFrameBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityFrameBlock" class="fn">setAccessibilityFrameBlock</a>(
+    &amp;self,
+    accessibility_frame_block: <a class="type" href="type.AXRectReturnBlock.html" title="type objc2_ui_kit::AXRectReturnBlock">AXRectReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityFrameBlock"><code>accessibilityFrameBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-24"><a class="doc-anchor" href="#safety-24">§</a>Safety</h5>
+<p><code>accessibility_frame_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityNavigationStyleBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityNavigationStyleBlock" class="fn">accessibilityNavigationStyleBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXNavigationStyleReturnBlock.html" title="type objc2_ui_kit::AXNavigationStyleReturnBlock">AXNavigationStyleReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityNavigationStyleBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityNavigationStyleBlock" class="fn">setAccessibilityNavigationStyleBlock</a>(
+    &amp;self,
+    accessibility_navigation_style_block: <a class="type" href="type.AXNavigationStyleReturnBlock.html" title="type objc2_ui_kit::AXNavigationStyleReturnBlock">AXNavigationStyleReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityNavigationStyleBlock"><code>accessibilityNavigationStyleBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-25"><a class="doc-anchor" href="#safety-25">§</a>Safety</h5>
+<p><code>accessibility_navigation_style_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityPathBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityPathBlock" class="fn">accessibilityPathBlock</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="type" href="type.AXPathReturnBlock.html" title="type objc2_ui_kit::AXPathReturnBlock">AXPathReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityPathBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityPathBlock" class="fn">setAccessibilityPathBlock</a>(
+    &amp;self,
+    accessibility_path_block: <a class="type" href="type.AXPathReturnBlock.html" title="type objc2_ui_kit::AXPathReturnBlock">AXPathReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityPathBlock"><code>accessibilityPathBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-26"><a class="doc-anchor" href="#safety-26">§</a>Safety</h5>
+<p><code>accessibility_path_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityActivateBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityActivateBlock" class="fn">accessibilityActivateBlock</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityActivateBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityActivateBlock" class="fn">setAccessibilityActivateBlock</a>(
+    &amp;self,
+    accessibility_activate_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityActivateBlock"><code>accessibilityActivateBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-27"><a class="doc-anchor" href="#safety-27">§</a>Safety</h5>
+<p><code>accessibility_activate_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityIncrementBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityIncrementBlock" class="fn">accessibilityIncrementBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXVoidReturnBlock.html" title="type objc2_ui_kit::AXVoidReturnBlock">AXVoidReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityIncrementBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityIncrementBlock" class="fn">setAccessibilityIncrementBlock</a>(
+    &amp;self,
+    accessibility_increment_block: <a class="type" href="type.AXVoidReturnBlock.html" title="type objc2_ui_kit::AXVoidReturnBlock">AXVoidReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityIncrementBlock"><code>accessibilityIncrementBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-28"><a class="doc-anchor" href="#safety-28">§</a>Safety</h5>
+<p><code>accessibility_increment_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityDecrementBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityDecrementBlock" class="fn">accessibilityDecrementBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXVoidReturnBlock.html" title="type objc2_ui_kit::AXVoidReturnBlock">AXVoidReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityDecrementBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityDecrementBlock" class="fn">setAccessibilityDecrementBlock</a>(
+    &amp;self,
+    accessibility_decrement_block: <a class="type" href="type.AXVoidReturnBlock.html" title="type objc2_ui_kit::AXVoidReturnBlock">AXVoidReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityDecrementBlock"><code>accessibilityDecrementBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-29"><a class="doc-anchor" href="#safety-29">§</a>Safety</h5>
+<p><code>accessibility_decrement_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityPerformEscapeBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityPerformEscapeBlock" class="fn">accessibilityPerformEscapeBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityPerformEscapeBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityPerformEscapeBlock" class="fn">setAccessibilityPerformEscapeBlock</a>(
+    &amp;self,
+    accessibility_perform_escape_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityPerformEscapeBlock"><code>accessibilityPerformEscapeBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-30"><a class="doc-anchor" href="#safety-30">§</a>Safety</h5>
+<p><code>accessibility_perform_escape_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityMagicTapBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityMagicTapBlock" class="fn">accessibilityMagicTapBlock</a>(&amp;self, mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>) -&gt; <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityMagicTapBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityMagicTapBlock" class="fn">setAccessibilityMagicTapBlock</a>(
+    &amp;self,
+    accessibility_magic_tap_block: <a class="type" href="type.AXBoolReturnBlock.html" title="type objc2_ui_kit::AXBoolReturnBlock">AXBoolReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityMagicTapBlock"><code>accessibilityMagicTapBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-31"><a class="doc-anchor" href="#safety-31">§</a>Safety</h5>
+<p><code>accessibility_magic_tap_block</code> must be a valid pointer or null.</p>
+</div></details><section id="method.accessibilityCustomActionsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">fn <a href="#method.accessibilityCustomActionsBlock" class="fn">accessibilityCustomActionsBlock</a>(
+    &amp;self,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+) -&gt; <a class="type" href="type.AXCustomActionsReturnBlock.html" title="type objc2_ui_kit::AXCustomActionsReturnBlock">AXCustomActionsReturnBlock</a></h4></section><details class="toggle method-toggle" open><summary><section id="method.setAccessibilityCustomActionsBlock" class="method"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#132-1198">Source</a><h4 class="code-header">unsafe fn <a href="#method.setAccessibilityCustomActionsBlock" class="fn">setAccessibilityCustomActionsBlock</a>(
+    &amp;self,
+    accessibility_custom_actions_block: <a class="type" href="type.AXCustomActionsReturnBlock.html" title="type objc2_ui_kit::AXCustomActionsReturnBlock">AXCustomActionsReturnBlock</a>,
+    mtm: <a class="struct" href="../objc2/main_thread_marker/struct.MainThreadMarker.html" title="struct objc2::main_thread_marker::MainThreadMarker">MainThreadMarker</a>,
+)</h4></section></summary><div class="docblock"><p>Setter for <a href="trait.NSObjectUIAccessibility.html#method.accessibilityCustomActionsBlock"><code>accessibilityCustomActionsBlock</code></a>.</p>
+<p>This is <a href="../objc2_foundation/copying/trait.NSCopying.html#method.copy" title="method objc2_foundation::copying::NSCopying::copy">copied</a> when set.</p>
+<h5 id="safety-32"><a class="doc-anchor" href="#safety-32">§</a>Safety</h5>
+<p><code>accessibility_custom_actions_block</code> must be a valid pointer or null.</p>
+</div></details></div><h2 id="dyn-compatibility" class="section-header">Dyn Compatibility<a href="#dyn-compatibility" class="anchor">§</a></h2><div class="dyn-compatibility-info"><p>This trait is <b>not</b> <a href="https://doc.rust-lang.org/nightly/reference/items/traits.html#dyn-compatibility">dyn compatible</a>.</p><p><i>In older versions of Rust, dyn compatibility was called "object safety", so this trait is not object safe.</i></p></div><h2 id="foreign-impls" class="section-header">Implementations on Foreign Types<a href="#foreign-impls" class="anchor">§</a></h2><section id="impl-NSObjectUIAccessibility-for-NSObject" class="impl"><a class="src rightside" href="../src/objc2_ui_kit/generated/UIAccessibility.rs.html#1202">Source</a><a href="#impl-NSObjectUIAccessibility-for-NSObject" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.NSObjectUIAccessibility.html" title="trait objc2_ui_kit::NSObjectUIAccessibility">NSObjectUIAccessibility</a> for <a class="struct" href="../objc2/runtime/nsobject/struct.NSObject.html" title="struct objc2::runtime::nsobject::NSObject">NSObject</a></h3></section><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"></div><script src="../trait.impl/objc2_ui_kit/generated/__UIAccessibility/trait.NSObjectUIAccessibility.js" data-ignore-extern-crates="objc2" async></script></section></div></main></body></html>

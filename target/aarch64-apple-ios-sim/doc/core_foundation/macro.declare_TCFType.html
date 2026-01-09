@@ -1,0 +1,25 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Declare a Rust type that wraps an underlying CoreFoundation type."><title>declare_TCFType in core_foundation - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-2eb46af5.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="core_foundation" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.0-nightly (fecb335cb 2026-01-07)" data-channel="nightly" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../static.files/storage-e2aeef58.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-ffcac47a.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">declare_TCFType</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../core_foundation/index.html">core_<wbr>foundation</a><span class="version">0.9.4</span></h2></div><div class="sidebar-elems"><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">core_foundation</a></div><h1>Macro <span class="macro">declare_<wbr>TCFType</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/core_foundation/lib.rs.html#57-71">Source</a> </span></div><pre class="rust item-decl"><code>macro_rules! declare_TCFType {
+    (
+        $(#[$doc:meta])*
+        $ty:ident, $raw:ident
+    ) =&gt; { ... };
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Declare a Rust type that wraps an underlying CoreFoundation type.</p>
+<p>This will provide an implementation of <code>Drop</code> using <a href="https://developer.apple.com/documentation/corefoundation/1521153-cfrelease"><code>CFRelease</code></a>.
+The type must have an implementation of the <a href="base/trait.TCFType.html"><code>TCFType</code></a> trait, usually
+provided using the <a href="macro.impl_TCFType.html"><code>impl_TCFType</code></a> macro.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[macro_use] </span><span class="kw">extern crate </span>core_foundation;
+<span class="comment">// Make sure that the `TCFType` trait is in scope.
+</span><span class="kw">use </span>core_foundation::base::{CFTypeID, TCFType};
+
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="comment">// We need a function that returns the `CFTypeID`.
+    </span><span class="kw">pub fn </span>ShrubberyGetTypeID() -&gt; CFTypeID;
+}
+
+<span class="kw">pub struct </span>__Shrubbery {}
+<span class="comment">// The ref type must be a pointer to the underlying struct.
+</span><span class="kw">pub type </span>ShrubberyRef = <span class="kw-2">*const </span>__Shrubbery;
+
+<span class="macro">declare_TCFType!</span>(Shrubbery, ShrubberyRef);
+<span class="macro">impl_TCFType!</span>(Shrubbery, ShrubberyRef, ShrubberyGetTypeID);</code></pre></div></div></details></section></div></main></body></html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="The NSURLDownloadDelegate delegate is used to report the progress of the download."><title>NSURLDownloadDelegate in objc2_foundation - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-2eb46af5.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="objc2_foundation" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.0-nightly (fecb335cb 2026-01-07)" data-channel="nightly" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../static.files/storage-e2aeef58.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-ffcac47a.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">NSURLDownloadDelegate</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../objc2_foundation/index.html">objc2_<wbr>foundation</a><span class="version">0.3.2</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">NSURL<wbr>Download<wbr>Delegate</a></h2><h3><a href="#provided-methods">Provided Methods</a></h3><ul class="block"><li><a href="#method.downloadDidBegin" title="downloadDidBegin">downloadDidBegin</a></li><li><a href="#method.downloadDidFinish" title="downloadDidFinish">downloadDidFinish</a></li><li><a href="#method.downloadShouldUseCredentialStorage" title="downloadShouldUseCredentialStorage">downloadShouldUseCredentialStorage</a></li><li><a href="#method.download_canAuthenticateAgainstProtectionSpace" title="download_canAuthenticateAgainstProtectionSpace">download_canAuthenticateAgainstProtectionSpace</a></li><li><a href="#method.download_decideDestinationWithSuggestedFilename" title="download_decideDestinationWithSuggestedFilename">download_decideDestinationWithSuggestedFilename</a></li><li><a href="#method.download_didCancelAuthenticationChallenge" title="download_didCancelAuthenticationChallenge">download_didCancelAuthenticationChallenge</a></li><li><a href="#method.download_didCreateDestination" title="download_didCreateDestination">download_didCreateDestination</a></li><li><a href="#method.download_didFailWithError" title="download_didFailWithError">download_didFailWithError</a></li><li><a href="#method.download_didReceiveAuthenticationChallenge" title="download_didReceiveAuthenticationChallenge">download_didReceiveAuthenticationChallenge</a></li><li><a href="#method.download_didReceiveDataOfLength" title="download_didReceiveDataOfLength">download_didReceiveDataOfLength</a></li><li><a href="#method.download_didReceiveResponse" title="download_didReceiveResponse">download_didReceiveResponse</a></li><li><a href="#method.download_shouldDecodeSourceDataOfMIMEType" title="download_shouldDecodeSourceDataOfMIMEType">download_shouldDecodeSourceDataOfMIMEType</a></li><li><a href="#method.download_willResumeWithResponse_fromByte" title="download_willResumeWithResponse_fromByte">download_willResumeWithResponse_fromByte</a></li><li><a href="#method.download_willSendRequest_redirectResponse" title="download_willSendRequest_redirectResponse">download_willSendRequest_redirectResponse</a></li></ul><h3><a href="#foreign-impls">Implementations on Foreign Types</a></h3><ul class="block"><li><a href="#impl-NSURLDownloadDelegate-for-ProtocolObject%3CT%3E" title="ProtocolObject&#60;T&#62;">ProtocolObject&#60;T&#62;</a></li></ul><h3><a href="#trait-implementations">Trait Implementations</a></h3><ul class="block trait-implementation"><li><a href="#impl-ImplementedBy%3CT%3E-for-dyn+NSURLDownloadDelegate" title="ImplementedBy&#60;T&#62;">ImplementedBy&#60;T&#62;</a></li><li><a href="#impl-ProtocolType-for-dyn+NSURLDownloadDelegate" title="ProtocolType">ProtocolType</a></li></ul><h3><a href="#implementors">Implementors</a></h3></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="index.html">In crate objc2_<wbr>foundation</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">objc2_foundation</a></div><h1>Trait <span class="trait">NSURL<wbr>Download<wbr>Delegate</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a> </span></div><pre class="rust item-decl"><code>pub unsafe trait NSURLDownloadDelegate: <a class="trait" href="trait.NSObjectProtocol.html" title="trait objc2_foundation::NSObjectProtocol">NSObjectProtocol</a> {
+<details class="toggle type-contents-toggle"><summary class="hideme"><span>Show 14 methods</span></summary>    // Provided methods
+    fn <a href="#method.downloadDidBegin" class="fn">downloadDidBegin</a>(&amp;self, download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>)
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.download_willSendRequest_redirectResponse" class="fn">download_willSendRequest_redirectResponse</a>(
+        &amp;self,
+        download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+        request: &amp;<a class="struct" href="struct.NSURLRequest.html" title="struct objc2_foundation::NSURLRequest">NSURLRequest</a>,
+        redirect_response: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.NSURLResponse.html" title="struct objc2_foundation::NSURLResponse">NSURLResponse</a>&gt;,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="struct.NSURLRequest.html" title="struct objc2_foundation::NSURLRequest">NSURLRequest</a>&gt;&gt;
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.download_canAuthenticateAgainstProtectionSpace" class="fn">download_canAuthenticateAgainstProtectionSpace</a>(
+        &amp;self,
+        connection: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+        protection_space: &amp;<a class="struct" href="struct.NSURLProtectionSpace.html" title="struct objc2_foundation::NSURLProtectionSpace">NSURLProtectionSpace</a>,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.download_didReceiveAuthenticationChallenge" class="fn">download_didReceiveAuthenticationChallenge</a>(
+        &amp;self,
+        download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+        challenge: &amp;<a class="struct" href="struct.NSURLAuthenticationChallenge.html" title="struct objc2_foundation::NSURLAuthenticationChallenge">NSURLAuthenticationChallenge</a>,
+    )
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.download_didCancelAuthenticationChallenge" class="fn">download_didCancelAuthenticationChallenge</a>(
+        &amp;self,
+        download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+        challenge: &amp;<a class="struct" href="struct.NSURLAuthenticationChallenge.html" title="struct objc2_foundation::NSURLAuthenticationChallenge">NSURLAuthenticationChallenge</a>,
+    )
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.downloadShouldUseCredentialStorage" class="fn">downloadShouldUseCredentialStorage</a>(
+        &amp;self,
+        download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.download_didReceiveResponse" class="fn">download_didReceiveResponse</a>(
+        &amp;self,
+        download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+        response: &amp;<a class="struct" href="struct.NSURLResponse.html" title="struct objc2_foundation::NSURLResponse">NSURLResponse</a>,
+    )
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.download_willResumeWithResponse_fromByte" class="fn">download_willResumeWithResponse_fromByte</a>(
+        &amp;self,
+        download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+        response: &amp;<a class="struct" href="struct.NSURLResponse.html" title="struct objc2_foundation::NSURLResponse">NSURLResponse</a>,
+        starting_byte: <a class="type" href="https://doc.rust-lang.org/nightly/core/ffi/primitives/type.c_longlong.html" title="type core::ffi::primitives::c_longlong">c_longlong</a>,
+    )
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.download_didReceiveDataOfLength" class="fn">download_didReceiveDataOfLength</a>(
+        &amp;self,
+        download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+        length: <a class="type" href="type.NSUInteger.html" title="type objc2_foundation::NSUInteger">NSUInteger</a>,
+    )
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.download_shouldDecodeSourceDataOfMIMEType" class="fn">download_shouldDecodeSourceDataOfMIMEType</a>(
+        &amp;self,
+        download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+        encoding_type: &amp;<a class="struct" href="struct.NSString.html" title="struct objc2_foundation::NSString">NSString</a>,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.download_decideDestinationWithSuggestedFilename" class="fn">download_decideDestinationWithSuggestedFilename</a>(
+        &amp;self,
+        download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+        filename: &amp;<a class="struct" href="struct.NSString.html" title="struct objc2_foundation::NSString">NSString</a>,
+    )
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.download_didCreateDestination" class="fn">download_didCreateDestination</a>(
+        &amp;self,
+        download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+        path: &amp;<a class="struct" href="struct.NSString.html" title="struct objc2_foundation::NSString">NSString</a>,
+    )
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.downloadDidFinish" class="fn">downloadDidFinish</a>(&amp;self, download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>)
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.download_didFailWithError" class="fn">download_didFailWithError</a>(
+        &amp;self,
+        download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+        error: &amp;<a class="struct" href="struct.NSError.html" title="struct objc2_foundation::NSError">NSError</a>,
+    )
+       <span class="where">where Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a></span> { ... }
+</details>}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>The NSURLDownloadDelegate delegate is used to report the progress of the download.</p>
+<p>See also <a href="https://developer.apple.com/documentation/foundation/nsurldownloaddelegate?language=objc">Apple’s documentation</a></p>
+</div></details><h2 id="provided-methods" class="section-header">Provided Methods<a href="#provided-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="method.downloadDidBegin" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.downloadDidBegin" class="fn">downloadDidBegin</a>(&amp;self, download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>)<div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>This method is called immediately after the download has started.</p>
+<p>Parameter <code>download</code>: The download that just started downloading.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.download_willSendRequest_redirectResponse" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.download_willSendRequest_redirectResponse" class="fn">download_willSendRequest_redirectResponse</a>(
+    &amp;self,
+    download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+    request: &amp;<a class="struct" href="struct.NSURLRequest.html" title="struct objc2_foundation::NSURLRequest">NSURLRequest</a>,
+    redirect_response: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.NSURLResponse.html" title="struct objc2_foundation::NSURLResponse">NSURLResponse</a>&gt;,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../objc2/rc/retained/struct.Retained.html" title="struct objc2::rc::retained::Retained">Retained</a>&lt;<a class="struct" href="struct.NSURLRequest.html" title="struct objc2_foundation::NSURLRequest">NSURLRequest</a>&gt;&gt;<div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>This method is called if the download must load another request because the previous
+request was redirected.</p>
+<p>Parameter <code>download</code>: The download that will send the request.</p>
+<p>Parameter <code>request</code>: The request that will be used to continue loading.</p>
+<p>Returns: The request to be used; either the request parameter or a replacement. If nil is returned,
+the download is cancelled.</p>
+<p>This method gives the delegate an opportunity to inspect the request
+that will be used to continue loading the request, and modify it if necessary.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.download_canAuthenticateAgainstProtectionSpace" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.download_canAuthenticateAgainstProtectionSpace" class="fn">download_canAuthenticateAgainstProtectionSpace</a>(
+    &amp;self,
+    connection: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+    protection_space: &amp;<a class="struct" href="struct.NSURLProtectionSpace.html" title="struct objc2_foundation::NSURLProtectionSpace">NSURLProtectionSpace</a>,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a><div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>This method gives the delegate an opportunity to inspect an NSURLProtectionSpace before an authentication attempt is made.</p>
+<p>If implemented, will be called before connection:didReceiveAuthenticationChallenge
+to give the delegate a chance to inspect the protection space that will be authenticated against.  Delegates should determine
+if they are prepared to respond to the authentication method of the protection space and if so, return YES, or NO to
+allow default processing to handle the authentication.  If this delegate is not implemented, then default
+processing will occur (typically, consulting
+the user’s keychain and/or failing the connection attempt.</p>
+<p>Parameter <code>connection</code>: an NSURLConnection that has an NSURLProtectionSpace ready for inspection</p>
+<p>Parameter <code>protectionSpace</code>: an NSURLProtectionSpace that will be used to generate an authentication challenge</p>
+<p>Returns: a boolean value that indicates the willingness of the delegate to handle the authentication</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.download_didReceiveAuthenticationChallenge" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.download_didReceiveAuthenticationChallenge" class="fn">download_didReceiveAuthenticationChallenge</a>(
+    &amp;self,
+    download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+    challenge: &amp;<a class="struct" href="struct.NSURLAuthenticationChallenge.html" title="struct objc2_foundation::NSURLAuthenticationChallenge">NSURLAuthenticationChallenge</a>,
+)<div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>Start authentication for a given challenge</p>
+<p>Parameter <code>download</code>: The download that needs authentication.</p>
+<p>Parameter <code>challenge</code>: The NSURLAuthenticationChallenge for which to start authentication.</p>
+<p>Call useCredential:forAuthenticationChallenge:,
+continueWithoutCredentialForAuthenticationChallenge: or cancel on
+the connection sender when done.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.download_didCancelAuthenticationChallenge" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.download_didCancelAuthenticationChallenge" class="fn">download_didCancelAuthenticationChallenge</a>(
+    &amp;self,
+    download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+    challenge: &amp;<a class="struct" href="struct.NSURLAuthenticationChallenge.html" title="struct objc2_foundation::NSURLAuthenticationChallenge">NSURLAuthenticationChallenge</a>,
+)<div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>Cancel authentication for a given request</p>
+<p>Parameter <code>download</code>: The download that’s cancelling</p>
+<p>Parameter <code>challenge</code>: The NSURLAuthenticationChallenge to cancel authentication for</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.downloadShouldUseCredentialStorage" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.downloadShouldUseCredentialStorage" class="fn">downloadShouldUseCredentialStorage</a>(&amp;self, download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a><div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>This method allows the delegate to inform the url loader that it
+should not consult the credential storage for the download.</p>
+<p>This method will be called before any attempt to authenticate is
+attempted on a download.  By returning NO the delegate is telling the
+download to not consult the credential storage and taking responsibility
+for providing any credentials for authentication challenges.  Not implementing
+this method is the same as returning YES.  The delegate is free to consult the
+credential storage itself when it receives a didReceiveAuthenticationChallenge
+message.</p>
+<p>Parameter <code>download</code>: the NSURLDownload object asking if it should consult the credential storage.</p>
+<p>Returns: NO if the download should not consult the credential storage, Yes if it should.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.download_didReceiveResponse" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.download_didReceiveResponse" class="fn">download_didReceiveResponse</a>(
+    &amp;self,
+    download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+    response: &amp;<a class="struct" href="struct.NSURLResponse.html" title="struct objc2_foundation::NSURLResponse">NSURLResponse</a>,
+)<div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>This method is called when the download has received a response from the server.</p>
+<p>Parameter <code>download</code>: The download that now has a NSURLResponse available for inspection.</p>
+<p>Parameter <code>response</code>: The NSURLResponse object for the given download.</p>
+<p>In some rare cases, multiple responses may be received for a single download.
+This occurs with multipart/x-mixed-replace, or “server push”. In this case, the client
+should assume that each new response resets progress so far for the resource back to 0,
+and should check the new response for the expected content length.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.download_willResumeWithResponse_fromByte" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.download_willResumeWithResponse_fromByte" class="fn">download_willResumeWithResponse_fromByte</a>(
+    &amp;self,
+    download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+    response: &amp;<a class="struct" href="struct.NSURLResponse.html" title="struct objc2_foundation::NSURLResponse">NSURLResponse</a>,
+    starting_byte: <a class="type" href="https://doc.rust-lang.org/nightly/core/ffi/primitives/type.c_longlong.html" title="type core::ffi::primitives::c_longlong">c_longlong</a>,
+)<div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>This method is called when the download has received a response from the server after attempting to
+resume a download.</p>
+<p>Parameter <code>download</code>: The download that now has a NSURLResponse available for inspection.</p>
+<p>Parameter <code>response</code>: The NSURLResponse object for the given download.</p>
+<p>Parameter <code>startingByte</code>: The number of bytes from where the download will resume. 0 indicates that the download will
+restart from the beginning.</p>
+<p>download:willResumeWithResponse:fromByte: is called instead of download:didReceiveResponse:
+when a download is initialized with initWithResumeData:delegate:path:.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.download_didReceiveDataOfLength" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.download_didReceiveDataOfLength" class="fn">download_didReceiveDataOfLength</a>(
+    &amp;self,
+    download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+    length: <a class="type" href="type.NSUInteger.html" title="type objc2_foundation::NSUInteger">NSUInteger</a>,
+)<div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>This method is called when the download has loaded data.</p>
+<p>Parameter <code>download</code>: The download that has received data.</p>
+<p>Parameter <code>length</code>: The length of the received data.</p>
+<p>This method will be called one or more times.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.download_shouldDecodeSourceDataOfMIMEType" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.download_shouldDecodeSourceDataOfMIMEType" class="fn">download_shouldDecodeSourceDataOfMIMEType</a>(
+    &amp;self,
+    download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+    encoding_type: &amp;<a class="struct" href="struct.NSString.html" title="struct objc2_foundation::NSString">NSString</a>,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a><div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>This method is called if the download detects that the downloading file is encoded.</p>
+<p>Parameter <code>download</code>: The download that has detected that the downloading file is encoded.</p>
+<p>Parameter <code>encodingType</code>: A MIME type expressing the encoding type.</p>
+<p>Returns: Return YES to decode the file, NO to not decode the file.</p>
+<p>An encoded file is encoded in MacBinary, BinHex or gzip format. This method may be
+called more than once if the file is encoded multiple times. This method is not called if the
+download is not encoded.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.download_decideDestinationWithSuggestedFilename" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.download_decideDestinationWithSuggestedFilename" class="fn">download_decideDestinationWithSuggestedFilename</a>(
+    &amp;self,
+    download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+    filename: &amp;<a class="struct" href="struct.NSString.html" title="struct objc2_foundation::NSString">NSString</a>,
+)<div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>This method is called when enough information has been loaded to decide a destination
+for the downloaded file.</p>
+<p>Parameter <code>download</code>: The download that requests the download path.</p>
+<p>Parameter <code>filename</code>: The suggested filename for deciding the path of the downloaded file. The filename is either
+derived from the last path component of the URL and the MIME type or if the download was encoded,
+it is the filename specified in the encoding.</p>
+<p>Once the delegate has decided a path, it should call setDestination:allowOverwrite:.
+The delegate may respond immediately or later. This method is not called if
+setDestination:allowOverwrite: has already been called.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.download_didCreateDestination" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.download_didCreateDestination" class="fn">download_didCreateDestination</a>(
+    &amp;self,
+    download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>,
+    path: &amp;<a class="struct" href="struct.NSString.html" title="struct objc2_foundation::NSString">NSString</a>,
+)<div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>This method is called after the download creates the downloaded file.</p>
+<p>Parameter <code>download</code>: The download that created the downloaded file.</p>
+<p>Parameter <code>path</code>: The path of the downloaded file.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.downloadDidFinish" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.downloadDidFinish" class="fn">downloadDidFinish</a>(&amp;self, download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>)<div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>This method is called when the download has finished downloading.</p>
+<p>Parameter <code>download</code>: The download that has finished downloading.</p>
+<p>This method is called after all the data has been received and written to disk.
+This method or download:didFailWithError: will only be called once.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.download_didFailWithError" class="method"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><h4 class="code-header">fn <a href="#method.download_didFailWithError" class="fn">download_didFailWithError</a>(&amp;self, download: &amp;<a class="struct" href="struct.NSURLDownload.html" title="struct objc2_foundation::NSURLDownload">NSURLDownload</a>, error: &amp;<a class="struct" href="struct.NSError.html" title="struct objc2_foundation::NSError">NSError</a>)<div class="where">where
+    Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a>,</div></h4></section></summary><div class="docblock"><p>This method is called when the download has failed.</p>
+<p>Parameter <code>download</code>: The download that ended in error.</p>
+<p>Parameter <code>error</code>: The error caused the download to fail.</p>
+<p>This method is called when the download encounters a network or file I/O related error.
+This method or downloadDidFinish: will only be called once.</p>
+</div></details></div><h2 id="trait-implementations" class="section-header">Trait Implementations<a href="#trait-implementations" class="anchor">§</a></h2><div id="trait-implementations-list"><details class="toggle implementors-toggle" open><summary><section id="impl-ProtocolType-for-dyn+NSURLDownloadDelegate" class="impl"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><a href="#impl-ProtocolType-for-dyn+NSURLDownloadDelegate" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="../objc2/top_level_traits/trait.ProtocolType.html" title="trait objc2::top_level_traits::ProtocolType">ProtocolType</a> for dyn <a class="trait" href="trait.NSURLDownloadDelegate.html" title="trait objc2_foundation::NSURLDownloadDelegate">NSURLDownloadDelegate</a></h3></section></summary><div class="impl-items"><details class="toggle" open><summary><section id="associatedconstant.NAME" class="associatedconstant trait-impl"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><a href="#associatedconstant.NAME" class="anchor">§</a><h4 class="code-header">const <a href="../objc2/top_level_traits/trait.ProtocolType.html#associatedconstant.NAME" class="constant">NAME</a>: &amp;'static <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a> = &quot;NSURLDownloadDelegate&quot;</h4></section></summary><div class='docblock'>The name of the Objective-C protocol that this type represents. <a href="../objc2/top_level_traits/trait.ProtocolType.html#associatedconstant.NAME">Read more</a></div></details><details class="toggle method-toggle" open><summary><section id="method.protocol" class="method trait-impl"><a class="src rightside" href="../src/objc2/top_level_traits.rs.html#487">Source</a><a href="#method.protocol" class="anchor">§</a><h4 class="code-header">fn <a href="../objc2/top_level_traits/trait.ProtocolType.html#method.protocol" class="fn">protocol</a>() -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;'static <a class="struct" href="../objc2/runtime/anyprotocol/struct.AnyProtocol.html" title="struct objc2::runtime::anyprotocol::AnyProtocol">AnyProtocol</a>&gt;</h4></section></summary><div class='docblock'>Get a reference to the Objective-C protocol object that this type
+represents. <a href="../objc2/top_level_traits/trait.ProtocolType.html#method.protocol">Read more</a></div></details></div></details><section id="impl-ImplementedBy%3CT%3E-for-dyn+NSURLDownloadDelegate" class="impl"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><a href="#impl-ImplementedBy%3CT%3E-for-dyn+NSURLDownloadDelegate" class="anchor">§</a><h3 class="code-header">impl&lt;T&gt; <a class="trait" href="../objc2/runtime/protocol_object/trait.ImplementedBy.html" title="trait objc2::runtime::protocol_object::ImplementedBy">ImplementedBy</a>&lt;T&gt; for dyn <a class="trait" href="trait.NSURLDownloadDelegate.html" title="trait objc2_foundation::NSURLDownloadDelegate">NSURLDownloadDelegate</a><div class="where">where
+    T: ?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="../objc2/top_level_traits/trait.Message.html" title="trait objc2::top_level_traits::Message">Message</a> + <a class="trait" href="trait.NSURLDownloadDelegate.html" title="trait objc2_foundation::NSURLDownloadDelegate">NSURLDownloadDelegate</a>,</div></h3></section></div><h2 id="foreign-impls" class="section-header">Implementations on Foreign Types<a href="#foreign-impls" class="anchor">§</a></h2><section id="impl-NSURLDownloadDelegate-for-ProtocolObject%3CT%3E" class="impl"><a class="src rightside" href="../src/objc2_foundation/generated/NSURLDownload.rs.html#154-397">Source</a><a href="#impl-NSURLDownloadDelegate-for-ProtocolObject%3CT%3E" class="anchor">§</a><h3 class="code-header">impl&lt;T&gt; <a class="trait" href="trait.NSURLDownloadDelegate.html" title="trait objc2_foundation::NSURLDownloadDelegate">NSURLDownloadDelegate</a> for <a class="struct" href="../objc2/runtime/protocol_object/struct.ProtocolObject.html" title="struct objc2::runtime::protocol_object::ProtocolObject">ProtocolObject</a>&lt;T&gt;<div class="where">where
+    T: ?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + <a class="trait" href="trait.NSURLDownloadDelegate.html" title="trait objc2_foundation::NSURLDownloadDelegate">NSURLDownloadDelegate</a>,</div></h3></section><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"></div><script src="../trait.impl/objc2_foundation/generated/__NSURLDownload/trait.NSURLDownloadDelegate.js" data-ignore-extern-crates="objc2" async></script></section></div></main></body></html>
