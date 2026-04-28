@@ -1,0 +1,9 @@
+/target
+/RustWrapper.app/simple
+/RustWrapper.app/entitlements.plist
+/RustWrapper.app/_CodeSignature/
+stdout.txt
+stderr.txt
+screenshot.png
+screenshot-big.png
+Summary.md
